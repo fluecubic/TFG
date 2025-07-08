@@ -1,1 +1,18 @@
+body{
+    background-color: black;
+}
 
+#Überschrift{
+    font-size: 40px;
+    font-family:'Times New Roman', Times, serif;
+    color:rgb(253, 181, 48);
+    text-decoration: underline;
+}
+
+#leiste{
+    background-color: gray;
+}
+
+#user-icon{
+    margin-right: 1px;
+}
