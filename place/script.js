@@ -2,7 +2,7 @@
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
-import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 
 const firebaseConfig = {
     apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
@@ -18,53 +18,104 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let canvas = document.getElementById("canva")
+const colRef = collection(db, "place");
+const qone = query(colRef, orderBy("time", "asc",), limit(1));  
+const q = query(colRef, orderBy("time", "asc")); 
 
-function updatePixel() {
-    
-}
 
-let canvahtml = "";
-let xy;
-let color = "black";
-
-   async function  buildCanvas() {
-    canvas.innerHTML = ""
-    for (let row = 0 ; row < 100; row++) {
-        
-        
-
-             for (let i = 0, row; i < 100; i++) {
-                xy = row + i;
-            canvahtml  += "<div class='pixel' id='" +  xy  + "' ></div>";
-            
-            
-            
-       
-        }
-        
-        canvas.innerHTML += canvahtml;
-            canvahtml = "";
-        
-
+async function updatePixel() {
+    const querySnapshot = await getDocs(qone);
+    const doc = querySnapshot.docs[0];
+    if (document.getElementById(doc.data().number)) {
+       document.getElementById(doc.data().number).style.backgroundColor = doc.data().color; 
     }
-    
-}
-try {
-    buildCanvas()
-} catch (error) {
-    console.error("scheisse")
+   
 }
 
+async function loadPixel() {
+    const querySnapshot = await getDocs(q);
 
   
+  querySnapshot.forEach((doc) => {
+    if (document.getElementById(doc.data().number)) {
+      document.getElementById(doc.data().number).style.backgroundColor = doc.data().color;
+  
+    }
+   
+  });
+}
+
+
+
+
+
+
+
+let color = "black";
+
+let idfound = false;
+
+function buildCanvas() {
+    const canva = document.getElementById("canva");
+    canva.innerHTML = "";
+    let row = 0;
+  
+    function drawRow() {
+      if (row >= 100) return;
+  
+      let html = "";
+      for (let col = 0; col < 100; col++) {
+        html += `<div class="pixel" id="pixel-${row}-${col}"></div>`;
+      }
+      canva.innerHTML += html;
+  
+      row++;
+      setTimeout(drawRow, 30); 
+    }
+  
+    drawRow();
+  } 
+    
+  
+  
+
+buildCanvas();
+
+
+  setTimeout(() => {
+    loadPixel()
+    onSnapshot(q, (querySnapshot) => {
+        updatePixel()
+    });
+  }, 6000);
 
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("pixel")) {
     color = localStorage.getItem("color");
-      document.getElementById(event.target.id).style.backgroundColor =  color 
+      document.getElementById(event.target.id).style.backgroundColor =  color ;
+      checkpixel(color, event.target.id)
     }
   });
   
 
+  async function checkpixel(color, number) {
   
+    const colRef = collection(db, "place");
+  const q = query(colRef, orderBy("time", "asc")); 
+   const querySnapshot = await getDocs(q);
+  
+    querySnapshot.forEach(async (document) => {
+      if (document.data().number ==  number) {
+        
+       
+        await setDoc(doc(db, "place", document.id), {
+            number: number,
+            color: color,
+            time: serverTimestamp()
+          });
+          
+      }
+    })
+  
+    
+}
