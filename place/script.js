@@ -24,12 +24,12 @@ const q = query(colRef, orderBy("time", "asc"));
 
 
 async function updatePixel() {
-    const querySnapshot = await getDocs(qone);
-    const doc = querySnapshot.docs[0];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
     if (document.getElementById(doc.data().number)) {
        document.getElementById(doc.data().number).style.backgroundColor = doc.data().color; 
     }
-   
+})
 }
 
 async function loadPixel() {
@@ -76,19 +76,20 @@ function buildCanvas() {
     drawRow();
   } 
     
-  
+  onSnapshot(q, (querySnapshot) => {
+        updatePixel()
+    });
   
 
 buildCanvas();
 
 
-  setTimeout(() => {
-    loadPixel()
-    onSnapshot(q, (querySnapshot) => {
-        updatePixel()
-    });
-  }, 6000);
 
+
+
+
+
+ 
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("pixel")) {
     color = localStorage.getItem("color");
@@ -127,3 +128,22 @@ document.addEventListener("click", function (event) {
          
       }
 }
+
+
+setTimeout(() => {
+    loadPixel()
+    
+  }, 1000);
+
+  setTimeout(() => {
+    loadPixel()
+    
+  }, 2000);
+  setTimeout(() => {
+    loadPixel()
+    
+  }, 4000);
+  setTimeout(() => {
+    loadPixel()
+    
+  }, 6000);
