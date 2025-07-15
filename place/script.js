@@ -113,9 +113,17 @@ document.addEventListener("click", function (event) {
             color: color,
             time: serverTimestamp()
           });
+          idfound = true;
           
       }
     })
   
-    
+     if (idfound == false) {
+         console.log("adddoc")
+        const AdddocRef = await addDoc(collection(db, "place"), {//dokumenr adden schreiben
+            number:number, 
+            time: serverTimestamp(),
+            color: color})
+         
+      }
 }
