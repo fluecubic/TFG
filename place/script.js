@@ -22,6 +22,8 @@ const colRef = collection(db, "place");
 const qone = query(colRef, orderBy("time", "asc",), limit(1));  
 const q = query(colRef, orderBy("time", "asc")); 
 
+let remaininTime = 5000;
+let pixels = [];
 
 async function updatePixel() {
     const querySnapshot = await getDocs(q);
@@ -34,15 +36,32 @@ async function updatePixel() {
 
 async function loadPixel() {
     const querySnapshot = await getDocs(q);
-
+    let i = 0
   
   querySnapshot.forEach((doc) => {
-    if (document.getElementById(doc.data().number)) {
-      document.getElementById(doc.data().number).style.backgroundColor = doc.data().color;
-  
-    }
+
+    console.log(doc.data().number, doc.data().color)
+    pixels[i] = [doc.data().number, doc.data().color];
+
+    
+    console.log(pixels[i])
+    
+    i++
    
   });
+
+ const interval = setInterval(() => {
+    for (let i = 0; i < pixels.length; i++) {
+        if (document.getElementById(pixels[i][0])) {
+            document.getElementById(pixels[i][0]).style.backgroundColor = pixels[i][1];
+          }
+        
+    }
+  }, 100);
+
+  setTimeout(() => {
+    clearInterval(interval)
+  }, 6000);
 }
 
 
@@ -91,18 +110,24 @@ buildCanvas();
 
  
 document.addEventListener("click", function (event) {
-    if (event.target.classList.contains("pixel")) {
+    remaininTime=localStorage.getItem("delay");
+    if (remaininTime < 0) {
+       if (event.target.classList.contains("pixel")) {
     color = localStorage.getItem("color");
       document.getElementById(event.target.id).style.backgroundColor =  color ;
       checkpixel(color, event.target.id)
-    }
+      remaininTime = 6;
+      localStorage.setItem("delay", 6)
+    } 
+    } 
+    
   });
   
 
   async function checkpixel(color, number) {
   
     const colRef = collection(db, "place");
-  const q = query(colRef, orderBy("time", "asc")); 
+  const q = query(colRef, orderBy("time", "desc")); 
    const querySnapshot = await getDocs(q);
   
     querySnapshot.forEach(async (document) => {
@@ -129,21 +154,4 @@ document.addEventListener("click", function (event) {
       }
 }
 
-
-setTimeout(() => {
-    loadPixel()
-    
-  }, 1000);
-
-  setTimeout(() => {
-    loadPixel()
-    
-  }, 2000);
-  setTimeout(() => {
-    loadPixel()
-    
-  }, 4000);
-  setTimeout(() => {
-    loadPixel()
-    
-  }, 6000);
+loadPixel()

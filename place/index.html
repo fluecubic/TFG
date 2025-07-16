@@ -15,6 +15,7 @@
         <iframe src="./canva.html#canva" id="canvas"></iframe>
 
         <div id="leistecolor">
+            <p id="time"></p>
             <div class="color" id="red"></div>
             <div class="color" id="green"></div>
             <div class="color" id="blue"></div>
@@ -85,6 +86,20 @@ document.addEventListener("click", function (event) {
     
     }
   });
+   
+
+  let remaininTime = 6;
+
+  const out = setInterval(() => {
+    remaininTime =localStorage.getItem("delay");
+    remaininTime = remaininTime - 1;
+    document.getElementById("time").innerHTML = String(remaininTime);
+    localStorage.setItem("delay", remaininTime)
+    if (remaininTime < 0) {
+        document.getElementById("time").innerHTML = "0";
+    }
+  }, 1000);
+
 
     </script>
   

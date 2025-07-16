@@ -55,7 +55,7 @@ h1{
 
 
 #red{
-    margin-left: 300px;
+    margin-left: 200px;
     background-color: red;
 }
 
@@ -129,4 +129,14 @@ h1{
     background-color: white;
     margin: 0px;
     border: 0px;
+}
+
+#time{
+    height: 40px;
+    width: 40px;
+    margin:30px;
+    margin-top: 15px;
+    font-size: 30px;
+    width: 80px;
+    margin-left: 20px;
 }
