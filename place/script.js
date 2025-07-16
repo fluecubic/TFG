@@ -57,7 +57,7 @@ async function loadPixel() {
           }
         
     }
-  }, 100);
+  }, 300);
 
   setTimeout(() => {
     clearInterval(interval)
@@ -72,7 +72,7 @@ async function loadPixel() {
 
 let color = "black";
 
-let idfound = false;
+
 
 function buildCanvas() {
     const canva = document.getElementById("canva");
@@ -109,49 +109,72 @@ buildCanvas();
 
 
  
+
+async function checkpixel(color, number) {
+    const colRef = collection(db, "place");
+    const q = query(colRef, orderBy("time", "desc"));
+    const querySnapshot = await getDocs(q);
+  
+    let found = false;
+  
+    // 1. Suche nach passender number
+    for (const document of querySnapshot.docs) {
+      if (document.data().number === number) {
+        found = true;
+  
+        // 2. Wenn Farbe schon korrekt ist, nichts tun
+        if (document.data().color === color) {
+          console.log("Farbe bereits korrekt");
+          return;
+        }
+  
+        // 3. Farbe aktualisieren
+        await setDoc(doc(db, "place", document.id), {
+          number,
+          color,
+          time: serverTimestamp()
+        }, { merge: true });
+  
+        console.log("Farbe aktualisiert");
+        return;
+      }
+    }
+  
+    // 4. Falls keine passende number gefunden wurde → neues Dokument anlegen
+    if (!found) {
+      await addDoc(colRef, {
+        number,
+        color,
+        time: serverTimestamp()
+      });
+      console.log("Neues Dokument hinzugefügt");
+    }
+  }
+  
+
+loadPixel()
+
 document.addEventListener("click", function (event) {
     remaininTime=localStorage.getItem("delay");
     if (remaininTime < 0) {
        if (event.target.classList.contains("pixel")) {
-    color = localStorage.getItem("color");
+       color = localStorage.getItem("color");
       document.getElementById(event.target.id).style.backgroundColor =  color ;
       checkpixel(color, event.target.id)
-      remaininTime = 6;
-      localStorage.setItem("delay", 6)
+      remaininTime = 4;
+      localStorage.setItem("delay", 4)
+     
     } 
-    } 
+     
+    }
     
   });
+setInterval(() => {
+    if (localStorage.getItem("delay") <= 0) {
+    document.getElementById("canva").style.cursor = "crosshair"
+  } else {
+     document.getElementById("canva").style.cursor = "progress"
+  }
+}, 100);
   
-
-  async function checkpixel(color, number) {
   
-    const colRef = collection(db, "place");
-  const q = query(colRef, orderBy("time", "desc")); 
-   const querySnapshot = await getDocs(q);
-  
-    querySnapshot.forEach(async (document) => {
-      if (document.data().number ==  number) {
-        
-       
-        await setDoc(doc(db, "place", document.id), {
-            number: number,
-            color: color,
-            time: serverTimestamp()
-          });
-          idfound = true;
-          
-      }
-    })
-  
-     if (idfound == false) {
-         console.log("adddoc")
-        const AdddocRef = await addDoc(collection(db, "place"), {//dokumenr adden schreiben
-            number:number, 
-            time: serverTimestamp(),
-            color: color})
-         
-      }
-}
-
-loadPixel()
