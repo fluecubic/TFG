@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TFG/Place</title>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css.css">
+    <link rel="shortcut icon" href="./assets/LOGO.png" type="image/x-icon">
+    </head>
+    <body>
+        <div id="leiste">
+            <h1 id="">TFG/Place</h1>
+            <img id="user-icon" src="./assets/user.png">
+        </div>
+        <iframe src="./canva.html#canva" id="canvas"></iframe>
+
+        <div id="leistecolor">
+            <p id="time"></p>
+            <div class="color" id="red"></div>
+            <div class="color" id="green"></div>
+            <div class="color" id="blue"></div>
+            <div class="color" id="purple"></div>
+            <div class="color" id="black"></div>
+            <div class="color" id="gray"></div>
+            <div class="color" id="white"></div>
+            <div class="color" id="brown"></div>
+            <div class="color" id="pink"></div>
+            <div class="color" id="yellow"></div>
+            <div class="color" id="orange"></div>
+            <button id="plus">+</button>
+            <button id="minus">-</button>
+        </div>
+    </body>
+    <script>
+        let scale = 1;
+
+function applyZoom() {
+  const iframe = document.getElementById("canvas");
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  iframeDoc.body.style.transform = `scale(${scale})`;
+  iframeDoc.body.style.transformOrigin = "0 0";
+}
+
+function zoomIn() {
+  scale += 0.1;
+  applyZoom();
+}
+
+function zoomOut() {
+  scale = Math.max(0.1, scale - 0.1);
+  applyZoom();
+}
+
+// Optional: Mausrad mit STRG für Zoom
+document.getElementById("canvas").addEventListener("wheel", (e) => {
+  if (e.ctrlKey) {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      zoomIn();
+    } else {
+      zoomOut();
+    }
+  }
+});
+
+document.getElementById("plus").onclick = zoomIn;
+document.getElementById("minus").onclick = zoomOut;
+
+let color = "black"
+
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("color")) {
+      color = event.target.id;  
+      localStorage.setItem("color", color);
+      document.getElementById("black").style.border ="0px";
+      document.getElementById("white").style.border ="0px";
+      document.getElementById("green").style.border ="0px";
+      document.getElementById("blue").style.border ="0px";
+      document.getElementById("red").style.border ="0px";
+      document.getElementById("pink").style.border ="0px";
+      document.getElementById("purple").style.border ="0px";
+      document.getElementById("orange").style.border ="0px";
+      document.getElementById("brown").style.border ="0px";
+      document.getElementById("yellow").style.border ="0px";
+     
+      document.getElementById(event.target.id).style.border = "5px solid white"
+    
+    }
+  });
+   
+
+  let remaininTime = 4;
+
+  const out = setInterval(() => {
+    remaininTime =localStorage.getItem("delay");
+    remaininTime = remaininTime - 1;
+    document.getElementById("time").innerHTML = String(remaininTime);
+    localStorage.setItem("delay", remaininTime)
+    if (remaininTime < 0) {
+        document.getElementById("time").innerHTML = "0";
+    }
+  }, 1000);
+
+
+    </script>
+  
+</html>
