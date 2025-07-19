@@ -1,0 +1,121 @@
+#output
+{
+margin-left: 50px;}
+
+button
+{width:100px; height: 30px;
+}
+
+#input{margin-left: 100px; height: 30px;
+  }
+
+#login{width:200px; height: 100%; position:fixed; background-color:white;}
+
+h1{font-family: Arial;
+font-size: large;}
+
+.message{
+    font-family: Arial;
+    background-color: rgb(49, 118, 245);
+    border-radius: 20px;
+    width:fit-content;
+    padding: 10px;
+}
+
+.yourmessage{
+    font-family: Arial;
+    background-color: rgb(163, 211, 255);
+    border-radius: 20px;
+    width:fit-content;
+    padding: 10px;
+    margin-left: 350px;
+}
+
+
+  .checkbox-wrapper-2 .ikxBAC {
+    appearance: none;
+    background-color: #dfe1e4;
+    border-radius: 72px;
+    border-style: none;
+    flex-shrink: 0;
+    height: 20px;
+    margin: 0;
+    position: relative;
+    width: 30px;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC::before {
+    bottom: -6px;
+    content: "";
+    left: -6px;
+    position: absolute;
+    right: -6px;
+    top: -6px;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC,
+  .checkbox-wrapper-2 .ikxBAC::after {
+    transition: all 100ms ease-out;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC::after {
+    background-color: #fff;
+    border-radius: 50%;
+    content: "";
+    height: 14px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 14px;
+  }
+
+  .checkbox-wrapper-2 input[type=checkbox] {
+    cursor: default;
+    
+  }
+
+  .checkbox-wrapper-2 .ikxBAC {
+    background-color: #c9cbcd;
+    transition-duration: 0s;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:checked {
+    background-color: #6e79d6;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:checked::after {
+    background-color: #fff;
+    left: 13px;
+  }
+
+  .checkbox-wrapper-2 :focus:not(.focus-visible) {
+    outline: 0;
+  }
+
+  .checkbox-wrapper-2 .ikxBAC:checked {
+    background-color: #535db3;
+  }
+
+
+  #img{
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+  #inputs{
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+  }
+
+  img{
+    max-width: 1000px;
+    max-height: 400px;
+  }
+
+  #infimg{
+    font-family: Arial;
+    margin-bottom: 10px;
+    margin-left: 8px;
+    position: relative;
+    top: -9px;
+  }
