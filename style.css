@@ -49,7 +49,7 @@ p{
 
 .link-name{
     margin-top: 300px;
-    margin-left: 90px;
+    margin-left: 105px;
 }
 
 .link-app:hover{
@@ -58,4 +58,17 @@ p{
     height: 420px;
     border-radius: 20px;
     margin: 30px;
+}
+
+
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+
+#place-link{
+    background-image: url(./assets/Screenshot\ \(15\).png);
 }

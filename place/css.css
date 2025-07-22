@@ -157,6 +157,15 @@ h1{
     color: aquamarine;
 }
 
+
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+
 @media screen and (max-width: 600px) {
     h1 {
         font-size: 8vw;

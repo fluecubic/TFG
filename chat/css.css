@@ -4,12 +4,23 @@ margin-left: 50px;}
 
 button
 {width:100px; height: 30px;
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: orange;
 }
 
 #input{margin-left: 100px; height: 30px;
+   border: 1px solid white;
+  border-radius: 5px;
+  background-color: rgb(255, 207, 117);
   }
 
-#login{width:200px; height: 100%; position:fixed; background-color:white;}
+#login{width:2000px; 
+  height: 4000px; position:fixed;
+   background-color:white; 
+   margin:0px;
+   margin-left: 10px;
+  }
 
 h1{font-family: Arial;
 font-size: large;}
@@ -118,4 +129,47 @@ font-size: large;}
     margin-left: 8px;
     position: relative;
     top: -9px;
+    color: white;
   }
+
+  body{
+    margin-top: 0px;
+    background-color: black;
+}
+  
+
+  
+h1{
+    font-size: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:rgb(253, 181, 48);
+    margin-bottom: 5px;
+    margin-right: 0px;
+    width: 350px;
+    margin-left: 20px;
+}
+
+#leiste{
+    display: flex;
+    flex-direction:row;
+    background-color: rgb(65, 63, 63);
+    position: fixed;
+    width: 1960px;
+    margin-top: 0px;
+}
+
+#user-icon{
+    margin-left: 1450px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    
+    width:70px;
+    height:70px;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}
