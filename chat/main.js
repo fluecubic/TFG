@@ -1,27 +1,36 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
-
+import {user, processClass} from "/TFG/login/login.js"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD5bua7viD8GGLKJH2Vt_uYoN2zmjb4DBg",
-  authDomain: "textchange-91bb5.firebaseapp.com",
-  projectId: "textchange-91bb5",
-  storageBucket: "textchange-91bb5.firebasestorage.app",
-  messagingSenderId: "287967549015", 
-  appId: "1:287967549015:web:983d315ece9f8c56f87512", 
-  measurementId: "G-40FLEQSHH5"
+  apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
+  authDomain: "tfg-community.firebaseapp.com",
+  projectId: "tfg-community",
+  storageBucket: "tfg-community.firebasestorage.app",
+  messagingSenderId: "1032844547594",
+  appId: "1:1032844547594:web:8d1a05711dffea459531f3",
+  measurementId: "G-1QFPXXQSEF"
 }; 
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-const docRef = doc(db, "User", "i87v72qq46Vdl9nhlumf"); //daten Formular
-let Namen = "";
-const colRef = collection(db, "User");
+const db = getFirestore(initializeApp(firebaseConfig));
+
+const docRef = doc(db, "main-chat", "i87v72qq46Vdl9nhlumf"); //daten Formular
+const colRef = collection(db, "main-chat");
 const q = query(colRef, orderBy("Date", "asc")); 
 let LastM
 let LastU
+let messageData;
+
+ if (user.uid) {
+       console.log(user) 
+    } else {
+      window.location = "/login/login.html"
+    }
+
+     
+
 
 
 async function getSortedDocuments() {
@@ -30,11 +39,12 @@ async function getSortedDocuments() {
   document.getElementById("output").innerHTML = ""
   
   querySnapshot.forEach((doc) => {
-    if (doc.data().User === Namen) { 
+    
+    if (doc.data().User === user.displayName) { 
       document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<p class='yourmessage'>" + doc.data().Text + "</p>";
     }
    else {
-    document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<p class='message'>" +doc.data().User + ": " + doc.data().Text + "</p>";
+    document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<div class='message'>" + "<div class='userinfos'>" +"<p class='name'>" +doc.data().User + "</p>" + "<p class='class'>" + doc.data().Klasse + "</p>" + "</div>" + doc.data().Text +  "</div>";
     }
     
     LastU = doc.data().User;
@@ -43,38 +53,18 @@ async function getSortedDocuments() {
   });
 }
 
-if (document.cookie === "")
-{document.getElementById("entername").onclick = function () {
-  Namen = document.getElementById("name").value;
-  document.getElementById("login").remove();
-  document.cookie = Namen;
-  Notification.requestPermission();
-  setTimeout(getSortedDocuments, 300)
-  
-}
-} else { document.getElementById("login").remove();
-         Namen = String(document.cookie);
-         setTimeout(getSortedDocuments, 300)}
+
          
 
 
 
 document.getElementById("go").addEventListener("click", async () => {
-  
-  if (document.getElementById("img").checked === true) {
-
-    const AdddocRef = addDoc(collection(db, "User"), {//dokumenr adden schreiben
-  Text: "<img src='" + document.getElementById("input").value + "' >",
-    Date: serverTimestamp(),
-    User: Namen})
-  } else {
-
-    const AdddocRef = addDoc(collection(db, "User"), {//dokumenr adden schreiben
+    const AdddocRef = addDoc(collection(db, "main-chat"), {//dokumenr adden schreiben
   Text:document.getElementById("input").value, 
   Date: serverTimestamp(),
-   User: Namen})
+  User: user.displayName,
+  Klasse: processClass()})
 
-  }
  
  
 document.getElementById("input").value = "";
@@ -103,6 +93,26 @@ setTimeout(() => {
 }, 200);
 
 
+
+
+
+
+
+  
+    document.getElementById("name").style.display = "none"
+    document.getElementById("password").style.display = "none"
+    document.getElementById("login").style.display = "none"
+    document.getElementById("signin").style.display = "none"
+    document.getElementById("logout").style.display = "none"
+    document.getElementById("class").style.display = "none"
+    document.getElementById("mecker").style.display = "none"
+    document.getElementById("bla").style.display = "none"
+
+
+   
+
+
+   
 
 
 

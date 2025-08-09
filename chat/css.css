@@ -1,26 +1,29 @@
 #output
 {
-margin-left: 50px;}
+margin-left: 50px;
+margin-top: 100px;
+margin-bottom: 100px;}
+
+.l{
+    display: none;
+}
 
 button
 {width:100px; height: 30px;
   border: 1px solid white;
   border-radius: 5px;
   background-color: orange;
+  margin-left: 15px;
 }
 
-#input{margin-left: 100px; height: 30px;
+#input{margin-left: 5px;
    border: 1px solid white;
   border-radius: 5px;
-  background-color: rgb(255, 207, 117);
+  background-color: rgb(65, 64, 63);
+  color: whitesmoke;
   }
 
-#login{width:2000px; 
-  height: 4000px; position:fixed;
-   background-color:white; 
-   margin:0px;
-   margin-left: 10px;
-  }
+
 
 h1{font-family: Arial;
 font-size: large;}
@@ -31,6 +34,8 @@ font-size: large;}
     border-radius: 20px;
     width:fit-content;
     padding: 10px;
+    font-size: 20px;
+    margin-top: 17px;
 }
 
 .yourmessage{
@@ -40,73 +45,13 @@ font-size: large;}
     width:fit-content;
     padding: 10px;
     margin-left: 350px;
+    font-size: 20px;
 }
 
-
-  .checkbox-wrapper-2 .ikxBAC {
-    appearance: none;
-    background-color: #dfe1e4;
-    border-radius: 72px;
-    border-style: none;
-    flex-shrink: 0;
-    height: 20px;
-    margin: 0;
-    position: relative;
-    width: 30px;
-  }
-
-  .checkbox-wrapper-2 .ikxBAC::before {
-    bottom: -6px;
-    content: "";
-    left: -6px;
-    position: absolute;
-    right: -6px;
-    top: -6px;
-  }
-
-  .checkbox-wrapper-2 .ikxBAC,
-  .checkbox-wrapper-2 .ikxBAC::after {
-    transition: all 100ms ease-out;
-  }
-
-  .checkbox-wrapper-2 .ikxBAC::after {
-    background-color: #fff;
-    border-radius: 50%;
-    content: "";
-    height: 14px;
-    left: 3px;
-    position: absolute;
-    top: 3px;
-    width: 14px;
-  }
-
-  .checkbox-wrapper-2 input[type=checkbox] {
-    cursor: default;
-    
-  }
-
-  .checkbox-wrapper-2 .ikxBAC {
-    background-color: #c9cbcd;
-    transition-duration: 0s;
-  }
-
-  .checkbox-wrapper-2 .ikxBAC:checked {
-    background-color: #6e79d6;
-  }
-
-  .checkbox-wrapper-2 .ikxBAC:checked::after {
-    background-color: #fff;
-    left: 13px;
-  }
-
-  .checkbox-wrapper-2 :focus:not(.focus-visible) {
-    outline: 0;
-  }
-
-  .checkbox-wrapper-2 .ikxBAC:checked {
-    background-color: #535db3;
-  }
-
+p{
+  margin-top: 1px;
+}
+  
 
   #img{
     margin-top: 5px;
@@ -116,6 +61,8 @@ font-size: large;}
     display: flex;
     flex-direction: row;
     height: 30px;
+    position:fixed;
+    bottom: 15px;
   }
 
   img{
@@ -154,8 +101,10 @@ h1{
     flex-direction:row;
     background-color: rgb(65, 63, 63);
     position: fixed;
-    width: 1960px;
+    width: 1894px;
     margin-top: 0px;
+    top: 5px;
+    height: 90px;
 }
 
 #user-icon{
@@ -173,3 +122,27 @@ a:hover,
 a:active {
   text-decoration: none;
 }
+
+.name{
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 5px;
+}
+
+.class{
+  background-color: rgb(142, 142, 151);
+  border-radius: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 14px;
+  padding: 2px;
+}
+
+.userinfos{
+  display: flex;
+  flex-direction: row;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+

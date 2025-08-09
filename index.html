@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,9 @@
 
     <div id="leiste">
         <h1 id="">TFG-Community</h1>
+        <a href="./login/login.html">
         <img id="user-icon" src="./assets/user.png">
+        </a>
     </div>
     <div id="links">
     <a href="./chat/"><div class="link-app" id="discord-link"><p class="link-name">Chat</p></div></a> 
@@ -23,5 +25,25 @@
     <a href="./place/"><div class="link-app" id="place-link"><p class="link-name">Place</p></div></a>
     <div class="link-app" id="tictactoe-link"><p class="link-name">TicTacToe</p></div>
     </div>
+      <div id="inputs">
+     <input id="name" type="text" placeholder="Benutzername">
+     <br>
+     <input id="password" type="password" placeholder="Passwort">
+     <br>
+     <p id="mecker"> </p>
+    
+        <p id="bla">In welche Klasse gehts du? <br>(Wenn du dich in den Sommerferien registrierst, wähle die Klasse aus, in die du gegangen bist.)</p>
+        <br>
+        <select  id="class">
+        </select>
+     </div>
+    
+        </div>
+        <div id="options">
+     <button id="login">Regristrieren</button>
+     <button id="signin">Anmelden</button>
+    </div> 
+     <button id="logout">Abmelden</button>
 </body>
+<script type="module" src="./script.js"></script>
 </html>

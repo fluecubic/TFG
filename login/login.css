@@ -1,0 +1,114 @@
+body{
+    width: 500px;
+    height: 800px;
+    margin-left: 35vw;
+    background-color: black;
+}
+
+#inputs{
+    margin: 50px;
+    margin-top: 130px;
+}
+
+input{
+    width: 300px;
+    height: 30px;
+    font-size: 25px;
+    padding: 2.5px;
+    background-color: rgb(7, 0, 0);
+    font-family: Arial;
+    margin: 10px;
+    color: white;
+    border: 0px;
+    margin-left: 27px;
+}
+
+#mecker{
+    color: rgb(255, 0, 0);
+    margin: 10px;
+    font-size: 15px;
+    font-family: arial;
+}
+
+p{
+    margin: 10px;
+    font-size: 15px;
+    font-family: arial;
+    color: white;
+}
+
+button{
+    font-family: Arial;
+    color: black;
+    background-color: orange;
+    margin: 10px;
+    width: 500px;
+    height: fit-content;
+    padding: 5px;
+    border: 0px;
+    border-radius: 10px;
+    margin-left: 13px;
+}
+
+#options{
+display: flex;
+flex-direction: row;
+}
+
+#login{
+    margin-left: 20px;
+}
+
+#logout{
+    display: none;
+}
+
+select{
+    width: 150px;
+    height: 30px;
+    margin-left: 130px;
+    background-color: rgb(255, 194, 81);
+    border-radius: 15px;
+    border: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-right: 10px;
+}
+
+#leiste{
+    display: flex;
+    flex-direction:row;
+    background-color: rgb(65, 63, 63);
+    position: fixed;
+    width: 500px;
+    margin-top: 0px;
+    top: 5px;
+    height: 90px;
+    
+}
+
+#user-icon{
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    
+    width:70px;
+    height:70px;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+h1{
+    font-size: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:rgb(253, 181, 48);
+    margin-bottom: 5px;
+    margin-right: 0px;
+    width: 350px;
+    margin-left: 20px;
+}

@@ -2,6 +2,18 @@ body{
     background-color: black;
 }
 
+#name
+#password
+#login
+#signin
+#logout
+#class
+#mecker
+#bla{
+    display: none;
+}
+
+
 h1{
     font-size: 40px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -72,3 +84,5 @@ a:active {
 #place-link{
     background-image: url(./assets/Screenshot\ \(15\).png);
 }
+
+
