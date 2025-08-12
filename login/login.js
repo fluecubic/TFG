@@ -10,14 +10,15 @@ let loginbtn = document.getElementById("login");
 let signinbtn = document.getElementById("signin");
 let logoutbtn = document.getElementById("logout");
 let Klasse = document.getElementById("class").value;
+let surnameinput = document.getElementById("surname").value;
 
   
 
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, setPersistence, browserLocalPersistence, updateEmail   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
+import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, setPersistence, browserLocalPersistence, updateEmail   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
 
@@ -31,14 +32,15 @@ const firebaseConfig = {
     measurementId: "G-1QFPXXQSEF"
   };
 
-
+  const db = getFirestore(initializeApp(firebaseConfig));
 
   const App = initializeApp(firebaseConfig)
 
   const auth = getAuth(App)
   
 
-
+const colRef = collection(db, "users");
+const q = query(colRef, orderBy("Uid", "asc")); 
 
 
 
@@ -49,10 +51,11 @@ const firebaseConfig = {
     document.getElementById("login").style.display = "none"
     document.getElementById("signin").style.display = "none"
     document.getElementById("class").style.display = "none"
-    document.getElementsByTagName("p")[1].style.display = "none"
+     document.getElementById("classinf").style.display = "none"
     document.getElementById("logout").style.display = "block"
+    document.getElementById("surname").style.display = "none"
     setTimeout(() => {
-        document.getElementById("mecker").innerHTML = "Willkomen zurück in der Hood, " + user.displayName     
+        document.getElementById("mecker").innerHTML = "Willkomen in der Hood, " + user.displayName     
     }, 300);
     
  
@@ -67,15 +70,17 @@ const firebaseConfig = {
     document.getElementsByTagName("p")[1].style.display = "block"
     document.getElementById("logout").style.display = "none"
     document.getElementById("mecker").innerHTML = ""
+    document.getElementById("surname").style.display = "block"
  }
 
   async function signinwithemail() {
     nameinput = document.getElementById("name").value;
     passwordinput = document.getElementById("password").value;
     Klasse = document.getElementById("class").value;
+    let surnameinput = document.getElementById("surname").value;
 
    try {
-    const signin = await signInWithEmailAndPassword(auth, nameinput + Klasse + "@tfg.com", passwordinput)
+    const signin = await signInWithEmailAndPassword(auth, nameinput + "." + surnameinput + "@tfg.com", passwordinput)
 
     user = signin.user;
     user.emailVerified = true;
@@ -108,8 +113,10 @@ const firebaseConfig = {
     nameinput = document.getElementById("name").value;
     passwordinput = document.getElementById("password").value;
     Klasse = document.getElementById("class").value;
+    let surnameinput = document.getElementById("surname").value;
+
    try {
-    const login = await createUserWithEmailAndPassword(auth, nameinput + Klasse + "@tfg.com", passwordinput)
+    const login = await createUserWithEmailAndPassword(auth, nameinput + "." + surnameinput + "@tfg.com", passwordinput)
 
     user = login.user
     user.emailVerified = true;
@@ -118,6 +125,12 @@ const firebaseConfig = {
     localStorage.setItem("password", passwordinput)
     localStorage.setItem("email", login.user.email)
     user = login.user
+
+    const AdddocRef = addDoc(collection(db, "users"), {
+     Uid: user.uid,
+     Vorname: nameinput,
+     Nachname: surnameinput,
+     Klasse: Klasse})
 
     uilogedin()
 
@@ -168,98 +181,12 @@ const firebaseConfig = {
 
    
 
-  function processClassFor(u) {
- 
-     if (u) {
-     user = u
-     } else {
-      user = user;
-     }
-     if (user.uid) {
-      
-     
-     let Klasse;
-     const creationTime = new Date(user.metadata.creationTime);
-     let lastYearStart = []
-     lastYearStart[0] = new Date("Mon, 07 Sep 2025 8:05:00 GMT");
-     const now = new Date;
-     let diffYears = 0;
+  
 
-for (let i = 0; i <= lastYearStart.length; i++) {
-  if (now > lastYearStart[i]) {
-    if (creationTime < lastYearStart[i]) {
-      diffYears++
-
-     }
-  }
-   
-}
-  if (user.email.charAt(user.displayName.length) == "1") {
-    if (user.email.charAt(user.displayName.length+1) == "0") {
-       Klasse = String(Number(user.email.charAt(user.displayName.length) + user.email.charAt(user.displayName.length+1))  + diffYears) + "/" + user.email.charAt(user.displayName.length+2)
-    } else {
-       Klasse = String(Number(user.email.charAt(user.displayName.length) + user.email.charAt(user.displayName.length+1))  + diffYears)
-    }
-    
-  } else if (user.email.charAt(user.displayName.length) == "L") {
-    Klasse = "Lehrer"
-   
-  } else  if (user.email.charAt(user.displayName.length) == "A") {
-      Klasse = ""
-    } else {
-     Klasse = String(Number(user.email.charAt(user.displayName.length))+diffYears) + "/" + user.email.charAt(user.displayName.length+1)
-  }
-   
-  return Klasse;
-
-}
-
-  }
+  
 
 
   
-  function processClass() {
- 
-     
-      
-     
-     let Klasse;
-     const creationTime = new Date(user.metadata.creationTime);
-     let lastYearStart = []
-     lastYearStart[0] = new Date("Mon, 07 Sep 2025 8:05:00 GMT");
-     const now = new Date;
-     let diffYears = 0;
+  
 
-for (let i = 0; i <= lastYearStart.length; i++) {
-  if (now > lastYearStart[i]) {
-    if (creationTime < lastYearStart[i]) {
-      diffYears++
-
-     }
-  }
-   
-}
-  if (user.email.charAt(user.displayName.length) == "1") {
-    if (user.email.charAt(user.displayName.length+1) == "0") {
-       Klasse = String(Number(user.email.charAt(user.displayName.length) + user.email.charAt(user.displayName.length+1))  + diffYears) + "/" + user.email.charAt(user.displayName.length+2)
-    } else {
-       Klasse = String(Number(user.email.charAt(user.displayName.length) + user.email.charAt(user.displayName.length+1))  + diffYears)
-    }
-    
-  } else if (user.email.charAt(user.displayName.length) == "L") {
-    Klasse = "Lehrer"
-   
-  } else  if (user.email.charAt(user.displayName.length) == "A") {
-      Klasse = ""
-    } else {
-     Klasse = String(Number(user.email.charAt(user.displayName.length))+diffYears) + "/" + user.email.charAt(user.displayName.length+1)
-  }
-   
-  return Klasse;
-
-
-
-  }
-
-
- export {user, processClass, processClassFor};
+ export {user,};

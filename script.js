@@ -9,6 +9,7 @@ import {user} from "/TFG/login/login.js"
     document.getElementById("class").style.display = "none"
     document.getElementById("mecker").style.display = "none"
     document.getElementById("bla").style.display = "none"
+    document.getElementById("surname").style.display = "none"
 
 
     function processClass() {
