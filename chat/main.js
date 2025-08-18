@@ -23,7 +23,7 @@ let LastM
 let LastU
 let messageData;
 let userInfo
-let isFetching = false;
+
 
 
  if (user.uid) {
@@ -52,37 +52,48 @@ async function getUserInfo(uid) {
     return userInfo;
 }
 
-
+ 
 async function getSortedDocuments() {
 
 
   const querySnapshot = await getDocs(q);
-  document.getElementById("output").innerHTML = ""
+  //document.getElementById("output").innerHTML = ""
   
+
   for (const doc of querySnapshot.docs) {
-    
+
+
+  if (doc.data().Date) {
     if (doc.data().User === user.uid) { 
-      document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<p class='yourmessage'>" + doc.data().Text + "</p>";
+      document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<div class='yourmessage'>" + doc.data().Text +  "<p class='time' style='display: none;'>" + String(doc.data().Date)+ "</p>" + "</div>";
     }
    else {
     userInfo = await getUserInfo(doc.data().User)
    
     if (userInfo.Vorname) {
-
-      document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<div class='message'>" + "<div class='userinfos'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "</div>";
+        
+      document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<div class='message'>"  + "<div class='userinfos'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "<p class='time' style='display: none;'  >" + String(doc.data().Date) + "</p>" + "</div>";
     }
       
     LastU = userInfo.Vorname;
     LastM = doc.data().Text;
     
     }
+  }
+    
 
    
-    
+    removeShit()
     
 
   };
   removeShit()
+
+  let elements = document.querySelectorAll(".message, .yourmessage");
+
+  elements[elements.length - 1].scrollIntoView();
+
+
 
 }
 
@@ -117,7 +128,7 @@ let fr = false;
     }
   
 
-  document.getElementById("input").scrollIntoView({behavior: "smooth"});
+  
 
     if (document.visibilityState == "hidden") {
       setTimeout(() => {
@@ -153,27 +164,48 @@ let fr = false;
 
    
 function removeShit() {
-  try {
-    for (let i = 0; i < document.getElementsByClassName("message").length; i++) {
-    if (document.getElementsByClassName("message")[i].innerHTML == document.getElementsByClassName("message")[i+1].innerHTML) {
-      document.getElementsByClassName("message")[i].remove()
+
+   const messages = Array.from(document.querySelectorAll(".message"));
+
+for (let i = 0; i < messages.length; i++) {
+  for (let l = i + 1; l < messages.length; l++) {
+    if (messages[i] && messages[l] && messages[i].innerHTML === messages[l].innerHTML) {
+      messages[l].remove();
+      console.log("Removed:", messages[l]?.innerHTML);
+      messages.splice(l, 1);
+      l--;
     }
   }
-  
-   for (let i = 0; i < document.getElementsByClassName("yourmessage").length; i++) {
-    if (document.getElementsByClassName("yourmessage")[i].innerHTML == document.getElementsByClassName("yourmessage")[i+1].innerHTML) {
-      document.getElementsByClassName("yourmessage")[i].remove()
+}
+
+
+const yourMessages = Array.from(document.querySelectorAll(".yourmessage"));
+
+for (let i = 0; i < yourMessages.length; i++) {
+  for (let l = i + 1; l < yourMessages.length; l++) {
+    if (yourMessages[i] && yourMessages[l] && yourMessages[i].innerHTML === yourMessages[l].innerHTML) {
+      yourMessages[l].remove();
+      console.log("Removed:", yourMessages[l]?.innerHTML);
+      yourMessages.splice(l, 1);
+      l--;
     }
   }
-  } catch (error) {
-    
-  }
+}
+
+
   
   
+  
+
+
+
 }
 
 
 
+setInterval(() => {
+  removeShit()
+}, 3000);
+
 
   
-

@@ -1,6 +1,6 @@
 
 
-
+let user = sessionStorage.getItem("User")
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 
@@ -111,43 +111,41 @@ buildCanvas();
  
 
 async function checkpixel(color, number) {
+    user = sessionStorage.getItem("User")
     const colRef = collection(db, "place");
     const q = query(colRef, orderBy("time", "desc"));
     const querySnapshot = await getDocs(q);
   
     let found = false;
   
-    // 1. Suche nach passender number
+    
     for (const document of querySnapshot.docs) {
       if (document.data().number === number) {
         found = true;
   
-        // 2. Wenn Farbe schon korrekt ist, nichts tun
         if (document.data().color === color) {
-          console.log("Farbe bereits korrekt");
           return;
         }
   
-        // 3. Farbe aktualisieren
+    
         await setDoc(doc(db, "place", document.id), {
           number,
           color,
-          time: serverTimestamp()
+          time: serverTimestamp(),
+          user: user
         }, { merge: true });
-  
-        console.log("Farbe aktualisiert");
+
         return;
       }
     }
-  
-    // 4. Falls keine passende number gefunden wurde → neues Dokument anlegen
+ 
     if (!found) {
       await addDoc(colRef, {
         number,
         color,
-        time: serverTimestamp()
+        time: serverTimestamp(),
+        user: user
       });
-      console.log("Neues Dokument hinzugefügt");
     }
   }
   
@@ -155,14 +153,14 @@ async function checkpixel(color, number) {
 loadPixel()
 
 document.addEventListener("click", function (event) {
-    remaininTime=localStorage.getItem("delay");
+    remaininTime=sessionStorage.getItem("delay");
     if (remaininTime < 0) {
        if (event.target.classList.contains("pixel")) {
-       color = localStorage.getItem("color");
+       color = sessionStorage.getItem("color");
       document.getElementById(event.target.id).style.backgroundColor =  color ;
       checkpixel(color, event.target.id)
       remaininTime = 4;
-      localStorage.setItem("delay", 4)
+      sessionStorage.setItem("delay", 4)
      
     } 
      
@@ -170,7 +168,7 @@ document.addEventListener("click", function (event) {
     
   });
 setInterval(() => {
-    if (localStorage.getItem("delay") <= 0) {
+    if (sessionStorage.getItem("delay") <= 0) {
     document.getElementById("canva").style.cursor = "crosshair"
   } else {
      document.getElementById("canva").style.cursor = "progress"
@@ -178,3 +176,10 @@ setInterval(() => {
 }, 100);
   
   
+
+
+
+
+
+  
+    

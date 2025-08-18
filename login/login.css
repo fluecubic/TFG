@@ -112,3 +112,49 @@ h1{
     width: 350px;
     margin-left: 20px;
 }
+
+
+@media screen and (max-width: 600px) {
+    
+   body{
+    width: 375px;
+    height: 800px;
+    margin-left: 0vw;
+}
+
+
+#user-icon{
+    margin-left: 0px;
+}
+
+#leiste{
+    
+    width: 375px;
+    margin-top: 0px;
+    top: 5px;
+    height: 90px;
+    
+}
+
+
+h1{
+    width: 270px;
+}
+
+button{
+    
+    margin: 5px;
+    width: 350px;
+    height: fit-content;
+    padding: 5px;
+    border: 0px;
+    border-radius: 10px;
+    margin-left: 13px;
+}
+
+select{
+    margin-left: 70px;
+   
+}
+
+}

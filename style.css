@@ -58,11 +58,16 @@ p{
 #links{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    
 }
 
 .link-name{
     margin-top: 300px;
     margin-left: 105px;
+    
 }
 
 .link-app:hover{
@@ -85,5 +90,37 @@ a:active {
 #place-link{
     background-image: url(./assets/Screenshot\ \(15\).png);
 }
+
+#labubu-link{
+    p{
+        margin-left: 100px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    
+   .link-app{
+    width: 320px !important;
+    height: 320px !important;
+    border-radius: 20px;
+    margin: 30px 5px;
+    padding: 5px;
+}
+  
+
+.link-name{
+    margin-top: 250px;
+    margin-left: 110px;
+    
+}
+
+#tictactoe-link{
+    p{
+        margin-left: 50px;
+    }
+}
+
+}
+
 
 
