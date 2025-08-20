@@ -9,18 +9,21 @@ margin-bottom: 100px;}
 }
 
 button
-{width:100px; height: 30px;
+{width:150px; height: 35px;
   border: 1px solid white;
   border-radius: 5px;
   background-color: orange;
   margin-left: 15px;
 }
 
-#input{margin-left: 5px;
+#input{margin-left: 350px;
    border: 1px solid white;
   border-radius: 5px;
   background-color: rgb(65, 64, 63);
   color: whitesmoke;
+  width: 250px;
+  height: 31px;
+  font-size: 15px;
   }
 
 
@@ -36,6 +39,7 @@ font-size: large;}
     padding: 10px;
     font-size: 20px;
     margin-top: 17px;
+    margin-left: 300px;
 }
 
 .yourmessage{
@@ -44,7 +48,7 @@ font-size: large;}
     border-radius: 20px;
     width:fit-content;
     padding: 10px;
-    margin-left: 350px;
+    margin-left: 500px;
     font-size: 20px;
     margin-top: 17px;
 }
@@ -61,7 +65,7 @@ p{
   #inputs{
     display: flex;
     flex-direction: row;
-    height: 30px;
+    height: 35px;
     position:fixed;
     bottom: 15px;
   }
@@ -93,12 +97,15 @@ h1{
 #leiste{
     display: flex;
     flex-direction:row;
-    background-color: rgb(65, 63, 63);
+    background-color: rgb(27, 27, 31);
     position: fixed;
-    width: 1894px;
+    width: 1920px;
     margin-top: 0px;
     top: 5px;
     height: 90px;
+    left: 0px;
+    top: 0px;
+    right: 0px;
 }
 
 #user-icon{
@@ -125,7 +132,7 @@ a:active {
 }
 
 .class{
-  background-color: rgb(142, 142, 151);
+  background-color: rgb(150, 150, 160);
   border-radius: 5px;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -140,6 +147,44 @@ a:active {
   margin-bottom: 0px;
 }
 
+
+#select-chat{
+  top: 90px;
+  position: fixed;
+  height: 950px;
+  width: 300px;
+  background-color: rgb(27, 27, 31);
+  left: 0px;
+}
+
+.chat-button{
+  margin: 5px;
+  width: 290px;
+  background-color: rgb(255, 187, 0);
+  border: 0px solid whitesmoke;
+  margin-top: 15px;
+
+    
+}
+
+
+#main-chat{
+      margin-top: 50px;
+    }
+
+
+#hide{
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  z-index: 10;
+  left: 5px;
+  display: none;
+}
+
+
+
+
 @media screen and (max-width: 600px) {
 
 #user-icon{
@@ -151,10 +196,6 @@ a:active {
     height:70px;
 }
    #leiste{
-    display: flex;
-    flex-direction:row;
-    background-color: rgb(65, 63, 63);
-    position: fixed;
     width: 399px;
     margin-top: 0px;
     top: 5px;
@@ -170,4 +211,35 @@ font-size: 35px;
 max-width: 250px;
 height: 70px;}
 
+#select-chat{
+  display: none;
 }
+  .message{
+   
+    padding: 10px;
+    font-size: 20px;
+    margin-top: 17px;
+    margin-left: 5px;
+}
+
+#hide{
+  display: block;
+}
+
+
+
+#input{
+  margin-left: 5px;
+  width: 250px;
+  height: 31px;
+  font-size: 15px;
+  }
+
+
+button{
+  width:80px;
+  height: 35px;
+  margin-left: 10px;
+}
+}
+

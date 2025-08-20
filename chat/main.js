@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
-import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 import {user} from "/TFG/login/login.js"
 
 const firebaseConfig = {
@@ -21,7 +21,7 @@ const colRef = collection(db, "main-chat");
 const q = query(colRef, orderBy("Date", "asc")); 
 let LastM
 let LastU
-let messageData;
+let chatId = "main-chat";
 let userInfo
 
 
@@ -57,22 +57,22 @@ async function getSortedDocuments() {
 
 
   const querySnapshot = await getDocs(q);
-  //document.getElementById("output").innerHTML = ""
-  
 
+  
+let html = ""
   for (const doc of querySnapshot.docs) {
 
 
-  if (doc.data().Date) {
+  if (doc.data().Date && doc.data().Chat == chatId) {
     if (doc.data().User === user.uid) { 
-      document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<div class='yourmessage'>" + doc.data().Text +  "<p class='time' style='display: none;'>" + String(doc.data().Date)+ "</p>" + "</div>";
+      html = html+ "<div class='yourmessage'>" + doc.data().Text +  "<p class='time' style='display: none;'>" + String(doc.data().Date)+ "</p>" + "</div>";
     }
    else {
     userInfo = await getUserInfo(doc.data().User)
    
     if (userInfo.Vorname) {
         
-      document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + "<div class='message'>"  + "<div class='userinfos'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "<p class='time' style='display: none;'  >" + String(doc.data().Date) + "</p>" + "</div>";
+      html = html + "<div class='message'>"  + "<div class='userinfos'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "<p class='time' style='display: none;'  >" + String(doc.data().Date) + "</p>" + "</div>";
     }
       
     LastU = userInfo.Vorname;
@@ -87,6 +87,7 @@ async function getSortedDocuments() {
     
 
   };
+  document.getElementById("output").innerHTML = html
   removeShit()
 
   let elements = document.querySelectorAll(".message, .yourmessage");
@@ -107,6 +108,7 @@ document.getElementById("go").addEventListener("click", async () => {
   Text:document.getElementById("input").value, 
   Date: serverTimestamp(),
   User: user.uid,
+  Chat: chatId
   })
 
  
@@ -203,9 +205,66 @@ for (let i = 0; i < yourMessages.length; i++) {
 
 
 
-setInterval(() => {
-  removeShit()
-}, 3000);
+//setInterval(() => {
+//  removeShit()
+//}, 3000);
 
 
+document.addEventListener("click", function (e) {
+ if (e.target.classList.contains("chat-button")) {
+    chatId = e.target.id
+    getSortedDocuments()
+  }
   
+})
+
+async function  loadChatOptions() {
+  const userData =  await getUserInfo(user.uid)
+  document.getElementById("select-chat").innerHTML += "<button id='" + userData.Klasse + "' class='chat-button' >" + userData.Klasse + " Chat</button>"
+}
+
+
+
+async function oldStuff() {
+  const querySnapshot = await getDocs(q);
+  const now = new Date();
+
+  for (const d of querySnapshot.docs) {
+    const docDate = new Date(d.data().Date); 
+    const docRef = doc(db, "main-chat", d.id);
+
+    if (now - docDate > 10) {
+      await deleteDoc(docRef);
+      console.log("Deleted:", d.id, JSON.stringify(d.data()));
+    }
+
+     if (!d.data().Chat) {
+      await deleteDoc(docRef);
+      console.log("Deleted:", d.id, JSON.stringify(d.data()));
+    }
+  }
+}
+
+loadChatOptions()
+oldStuff()
+
+let hideStatus = "menu";
+
+document.getElementById("hide").addEventListener("click", function () {
+  if (hideStatus === "menu") {
+    hideStatus = "cross";
+    document.getElementById("hide").src = "/TFG/assets/cross.png";
+    document.getElementById("select-chat").style.display = "block";
+    document.getElementById("hide").style.left = "265px";
+
+  } 
+  else if (hideStatus === "cross") {
+    hideStatus = "menu";
+    document.getElementById("hide").src = "/TFG/assets/menu.png";
+    document.getElementById("select-chat").style.display = "none";
+    document.getElementById("hide").style.left = "5px";
+  }
+});
+
+
+
