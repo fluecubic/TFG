@@ -86,15 +86,18 @@ let html = ""
     removeShit()
     
 
-  };
-  document.getElementById("output").innerHTML = html
+  };document.getElementById("output").innerHTML = html
   removeShit()
 
+  if (html != "") {
+    
   let elements = document.querySelectorAll(".message, .yourmessage");
 
   elements[elements.length - 1].scrollIntoView();
 
 
+  }
+  
 
 }
 
@@ -194,7 +197,17 @@ for (let i = 0; i < yourMessages.length; i++) {
   }
 }
 
+const buttons = Array.from(document.querySelectorAll(".chat-button"));
 
+for (let i = 0; i < buttons.length; i++) {
+  for (let l = i + 1; l < buttons.length; l++) {
+    if (buttons[i] && buttons[l] && buttons[i].innerHTML === buttons[l].innerHTML) {
+      buttons[l].remove();
+      buttons.splice(l, 1);
+      l--;
+    }
+  }
+}
   
   
   
@@ -220,7 +233,32 @@ document.addEventListener("click", function (e) {
 
 async function  loadChatOptions() {
   const userData =  await getUserInfo(user.uid)
-  document.getElementById("select-chat").innerHTML += "<button id='" + userData.Klasse + "' class='chat-button' >" + userData.Klasse + " Chat</button>"
+  document.getElementById("chat-select").innerHTML += "<button id='" + userData.Klasse + "' class='chat-button' >" + userData.Klasse + " Chat</button>"
+
+  const q = query(collection(db, "main-chat")); 
+  const querySnapshot = await getDocs(q);
+
+for (const doc of querySnapshot.docs) { 
+
+  if (String(doc.data().Chat).length == 57) {
+
+    if (doc.data().Chat.includes(user.uid)) {
+
+      let uid1 = doc.data().Chat.slice(0, 28)
+      let uid2 = doc.data().Chat.slice(29, 57)
+
+      if (uid1 == user.uid) {
+    const userData =  await getUserInfo(uid2)
+    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
+      } else{
+       const userData =  await getUserInfo(uid1)
+    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
+      }
+    }
+  }
+}
+
+removeShit()
 }
 
 
@@ -267,4 +305,39 @@ document.getElementById("hide").addEventListener("click", function () {
 });
 
 
+ await loaddmoptions()
 
+document.getElementById("new-dm").addEventListener("click", function () {
+  document.getElementById("dms").style.display = "block"
+  
+
+})
+
+document.getElementById("esc").addEventListener("click", function () {
+  document.getElementById("dms").style.display = "none"
+  console.log("zftztj")
+})
+
+async function loaddmoptions() {
+
+  const q = query(collection(db, "users")); 
+
+  const querySnapshot = await getDocs(q);
+
+for (const doc of querySnapshot.docs) { 
+  document.getElementById("dms").innerHTML += "<div id='" + doc.data().Uid + "' class='dm-option'>"+ doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
+
+}
+
+
+}
+
+document.addEventListener("click", async function (e) {
+ if (e.target.classList.contains("dm-option")) {
+    chatId = String(e.target.id) + "-" + String(user.uid)
+    const userData =  await getUserInfo(e.target.id)
+    document.getElementById("chat-select").innerHTML += "<button id='" + chatId+ "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
+    getSortedDocuments()
+  }
+  
+})
