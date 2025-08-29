@@ -10,7 +10,8 @@ body{
 #class
 #mecker
 #bla
-#surname{
+#surname
+#fertig{
     display: none;
 }
 
@@ -96,6 +97,14 @@ a:active {
         margin-left: 100px;
     }
 }
+
+.profilepic{
+width: 80px;
+height: 80px;
+border-radius: 40px;
+margin-top: 0px;
+}
+
 
 @media screen and (max-width: 600px) {
     

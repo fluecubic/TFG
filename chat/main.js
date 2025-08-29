@@ -44,6 +44,12 @@ async function getUserInfo(uid) {
         userInfo.Nachname = doc.data().Nachname;
         userInfo.Vorname = doc.data().Vorname;
         userInfo.Klasse = doc.data().Klasse;
+        if (doc.data().Photo) {
+          userInfo.Photo = doc.data().Photo;
+        } else {
+          userInfo.Photo = "/TFG/assets/user.png"
+        }
+        
         
         break;
      }
@@ -72,7 +78,7 @@ let html = ""
    
     if (userInfo.Vorname) {
         
-      html = html + "<div class='message'>"  + "<div class='userinfos'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "<p class='time' style='display: none;'  >" + String(doc.data().Date) + "</p>" + "</div>";
+      html = html + "<div class='message'>"  + "<div class='userinfos'>" + "<img class='profilepic' src='" + userInfo.Photo + "'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "<p class='time' style='display: none;'  >" + String(doc.data().Date) + "</p>" + "</div>";
     }
       
     LastU = userInfo.Vorname;
@@ -107,7 +113,7 @@ let html = ""
 
 
 document.getElementById("go").addEventListener("click", async () => {
-    const AdddocRef = addDoc(collection(db, "main-chat"), {//dokumenr adden schreiben
+    const AdddocRef = addDoc(collection(db, "main-chat"), {
   Text:document.getElementById("input").value, 
   Date: serverTimestamp(),
   User: user.uid,
@@ -116,8 +122,8 @@ document.getElementById("go").addEventListener("click", async () => {
 
  
  
-document.getElementById("input").value = "";
-});
+document.getElementById("input").value = ""
+})
 
 
 
@@ -162,6 +168,8 @@ let fr = false;
     document.getElementById("mecker").style.display = "none"
     document.getElementById("bla").style.display = "none"
     document.getElementById("surname").style.display = "none"
+    document.getElementById("fertig").style.display = "none"
+    document.getElementById("q").style.display = "none"
 
 
    
@@ -225,7 +233,10 @@ for (let i = 0; i < buttons.length; i++) {
 
 document.addEventListener("click", function (e) {
  if (e.target.classList.contains("chat-button")) {
-    chatId = e.target.id
+    chatId = e.target.id;
+    
+    for (let i = 0; i < document.getElementsByClassName("chat-button").length; i++) {document.getElementsByClassName("chat-button")[i].style.border = "1px solid whitesmoke"}
+    document.getElementById(e.target.id).style.border = "3px solid whitesmoke";
     getSortedDocuments()
   }
   
@@ -233,7 +244,7 @@ document.addEventListener("click", function (e) {
 
 async function  loadChatOptions() {
   const userData =  await getUserInfo(user.uid)
-  document.getElementById("chat-select").innerHTML += "<button id='" + userData.Klasse + "' class='chat-button' >" + userData.Klasse + " Chat</button>"
+  document.getElementById("chat-select").innerHTML += "<button id='" + userData.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  userData.Klasse + " Chat" + "</p>" +"</button>"
 
   const q = query(collection(db, "main-chat")); 
   const querySnapshot = await getDocs(q);
@@ -249,10 +260,10 @@ for (const doc of querySnapshot.docs) {
 
       if (uid1 == user.uid) {
     const userData =  await getUserInfo(uid2)
-    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
+    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>" + userData.Vorname + " " + userData.Nachname + "</button>"
       } else{
        const userData =  await getUserInfo(uid1)
-    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
+    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</button>"
       }
     }
   }
@@ -315,7 +326,6 @@ document.getElementById("new-dm").addEventListener("click", function () {
 
 document.getElementById("esc").addEventListener("click", function () {
   document.getElementById("dms").style.display = "none"
-  console.log("zftztj")
 })
 
 async function loaddmoptions() {
@@ -325,7 +335,7 @@ async function loaddmoptions() {
   const querySnapshot = await getDocs(q);
 
 for (const doc of querySnapshot.docs) { 
-  document.getElementById("dms").innerHTML += "<div id='" + doc.data().Uid + "' class='dm-option'>"+ doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
+  document.getElementById("dms").innerHTML += "<div id='" + doc.data().Uid + "' class='dm-option'>"+  "<img class='profilepic big' src='" +  doc.data().Photo + "'>" + doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
 
 }
 
@@ -338,6 +348,9 @@ document.addEventListener("click", async function (e) {
     const userData =  await getUserInfo(e.target.id)
     document.getElementById("chat-select").innerHTML += "<button id='" + chatId+ "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
     getSortedDocuments()
+     for (let i = 0; i < document.getElementsByClassName("chat-button").length; i++) {document.getElementsByClassName("chat-button")[i].style.border = "1px solid whitesmoke"}
+    document.getElementById(chatId).style.border = "3px solid whitesmoke";
+    document.getElementById("dms").style.display = "none"
   }
   
 })

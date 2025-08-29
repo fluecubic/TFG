@@ -8,6 +8,7 @@ body{
 #inputs{
     margin: 50px;
     margin-top: 130px;
+    bottom: 5px;
 }
 
 input{
@@ -50,7 +51,7 @@ button{
     margin-left: 13px;
 }
 
-#options{
+.options{
 display: flex;
 flex-direction: row;
 }
@@ -111,6 +112,26 @@ h1{
     margin-right: 0px;
     width: 350px;
     margin-left: 20px;
+}
+
+
+#logout{
+    background-color: black;
+    color: red;
+}
+
+.profilepic{
+width: 80px;
+height: 80px;
+border-radius: 40px;
+margin-top: 0px;
+}
+
+#URL{
+    margin: 5px;
+    margin-bottom: 40px;
+    border: 1px solid white;
+    margin-top: 23px;
 }
 
 

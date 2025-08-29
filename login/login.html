@@ -9,7 +9,7 @@
         <a href="/TFG/index.html"><h1 id="">TFG/Login</h1></a>
 
         <a href="/TFG/login/login.html">
-        <img id="user-icon" src="/TFG/assets/user.png">
+        <img id="user-icon" class="profilepic" src="/TFG/assets/user.png">
         </a>
     </div>
 
@@ -22,7 +22,7 @@
      <br>
      <p id="mecker"> </p>
     
-        <p ID="classinf">In welche Klasse gehts du? <br>(Wenn du dich in den Sommerferien registrierst, wähle die Klasse aus, in die du gegangen bist.)</p>
+        <p id="classinf">In welche Klasse gehts du? <br>(Wenn du dich in den Sommerferien registrierst, wähle die Klasse aus, in die du gegangen bist.)</p>
         <br>
         <select  id="class">
             <option value="5/6">5</option>
@@ -59,11 +59,18 @@
      </div>
     
         </div>
-        <div id="options">
+        <div class="options">
      <button id="login">Regristrieren</button>
      <button id="signin">Anmelden</button>
-    </div> 
+    </div>
+
+    <div class="options">
+
+    <img src="/TFG/assets/Screenshot (15).png" id="q"  class="profilepic"> 
+    <input class="l" id="URL" type="text" placeholder="Profilbild-URL">
+     </div>
      <button id="logout">Abmelden</button>
+     <a href="/TFG/"><button id="fertig">Fertig</button></a>
     </body>
     <script type="module" src="./login.js"></script>
 </html>

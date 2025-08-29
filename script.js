@@ -10,6 +10,9 @@ import {user} from "/TFG/login/login.js"
     document.getElementById("mecker").style.display = "none"
     document.getElementById("bla").style.display = "none"
     document.getElementById("surname").style.display = "none"
+    document.getElementById("fertig").style.display = "none"
+    document.getElementById("q").style.display = "none"
+    document.getElementById("URL").style.display = "none"
 
 
     

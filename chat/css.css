@@ -164,8 +164,19 @@ a:active {
   border: 1px solid whitesmoke;
   color: white;
   margin-top: 15px;
-
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  height: 45px;
+  padding-left: 5%;
     
+}
+
+.chat-button-txt{
+  margin: 0px;
+  margin-left: 5px;
+  margin-top: 3px;
+  font-size: 25px;
 }
 
 
@@ -219,13 +230,36 @@ a:active {
 .dm-option{
   font-size: 32px;
   padding: 5px;
-  padding-left: 150px;
+  padding-left: 1px;
   font-family: Arial, Helvetica, sans-serif;
-  margin-left: 0.1px;
+  margin-left: 0px;
   border: 0px;
   border-top: 1px solid white;
   color: white;
+  padding-bottom: 0px;
+  padding-top: 2px;
   
+}
+
+.profilepic{
+width: 20px;
+height: 20px;
+border-radius: 40px;
+margin-right: 3px;
+}
+
+.big{
+  width: 50px;
+  height: 50px;
+  margin-top: 0px;
+  margin-right: 300px;
+}
+
+.middle{
+  width: 35px;
+  height: 35px;
+  margin-top: 0px;
+  margin-right: 0px;
 }
 
 

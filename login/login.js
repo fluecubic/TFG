@@ -17,7 +17,7 @@ let surnameinput = document.getElementById("surname").value;
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, setPersistence, browserLocalPersistence, updateEmail   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, setPersistence, browserLocalPersistence, updateEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
@@ -45,15 +45,23 @@ const q = query(colRef, orderBy("Uid", "asc"));
 
 
 
-  function uilogedin() {
+async  function uilogedin() {
     document.getElementById("name").style.display = "none"
     document.getElementById("password").style.display = "none"
     document.getElementById("login").style.display = "none"
     document.getElementById("signin").style.display = "none"
     document.getElementById("class").style.display = "none"
-     document.getElementById("classinf").style.display = "none"
+    document.getElementById("classinf").style.display = "none"
     document.getElementById("logout").style.display = "block"
     document.getElementById("surname").style.display = "none"
+    document.getElementById("fertig").style.display = "block"
+    document.getElementById("mecker").style.color = "white"
+    document.getElementById("URL").style.display = "block"
+    document.getElementById("q").style.display = "block"
+    const userInfo = await getUserInfo(user.uid)
+    document.getElementById("q").src = userInfo.Photo
+    document.getElementById("user-icon").src = userInfo.Photo
+    document.getElementById("URL").value = userInfo.Photo
     setTimeout(() => {
         document.getElementById("mecker").innerHTML = "Willkomen in der Hood, " + user.displayName     
     }, 300);
@@ -61,7 +69,7 @@ const q = query(colRef, orderBy("Uid", "asc"));
  
  }
 
- function uilogedout() {
+async function uilogedout() {
     document.getElementById("name").style.display = "block"
     document.getElementById("password").style.display = "block"
     document.getElementById("login").style.display = "block"
@@ -71,7 +79,17 @@ const q = query(colRef, orderBy("Uid", "asc"));
     document.getElementById("logout").style.display = "none"
     document.getElementById("mecker").innerHTML = ""
     document.getElementById("surname").style.display = "block"
+    document.getElementById("fertig").style.display = "none"
+    document.getElementById("mecker").style.color = "red"
+    document.getElementById("URL").style.display = "none"
+    document.getElementById("q").style.display = "none"
+    const userInfo = await getUserInfo(user.uid)
+    document.getElementById("q").src = userInfo.Photo
+    document.getElementById("user-icon").src = userInfo.Photo
+    document.getElementById("URL").value = userInfo.Photo
  }
+uilogedout()
+
 
   async function signinwithemail() {
     nameinput = document.getElementById("name").value;
@@ -174,10 +192,58 @@ const q = query(colRef, orderBy("Uid", "asc"));
     
  }
 
+
+ async function getUserInfo(uid) {
+     const q = query(collection(db, "users"));
+     let userInfo = new Object();
+ 
+      const Snapshot = await getDocs(q);
+ 
+      for (const doc of Snapshot.docs) {
+      if (doc.data().Uid == uid) {
+         userInfo.Nachname = doc.data().Nachname;
+         userInfo.Vorname = doc.data().Vorname;
+         userInfo.Klasse = doc.data().Klasse;
+         if (doc.data().Photo != "") {
+          userInfo.Photo = doc.data().Photo;
+        } else {
+          userInfo.Photo = "/TFG/assets/user.png"
+        }
+         
+         break;
+      }
+     
+ }
+     return userInfo;
+ }
  
 
-
+async  function SetProfilePic(url) {
+  const querySnapshot = await getDocs(q);
     
+      for (const Doc of querySnapshot.docs) {
+
+       if (Doc.data().Uid == user.uid) {
+        await updateDoc(doc(db, "users", Doc.id), {
+            Photo:url
+          });
+  
+       }
+      
+          
+          
+        }
+        const userInfo = await getUserInfo(user.uid)
+        document.getElementsByClassName("profilepic")[0].src = userInfo.Photo
+      }
+   
+    
+ 
+document.getElementById("URL").addEventListener("input", async () => {
+  await SetProfilePic(document.getElementById("URL").value);
+});
+
+
 
    
 
@@ -189,4 +255,4 @@ const q = query(colRef, orderBy("Uid", "asc"));
   
   
 
- export {user,};
+ export {user};

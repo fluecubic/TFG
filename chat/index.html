@@ -6,8 +6,6 @@
 <link rel="stylesheet" type="text/css" href="./css.css">
     <link rel=" icon" type="image/png" href="./live-chat.png">
     <title>Firebase chat</title>
-
-    <link rel="manifest" href="./manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Chat">
@@ -19,7 +17,7 @@
         <a href="/TFG/index.html"><h1 id="">TFG/Chat</h1></a>
 
         <a href="/TFG/login/login.html">
-        <img id="user-icon" src="/TFG/assets/user.png">
+        <img id="user-icon" class="profilepic" src="/TFG/assets/user.png">
         </a>
     </div>
 
@@ -29,14 +27,13 @@
      
     <div id="select-chat">
    <div id="chat-select">
-    <button id="main-chat" class="chat-button">Haupt-Chat</button>
+    <button id="main-chat" class="chat-button"><p class="chat-button-txt">Haupt-Chat</p></button>
     </div>
     <button id="new-dm">+</button>
    </div>
    
     <div id="dms">
       <img id="esc"  src="/TFG/assets/cross.png">
-      <div id="_G7iuPizOt6t7" class="dm-option">Max Mustermann 7/3</div>
     </div>
 
 
@@ -66,8 +63,9 @@
      <br>
      <p id="mecker"> </p>
     
-        <p id="bla">In welche Klasse gehts du? <br>(Wenn du dich in den Sommerferien registrierst, wähle die Klasse aus, in die du gegangen bist.)</p>
+        <p id="bla"></p>
         <br>
+        <p class="l" id="classinf"></p>
         <select  id="class">
         </select>
      </div>
@@ -76,9 +74,12 @@
         <div class="l" id="options">
      <button id="login">Regristrieren</button>
      <button id="signin">Anmelden</button>
+     <img src="" id="q"  class="l">
     </div> 
-     <button class ="l" id="logout">Abmelden</button>
+     <button class ="l" id="logout"></button>
+     <input class="l" id="URL" type="text">
 </div>
+<button clas="l" id="fertig"></button>
     <script type="module" src="./main.js"></script>
   
 
@@ -88,4 +89,5 @@
 
 
   </body>
+  
 </html>

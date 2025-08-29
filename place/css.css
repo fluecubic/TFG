@@ -176,6 +176,12 @@ a:active {
   text-decoration: none;
 }
 
+.profilepic{
+width: 80px;
+height: 80px;
+border-radius: 40px;
+margin-top: 0px;
+}
 
 @media screen and (max-width: 600px) {
     h1 {
