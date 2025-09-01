@@ -1,1 +1,0 @@
-//document.getElementById("logo").addEventListener("click", (window.location = "https://gymnasium-strausberg.de/"))  
