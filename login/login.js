@@ -112,10 +112,10 @@ uilogedout()
     
     return user
    } catch (error) {
-    document.getElementById("mecker").innerHTML = "Fehler. Überprüfe ob Name, Passwort und Klasse richtig sind"
+    document.getElementById("mecker").innerHTML = "Fehler. Überprüfe ob Name, Passwort und Klasse richtig sind. Wenn der Account noch nicht existiert, versuche dich zu registrieren"
     setTimeout(() => {
         window.location.reload()
-    }, 2000);
+    }, 6000);
     
    }
 
@@ -158,10 +158,10 @@ uilogedout()
 
     
    } catch (error) {
-    document.getElementById("mecker").innerHTML = "Fehler. Überprüfe ob Name, Password und Email vorhanden sind, oder ob der Account in deiner Klasse schon existiert"
+    document.getElementById("mecker").innerHTML = "Fehler. Überprüfe ob Name, Password und Klasse vorhanden sind und das Passwort min. 6 Zeichen hat. Wenn der Account schon existiert, probiere dich anzumelden. "
     setTimeout(() => {
         window.location.reload()
-    }, 2000);
+    }, 6000);
    }
     
     
@@ -204,8 +204,13 @@ uilogedout()
          userInfo.Nachname = doc.data().Nachname;
          userInfo.Vorname = doc.data().Vorname;
          userInfo.Klasse = doc.data().Klasse;
-         if (doc.data().Photo != "") {
-          userInfo.Photo = doc.data().Photo;
+         if (doc.data().Photo) {
+          if (doc.data().Photo != "") {
+            userInfo.Photo = doc.data().Photo;
+          } else {
+            userInfo.Photo = "/TFG/assets/user.png"
+          }
+          
         } else {
           userInfo.Photo = "/TFG/assets/user.png"
         }
