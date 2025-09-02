@@ -1,7 +1,7 @@
 import {user} from "/TFG/login/login.js"
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, FieldPath  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, FieldPath, deleteDoc  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -16,12 +16,12 @@ const firebaseConfig = {
 
 const db = getFirestore(initializeApp(firebaseConfig));
 
-const App = initializeApp(firebaseConfig)
 
 
 const cells = document.querySelectorAll(".cell");
 const statusText = document.querySelector("#statusText");
 const restartBtn = document.querySelector("#restartBtn");
+let Oppponenttxt = document.getElementById("opponent")
 const winConditions = [
     [0, 1, 2],
     [3, 4, 5],
@@ -78,7 +78,7 @@ async function changePlayer(){
     }
     
 }
-function checkWinner(){
+async function checkWinner(){
     let roundWon = false;
     for(let i = 0; i < winConditions.length; i++){
         const condition = winConditions[i];
@@ -96,7 +96,15 @@ function checkWinner(){
     }
 
     if(roundWon){
-        statusText.textContent = `${currentPlayer} hat gewonnen!`;
+        const docRef = doc(db, "TTT", game.gameId);
+        await deleteDoc(docRef);
+        if (currentPlayer == game.you) {
+             statusText.textContent = `Du hast gewonnen!`;
+        }
+        else {
+            statusText.textContent = `Du hast verloren!`;
+        }
+        
         running = false;
     }
     else if(!options.includes("")){
@@ -107,7 +115,10 @@ function checkWinner(){
         changePlayer();
     }
 }
-function restartGame(){
+async function restartGame(){
+    console.log("gamedelete")
+     const docRef = doc(db, "TTT", game.gameId);
+    await deleteDoc(docRef);
     window.location.reload()
 }
 
@@ -127,7 +138,34 @@ document.getElementById("q").style.display = "none"
 document.getElementById("URL").style.display = "none"
 
 
+async function getUserInfo(uid) {
+    const q = query(collection(db, "users"));
+    let userInfo = new Object();
+
+     const Snapshot = await getDocs(q);
+
+     for (const doc of Snapshot.docs) {
+     if (doc.data().Uid == uid) {
+        userInfo.Nachname = doc.data().Nachname;
+        userInfo.Vorname = doc.data().Vorname;
+        userInfo.Klasse = doc.data().Klasse;
+        if (doc.data().Photo) {
+          userInfo.Photo = doc.data().Photo;
+        } else {
+          userInfo.Photo = "/TFG/assets/user.png"
+        }
+        
+        
+        break;
+     }
+    
+}
+    return userInfo;
+}
+
+
 async function GameSearch() {
+    
     let game = new Object();
     const q = query(collection(db, "TTT")); 
     const querySnapshot = await getDocs(q);
@@ -138,31 +176,37 @@ async function GameSearch() {
     let PlayerX;
 
     for (const document of querySnapshot.docs) {
-    if (document.data().PlayerO == "") {
+    if (!document.data().PlayerO) {
        gameId = document.id
        PlayerO = user.uid;
        PlayerX = document.data().PlayerX;
        Turn = document.data().Turn;
        console.log(gameId, " ", PlayerX + " " + PlayerO)
         await setDoc(doc(db, "TTT", gameId), {PlayerO: user.uid },);
-    } else if (document.data().PlayerX == "") {
+    } else if (!document.data().PlayerX) {
        gameId = document.id
        PlayerO = document.data().PlayerO;
        PlayerX = user.uid;
        Turn = document.data().Turn;
+        let userInfo = await getUserInfo(PlayerO)
+    Oppponenttxt.innerHTML = "Du spielst gegen " + userInfo.Vorname + " " + userInfo.Nachname
        console.log("Game Found: " + gameId, " ", PlayerX + " " + PlayerO)
         await updateDoc(doc(db, "TTT", gameId), {PlayerX: user.uid },);
     }
 }
 
 if (gameId == "") {
+    uiGameSearch()
+
     if (Math.random() < 0.5) {Turn = "PlayerO"} else {Turn = "PlayerX"}
     console.log(Turn)
-    let addDocRef = await addDoc(colRef, {PlayerO: user.uid, PlayerX: "", Cells: ["","","","","","","","",""], Turn: Turn});
+    let addDocRef = await addDoc(colRef, {PlayerO: user.uid, Cells: ["","","","","","","","",""], Turn: Turn});
     PlayerO = user.uid;
     gameId = addDocRef.id;
     console.log("new Game: " + gameId + " " + PlayerO)
     PlayerX = await waitForOpponent(gameId)
+    let userInfo = await getUserInfo(PlayerX)
+    Oppponenttxt.innerHTML = "Du spielst gegen " + userInfo.Vorname + " " + userInfo.Nachname
     console.log("Player " + PlayerX + " joined game")
 }
 
@@ -186,6 +230,7 @@ async function waitForOpponent(Id) {
         onSnapshot(doc(db, "TTT", Id), (docSnapshot) => {
             const data = docSnapshot.data();
             if (data && data.PlayerX) {
+                uiGameFound()
                 resolve(data.PlayerX);
             }
         });
@@ -195,15 +240,49 @@ async function waitForOpponent(Id) {
 
  onSnapshot(doc(db, "TTT", game.gameId), (docSnapshot) => {
             const data = docSnapshot.data();
-            for (let i = 0; i < document.querySelectorAll(".cell"); i++) {
+            for (let i = 0; i < document.querySelectorAll(".cell").length; i++) {
+                if (data.Cells[i]) {
+                    console.log(i+ ": " + data.Cells[i])
                 options[i] = data.Cells[i]
                 
+                
+                
                 document.querySelectorAll(".cell").forEach(cell =>
-                    {if (cell.cellIndex = i) {
-                        cell.innerHTML = data.Cells[i] }}
+                    {
+
+                        if (document.querySelectorAll(".cell")[i].id == String(i) ) {
+                        console.log(document.querySelectorAll(".cell")[i])
+                        document.querySelectorAll(".cell")[i].innerHTML = data.Cells[i] }}
                 )
+            }
             }
             
             checkWinner();
         });
     
+
+
+
+const beforeUnloadHandler = (event) => {
+  event.preventDefault();
+  event.returnValue = true;
+};
+
+
+window.addEventListener("beforeunload", async function () {
+    beforeUnloadHandler
+    const docRef = doc(db, "TTT", game.gameId);
+    await deleteDoc(docRef);
+})
+
+function uiGameSearch(){
+    statusText.textContent = `Warte auf Gegner`;
+    cells.forEach( cell => {cell.style.display = "none"})
+    restartBtn.style.display = "none"
+}
+
+function uiGameFound(){
+    statusText.textContent = ``;
+    cells.forEach( cell => {cell.style.display = "block"})
+    restartBtn.style.display = "block"
+}

@@ -14,22 +14,24 @@
         <img id="user-icon" class="profilepic" src="/TFG/assets/user.png">
         </a>
     </div>
+
+    <h1 id="opponent"></h1>
     <div id="gameContainer">
         <div id="cellContainer">
-            <div cellIndex="0" class="cell"></div>
-            <div cellIndex="1" class="cell"></div>
-            <div cellIndex="2" class="cell"></div>
-            <div cellIndex="3" class="cell"></div>
-            <div cellIndex="4" class="cell"></div>
-            <div cellIndex="5" class="cell"></div>
-            <div cellIndex="6" class="cell"></div>
-            <div cellIndex="7" class="cell"></div>
-            <div cellIndex="8" class="cell"></div>
+            <div cellIndex="0" id="0" class="cell"></div>
+            <div cellIndex="1" id="1" class="cell"></div>
+            <div cellIndex="2" id="2" class="cell"></div>
+            <div cellIndex="3" id="3" class="cell"></div>
+            <div cellIndex="4" id="4" class="cell"></div>
+            <div cellIndex="5" id="5" class="cell"></div>
+            <div cellIndex="6" id="6" class="cell"></div>
+            <div cellIndex="7" id="7" class="cell"></div>
+            <div cellIndex="8" id="8" class="cell"></div>
         </div>
         <h2 id="statusText"></h2>
         <button id="restartBtn">Neustart</button>
     </div>
-    <script type="module" src="index.js"></script>
+
 
      <div class="l" id="inputs">
      <input class="l" id="name" type="text" placeholder="Vorname">
@@ -57,4 +59,5 @@
      <button class="l" id="logout">Abmelden</button>
      <a href="/TFG/"><button class="l" id="fertig">Fertig</button></a>
 </body>
+    <script type="module" src="index.js"></script>
 </html>
