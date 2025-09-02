@@ -1,7 +1,7 @@
 import {user} from "/TFG/login/login.js"
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, FieldPath  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -33,9 +33,9 @@ const winConditions = [
     [2, 4, 6],
 ];
 let options = ["", "", "", "", "", "", "", "", ""];
-let currentPlayer = "X";
 let running = false;
-
+let game = await GameSearch()
+let currentPlayer = game.Turn;
 
 if (user.uid) {
        console.log(user) 
@@ -49,26 +49,34 @@ initializeGame();
 function initializeGame(){
     cells.forEach(cell => cell.addEventListener("click", cellClicked));
     restartBtn.addEventListener("click", restartGame);
-    statusText.textContent = `${currentPlayer} ist dran`;
+    if (currentPlayer == game.you) {
+         statusText.textContent = `Du bist dran`;
+    } else {
+        statusText.textContent = currentPlayer.charAt(6) + ` ist dran`
+    }
     running = true;
 }
-function cellClicked(){
+async function cellClicked(){
     const cellIndex = this.getAttribute("cellIndex");
 
-    if(options[cellIndex] != "" || !running){
+    if(options[cellIndex] != "" || !running || currentPlayer != game.you){
         return;
     }
 
-    updateCell(this, cellIndex);
-    checkWinner();
+    await updateDoc(
+        doc(db, "TTT", game.gameId), 
+        { [`Cells.${cellIndex}`]: currentPlayer.charAt(6) }
+    )
 }
-function updateCell(cell,index){
-    options[index] = currentPlayer;
-    cell.textContent = currentPlayer;
-}
-function changePlayer(){
-    currentPlayer = (currentPlayer == "X") ? "O" : "X";
-    statusText.textContent = `${currentPlayer} ist dran`; 
+
+async function changePlayer(){
+    currentPlayer = (currentPlayer == "PlayerX") ? "PlayerO" : "PlayerX";
+    if (currentPlayer == game.you) {
+         statusText.textContent = `Du bist dran`;
+    } else {
+        statusText.textContent = currentPlayer.charAt(6) + ` ist dran`
+    }
+    
 }
 function checkWinner(){
     let roundWon = false;
@@ -100,7 +108,7 @@ function checkWinner(){
     }
 }
 function restartGame(){
-    window.reload()
+    window.location.reload()
 }
 
 
@@ -120,9 +128,11 @@ document.getElementById("URL").style.display = "none"
 
 
 async function GameSearch() {
+    let game = new Object();
     const q = query(collection(db, "TTT")); 
     const querySnapshot = await getDocs(q);
     const colRef = collection(db, "TTT");
+    let Turn
     let gameId = ""
     let PlayerO;
     let PlayerX;
@@ -132,30 +142,68 @@ async function GameSearch() {
        gameId = document.id
        PlayerO = user.uid;
        PlayerX = document.data().PlayerX;
+       Turn = document.data().Turn;
        console.log(gameId, " ", PlayerX + " " + PlayerO)
         await setDoc(doc(db, "TTT", gameId), {PlayerO: user.uid },);
     } else if (document.data().PlayerX == "") {
        gameId = document.id
        PlayerO = document.data().PlayerO;
        PlayerX = user.uid;
-       console.log(gameId, " ", PlayerX + " " + PlayerO)
+       Turn = document.data().Turn;
+       console.log("Game Found: " + gameId, " ", PlayerX + " " + PlayerO)
         await updateDoc(doc(db, "TTT", gameId), {PlayerX: user.uid },);
     }
 }
 
 if (gameId == "") {
-   let addDocRef = await addDoc(colRef, {PlayerO: user.uid, PlayerX: "", Cells: ["","","","","","","","",""], Turn: "PlayerX"});
+    if (Math.random() < 0.5) {Turn = "PlayerO"} else {Turn = "PlayerX"}
+    console.log(Turn)
+    let addDocRef = await addDoc(colRef, {PlayerO: user.uid, PlayerX: "", Cells: ["","","","","","","","",""], Turn: Turn});
     PlayerO = user.uid;
     gameId = addDocRef.id;
-    console.log("new Game: " + gameId +  PlayerX + " " + PlayerO)
-    waitForOpponent()
+    console.log("new Game: " + gameId + " " + PlayerO)
+    PlayerX = await waitForOpponent(gameId)
+    console.log("Player " + PlayerX + " joined game")
 }
-   
+
+  game = {gameId: gameId, PlayerO: PlayerO, PlayerX: PlayerX, Turn: Turn}
+
+  if (game.PlayerO == user.uid) {
+    game.you = "PlayerO"
+    game.opponent = "PlayerX"
+  } else {
+    game.you = "PlayerX"
+    game.opponent = "PlayerO"
+  }
+
+  console.log(game)
+return game
 }
 
 
-function waitForOpponent() {
-    
+async function waitForOpponent(Id) {
+    return new Promise((resolve) => {
+        onSnapshot(doc(db, "TTT", Id), (docSnapshot) => {
+            const data = docSnapshot.data();
+            if (data && data.PlayerX) {
+                resolve(data.PlayerX);
+            }
+        });
+    });
 }
-//GameSearch()
+
+
+ onSnapshot(doc(db, "TTT", game.gameId), (docSnapshot) => {
+            const data = docSnapshot.data();
+            for (let i = 0; i < document.querySelectorAll(".cell"); i++) {
+                options[i] = data.Cells[i]
+                
+                document.querySelectorAll(".cell").forEach(cell =>
+                    {if (cell.cellIndex = i) {
+                        cell.innerHTML = data.Cells[i] }}
+                )
+            }
+            
+            checkWinner();
+        });
     
