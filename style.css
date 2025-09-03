@@ -29,7 +29,7 @@ h1{
 #leiste{
     display: flex;
     flex-direction:row;
-    background-color: rgb(65, 63, 63);
+    background-color: rgb(27, 27, 31);
 }
 
 #user-icon{

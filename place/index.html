@@ -9,14 +9,18 @@
     </head>
     <body>
         <div id="leiste">
-            <a href="/TFG/index.html"><h1 id="">TFG/Place</h1></a>
+            <a href="/TFG/"><h1 id="">TFG/Place</h1></a>
 
             <a href="/TfG/login/login.html">
         <img id="user-icon" class="profilepic" src="/TFG/assets/user.png">
         </a>
         </div>
-        <iframe src="./canva.html#canva" id="canvas"></iframe>
 
+        <div id="canvas">
+          <bruh></bruh>
+          <div id="canva"></div>
+      </div>
+        
         <div id="leistecolor">
             <p id="time"></p>
             <div class="color" id="red"></div>
@@ -63,102 +67,6 @@
         </div>
     </body>
 
-    <script type="module">
-      import {user} from "/TFG/login/login.js"
-
-        let scale = 1;
-
-function applyZoom() {
-  const iframe = document.getElementById("canvas");
-  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-  iframeDoc.body.style.transform = `scale(${scale})`;
-  iframeDoc.body.style.transformOrigin = "0 0";
-}
-
-function zoomIn() {
-  scale += 0.1;
-  applyZoom();
-}
-
-function zoomOut() {
-  scale = Math.max(0.1, scale - 0.1);
-  applyZoom();
-}
-
-
-document.getElementById("canvas").addEventListener("wheel", (e) => {
-  if (e.ctrlKey) {
-    e.preventDefault();
-    if (e.deltaY < 0) {
-      zoomIn();
-    } else {
-      zoomOut();
-    }
-  }
-});
-
-document.getElementById("plus").onclick = zoomIn;
-document.getElementById("minus").onclick = zoomOut;
-
-let color = "black"
-
-document.addEventListener("click", function (event) {
-    if (event.target.classList.contains("color")) {
-      color = event.target.id;  
-      sessionStorage.setItem("color", color);
-      document.getElementById("black").style.border ="0px";
-      document.getElementById("white").style.border ="0px";
-      document.getElementById("green").style.border ="0px";
-      document.getElementById("blue").style.border ="0px";
-      document.getElementById("red").style.border ="0px";
-      document.getElementById("pink").style.border ="0px";
-      document.getElementById("purple").style.border ="0px";
-      document.getElementById("orange").style.border ="0px";
-      document.getElementById("brown").style.border ="0px";
-      document.getElementById("yellow").style.border ="0px";
-      document.getElementById("gray").style.border ="0px";
-     
-      document.getElementById(event.target.id).style.border = "5px solid white"
-    
-    }
-  });
-   
-
-  let remaininTime = 4;
-
-  const out = setInterval(() => {
-    remaininTime =sessionStorage.getItem("delay");
-    remaininTime = remaininTime - 1;
-    document.getElementById("time").innerHTML = String(remaininTime);
-    sessionStorage.setItem("delay", remaininTime)
-    if (remaininTime < 0) {
-        document.getElementById("time").innerHTML = "0";
-        document.getElementById("canvas").style.cursor = "crosshair"
-        
-    }
-  }, 1000);
-
-document.getElementById("name").style.display = "none"
-    document.getElementById("password").style.display = "none"
-    document.getElementById("login").style.display = "none"
-    document.getElementById("signin").style.display = "none"
-    document.getElementById("logout").style.display = "none"
-    document.getElementById("class").style.display = "none"
-    document.getElementById("mecker").style.display = "none"
-    document.getElementById("classinf").style.display = "none"
-    document.getElementById("surname").style.display = "none"
-    document.getElementById("fertig").style.display = "none"
-
-
-    
-
-    if (user.uid) {
-       console.log(user) 
-       sessionStorage.setItem("User", user.uid)
-    } else {
-      window.location = "/TFG/login/login.html"
-    }
-
-    </script>
+    <script type="module" src="./script.js"></script>
   
 </html>

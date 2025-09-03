@@ -27,7 +27,7 @@ button
   border: 1px solid white;
   border-radius: 5px;
   background-color: orange;
-  margin-left: 15px;
+  margin-left: 690px;
 }
 
  body{
@@ -130,6 +130,7 @@ margin-top: 0px;
 
 h1{
     width: 270px;
+    font-size: 30px;
 }
 
 button{

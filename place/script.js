@@ -1,6 +1,5 @@
 
-
-let user = sessionStorage.getItem("User")
+import {user} from "/TFG/login/login.js"
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 
@@ -111,7 +110,6 @@ buildCanvas();
  
 
 async function checkpixel(color, number) {
-    user = sessionStorage.getItem("User")
     const colRef = collection(db, "place");
     const q = query(colRef, orderBy("time", "desc"));
     const querySnapshot = await getDocs(q);
@@ -132,7 +130,7 @@ async function checkpixel(color, number) {
           number,
           color,
           time: serverTimestamp(),
-          user: user
+          user: user.uid
         }, { merge: true });
 
         return;
@@ -144,7 +142,7 @@ async function checkpixel(color, number) {
         number,
         color,
         time: serverTimestamp(),
-        user: user
+        user: user.uid
       });
     }
   }
@@ -153,14 +151,11 @@ async function checkpixel(color, number) {
 loadPixel()
 
 document.addEventListener("click", function (event) {
-    remaininTime=sessionStorage.getItem("delay");
     if (remaininTime < 0) {
        if (event.target.classList.contains("pixel")) {
-       color = sessionStorage.getItem("color");
       document.getElementById(event.target.id).style.backgroundColor =  color ;
       checkpixel(color, event.target.id)
       remaininTime = 4;
-      sessionStorage.setItem("delay", 4)
      
     } 
      
@@ -168,7 +163,7 @@ document.addEventListener("click", function (event) {
     
   });
 setInterval(() => {
-    if (sessionStorage.getItem("delay") <= 0) {
+    if (remaininTime <= 0) {
     document.getElementById("canva").style.cursor = "crosshair"
   } else {
      document.getElementById("canva").style.cursor = "progress"
@@ -178,7 +173,96 @@ setInterval(() => {
   
 
 
+let scale = 1;
 
+function applyZoom() {
+  const iframe = document.getElementById("canvas");
+  const iframeDoc = document.getElementById("canvas");
+  iframeDoc.style.transform = `scale(${scale})`;
+  iframeDoc.style.transformOrigin = "0 0";
+}
+
+function zoomIn() {
+  scale += 0.1;
+  applyZoom();
+}
+
+function zoomOut() {
+  scale = Math.max(0.1, scale - 0.1);
+  applyZoom();
+}
+
+
+document.getElementById("canvas").addEventListener("wheel", (e) => {
+  if (e.ctrlKey) {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      zoomIn();
+    } else {
+      zoomOut();
+    }
+  }
+});
+
+document.getElementById("plus").onclick = zoomIn;
+document.getElementById("minus").onclick = zoomOut;
+
+color = "black"
+
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("color")) {
+      color = event.target.id;  
+      document.getElementById("black").style.border ="0px";
+      document.getElementById("white").style.border ="0px";
+      document.getElementById("green").style.border ="0px";
+      document.getElementById("blue").style.border ="0px";
+      document.getElementById("red").style.border ="0px";
+      document.getElementById("pink").style.border ="0px";
+      document.getElementById("purple").style.border ="0px";
+      document.getElementById("orange").style.border ="0px";
+      document.getElementById("brown").style.border ="0px";
+      document.getElementById("yellow").style.border ="0px";
+      document.getElementById("gray").style.border ="0px";
+     
+      document.getElementById(event.target.id).style.border = "5px solid white"
+    
+    }
+  });
+   
+
+remaininTime = 4;
+
+  const out = setInterval(() => {
+    remaininTime
+    remaininTime = remaininTime - 1;
+    document.getElementById("time").innerHTML = String(remaininTime);
+    if (remaininTime < 0) {
+        document.getElementById("time").innerHTML = "0";
+        document.getElementById("canvas").style.cursor = "crosshair"
+        
+    }
+  }, 1000);
+
+document.getElementById("name").style.display = "none"
+    document.getElementById("password").style.display = "none"
+    document.getElementById("login").style.display = "none"
+    document.getElementById("signin").style.display = "none"
+    document.getElementById("logout").style.display = "none"
+    document.getElementById("class").style.display = "none"
+    document.getElementById("mecker").style.display = "none"
+    document.getElementById("classinf").style.display = "none"
+    document.getElementById("surname").style.display = "none"
+    document.getElementById("fertig").style.display = "none"
+
+
+    
+
+    if (user.uid) {
+       console.log(user) 
+    } else {
+      window.location = "/TFG/login/login.html"
+    }
+    
 
 
   
