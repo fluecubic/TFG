@@ -158,8 +158,8 @@ a:active {
 }
 
 .chat-button{
-  margin: 5px;
-  width: 290px;
+  border-radius: 15px;
+  width: 270px;
   background-color: rgb(27, 27, 31);
   border: 1px solid whitesmoke;
   color: white;
@@ -169,10 +169,12 @@ a:active {
   padding: 5px;
   height: 45px;
   padding-left: 5%;
-    
+  margin-left: 5px;  
+  z-index: 9;
 }
 
 .chat-button-txt{
+  font-family: Arial;
   margin: 0px;
   margin-left: 5px;
   margin-top: 3px;
@@ -262,6 +264,13 @@ margin-right: 3px;
   margin-right: 0px;
 }
 
+
+.loadingscreen{
+  margin: 100px;
+  width: 80px;
+  height: 80px;
+  display: none;
+}
 
 @media screen and (max-width: 600px) {
 

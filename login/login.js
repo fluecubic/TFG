@@ -88,7 +88,21 @@ async function uilogedout() {
     document.getElementById("user-icon").src = userInfo.Photo
     document.getElementById("URL").value = userInfo.Photo
  }
+
+ function LoadingScreen(div, on) {
+  if (on) {
+    document.getElementsByTagName(div).innerHTML = "<img src='/TFG/assets/loading.gif' class='loadingscreen'>"
+    console.log("added")
+  } else {
+    document.querySelector(".loadingscreen").remove()
+    console.log("removed")
+  }
+  
+}
+
+
 uilogedout()
+
 
 
   async function signinwithemail() {
@@ -105,8 +119,9 @@ uilogedout()
     localStorage.setItem("uid", signin.user.uid)
     localStorage.setItem("password", passwordinput)
     localStorage.setItem("email", signin.user.email)
-    
+    LoadingScreen("body", true)
     uilogedin();
+    LoadingScreen()
     
    
     
@@ -134,8 +149,9 @@ uilogedout()
     let surnameinput = document.getElementById("surname").value;
 
    try {
+    LoadingScreen("body", true)
     const login = await createUserWithEmailAndPassword(auth, nameinput + "." + surnameinput + "@tfg.com", passwordinput)
-
+    
     user = login.user
     user.emailVerified = true;
     await updateProfile(login.user, { displayName: nameinput })
@@ -151,6 +167,7 @@ uilogedout()
      Klasse: Klasse})
 
     uilogedin()
+    LoadingScreen()
 
     
 
@@ -180,11 +197,13 @@ uilogedout()
   
  if (localStorage.getItem("uid")) {
   try {
+    LoadingScreen("body", true)
      const signin = await signInWithEmailAndPassword(auth, localStorage.getItem("email"), localStorage.getItem("password"))
 
      user = signin.user;
 
     uilogedin()
+    LoadingScreen()
     
    
   

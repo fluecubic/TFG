@@ -23,6 +23,7 @@ let LastM
 let LastU
 let chatId = "main-chat";
 let userInfo
+let unreadMessage = [];
 
 
 
@@ -66,23 +67,35 @@ async function getSortedDocuments() {
 
   
 let html = ""
-  for (const doc of querySnapshot.docs) {
+  for (const Doc of querySnapshot.docs) {
+  let Readers = Array.isArray(Doc.data().Readers) ? Doc.data().Readers : [];
 
-
-  if (doc.data().Date && doc.data().Chat == chatId) {
-    if (doc.data().User === user.uid) { 
-      html = html+ "<div class='yourmessage'>" + doc.data().Text +  "<p class='time' style='display: none;'>" + String(doc.data().Date)+ "</p>" + "</div>";
+if (!Readers.includes(user.uid)) {
+  if (!unreadMessage.includes(Doc.data().Chat)) {
+    unreadMessage[unreadMessage.length()] = Doc.data().Chat;
+  }
+    
+    }
+  if (Doc.data().Date && Doc.data().Chat == chatId) {
+   
+    if (!Readers.includes(user.uid)) {
+      await updateDoc(
+              doc(db, "main-chat", Doc.id), 
+              { [`Readers.${Readers.length}`]: user.uid })
+    }
+    if (Doc.data().User === user.uid) { 
+      html = html+ "<div class='yourmessage'>" + Doc.data().Text +  "<p class='time' style='display: none;'>" + String(Doc.data().Date)+ "</p>" + "</div>";
     }
    else {
-    userInfo = await getUserInfo(doc.data().User)
+    userInfo = await getUserInfo(Doc.data().User)
    
     if (userInfo.Vorname) {
         
-      html = html + "<div class='message'>"  + "<div class='userinfos'>" + "<img class='profilepic' src='" + userInfo.Photo + "'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + doc.data().Text +  "<p class='time' style='display: none;'  >" + String(doc.data().Date) + "</p>" + "</div>";
+      html = html + "<div class='message'>"  + "<div class='userinfos'>" + "<img class='profilepic' src='" + userInfo.Photo + "'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + Doc.data().Text +  "<p class='time' style='display: none;'  >" + String(Doc.data().Date) + "</p>" + "</div>";
     }
       
     LastU = userInfo.Vorname;
-    LastM = doc.data().Text;
+    LastM = Doc.data().Text;
     
     }
   }
@@ -91,7 +104,6 @@ let html = ""
    
     removeShit()
     
-
   };document.getElementById("output").innerHTML = html
   removeShit()
 
@@ -117,7 +129,8 @@ document.getElementById("go").addEventListener("click", async () => {
   Text:document.getElementById("input").value, 
   Date: serverTimestamp(),
   User: user.uid,
-  Chat: chatId
+  Chat: chatId,
+  Readers: [user.uid]
   })
 
  
@@ -243,8 +256,10 @@ document.addEventListener("click", function (e) {
 })
 
 async function  loadChatOptions() {
+  LoadingScreen("chat-select", true)
   const userData =  await getUserInfo(user.uid)
-  document.getElementById("chat-select").innerHTML += "<button id='" + userData.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  userData.Klasse + " Chat" + "</p>" +"</button>"
+  document.getElementById("chat-select").innerHTML += "<div id='main-chat' class='chat-button'><p class='chat-button-txt'>Haupt-Chat</p></div>"
+  document.getElementById("chat-select").innerHTML += "<div id='" + userData.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  userData.Klasse + " Chat" + "</p>" +"</div>"
 
   const q = query(collection(db, "main-chat")); 
   const querySnapshot = await getDocs(q);
@@ -260,16 +275,17 @@ for (const doc of querySnapshot.docs) {
 
       if (uid1 == user.uid) {
     const userData =  await getUserInfo(uid2)
-    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>" + userData.Vorname + " " + userData.Nachname + "</button>"
+    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>" + userData.Vorname + " " + userData.Nachname + "</div>"
       } else{
        const userData =  await getUserInfo(uid1)
-    document.getElementById("chat-select").innerHTML += "<button id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</button>"
+    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
       }
     }
   }
 }
 
 removeShit()
+LoadingScreen()
 }
 
 
@@ -346,7 +362,7 @@ document.addEventListener("click", async function (e) {
  if (e.target.classList.contains("dm-option")) {
     chatId = String(e.target.id) + "-" + String(user.uid)
     const userData =  await getUserInfo(e.target.id)
-    document.getElementById("chat-select").innerHTML += "<button id='" + chatId+ "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</button>"
+    document.getElementById("chat-select").innerHTML += "<div id='" + chatId+ "' class='chat-button' >" + userData.Vorname + " " + userData.Nachname + "</div>"
     getSortedDocuments()
      for (let i = 0; i < document.getElementsByClassName("chat-button").length; i++) {document.getElementsByClassName("chat-button")[i].style.border = "1px solid whitesmoke"}
     document.getElementById(chatId).style.border = "3px solid whitesmoke";
@@ -354,3 +370,13 @@ document.addEventListener("click", async function (e) {
   }
   
 })
+
+
+function LoadingScreen(div, on) {
+  if (on) {
+    document.getElementById(div).innerHTML = "<img src='/TFG/assets/loading.gif' class='loadingscreen'>"
+  } else {
+    document.querySelector(".loadingscreen").remove()
+  }
+  
+}
