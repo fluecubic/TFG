@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
-import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, arrayUnion   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 import {user} from "/TFG/login/login.js"
 
 const firebaseConfig = {
@@ -24,11 +24,13 @@ let LastU
 let chatId = "main-chat";
 let userInfo
 let unreadMessage = [];
+let unreadChat = [];
 
 
 
  if (user.uid) {
-       console.log(user) 
+      let Me = await getUserInfo(user.uid)
+       console.log(Me) 
     } else {
       window.location = "/TFG/login/login.html"
     }
@@ -68,21 +70,44 @@ async function getSortedDocuments() {
   
 let html = ""
   for (const Doc of querySnapshot.docs) {
-  let Readers = Array.isArray(Doc.data().Readers) ? Doc.data().Readers : [];
 
-if (!Readers.includes(user.uid)) {
-  if (!unreadMessage.includes(Doc.data().Chat)) {
-    unreadMessage[unreadMessage.length()] = Doc.data().Chat;
-  }
-    
-    }
-  if (Doc.data().Date && Doc.data().Chat == chatId) {
+  let Readers
+  
+    Readers = Doc.data().Readers
+
+
+  if (!Readers.includes(user.uid)) {
+  if (!unreadMessage.includes(Doc.id)) {
+    unreadMessage[unreadMessage.length] = Doc.id;
+    }}
+
+     if (!Readers.includes(user.uid)) {
+  if (!unreadChat.includes(Doc.data().Chat)) {
+    unreadChat[unreadChat.length] = Doc.data().Chat;
+    }}
+
+
+  if (Doc.data().Chat == chatId) {
    
     if (!Readers.includes(user.uid)) {
       await updateDoc(
-              doc(db, "main-chat", Doc.id), 
-              { [`Readers.${Readers.length}`]: user.uid })
+  doc(db, "main-chat", Doc.id), 
+  { Readers: arrayUnion(user.uid) }
+)
     }
+    
+    if (unreadMessage.includes(Doc.id)) {
+      for (let i = 0; i < unreadMessage.length; i++) {
+        if (unreadMessage[i] == Doc.id) {
+          unreadMessage.splice(i, 1)
+        }}}
+
+        if (unreadChat.includes(chatId)) {
+      for (let i = 0; i < unreadChat.length; i++) {
+        if (unreadChat[i] == chatId) {
+          unreadChat.splice(i, 1)
+        }}}
+
     if (Doc.data().User === user.uid) { 
       html = html+ "<div class='yourmessage'>" + Doc.data().Text +  "<p class='time' style='display: none;'>" + String(Doc.data().Date)+ "</p>" + "</div>";
     }
@@ -93,9 +118,6 @@ if (!Readers.includes(user.uid)) {
         
       html = html + "<div class='message'>"  + "<div class='userinfos'>" + "<img class='profilepic' src='" + userInfo.Photo + "'>" +"<p class='name'>" + userInfo.Vorname + "</p>" + "<p class='class'>" + userInfo.Klasse + "</p>" + "</div>" + Doc.data().Text +  "<p class='time' style='display: none;'  >" + String(Doc.data().Date) + "</p>" + "</div>";
     }
-      
-    LastU = userInfo.Vorname;
-    LastM = Doc.data().Text;
     
     }
   }
@@ -130,7 +152,7 @@ document.getElementById("go").addEventListener("click", async () => {
   Date: serverTimestamp(),
   User: user.uid,
   Chat: chatId,
-  Readers: [user.uid]
+  Readers: []
   })
 
  
@@ -144,7 +166,7 @@ getSortedDocuments();
 
 let fr = false;
 
-  onSnapshot(q, (querySnapshot) => {
+  onSnapshot(q, async (querySnapshot) => {
     if (fr === false) {
       getSortedDocuments();
     } else {
@@ -153,19 +175,22 @@ let fr = false;
   
 
   
-
-    if (document.visibilityState == "hidden") {
+for (let i = 0; i < unreadMessage.length; i++) {
+  const docRef = doc(db, "main-chat", unreadMessage[i]);
+  const docSnap = await getDoc(docRef);
+  if (document.visibilityState == "hidden" && docSnap.data().User != user.uid && docSnap.data().Chat == "main-chat" || docSnap.data().Chat == Me.Klasse ||  docSnap.data().Chat.includes(user.uid)) {
+      Sender = getUserInfo(docSnap.data().User)
       setTimeout(() => {
-        new Notification("Neue Nachricht von " + LastU , {body: LastM});
+        new Notification("Neue Nachricht von " + Sender.Vorname , {body: docSnap.data().Text});
       }, 100);
+      
       
     }
   
+}
+    
+  
 })
-
-
-
-
 
 
 
@@ -237,11 +262,6 @@ for (let i = 0; i < buttons.length; i++) {
 
 }
 
-
-
-//setInterval(() => {
-//  removeShit()
-//}, 3000);
 
 
 document.addEventListener("click", function (e) {
@@ -379,4 +399,15 @@ function LoadingScreen(div, on) {
     document.querySelector(".loadingscreen").remove()
   }
   
+}
+
+function updateChatOption() {
+  for (let i = 0; i < document.getElementsByClassName("chat-button").length; i++) {
+    if (unreadChat.includes(document.getElementsByClassName("chat-button")[i].id)) {
+      document.getElementsByClassName("chat-button")[i].innerHTML += "<p class='unread' id='" +  document.getElementsByClassName("chat-button")[i].id + "-unread" +"'></p>"
+    } else {
+       
+    }
+    
+  }
 }

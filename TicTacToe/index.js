@@ -269,8 +269,7 @@ const beforeUnloadHandler = (event) => {
 };
 
 
-window.addEventListener("beforeunload", async function () {
-    beforeUnloadHandler
+window.addEventListener("beforeunload", async function (e) {
     const docRef = doc(db, "TTT", game.gameId);
     await deleteDoc(docRef);
 })
@@ -286,3 +285,8 @@ function uiGameFound(){
     cells.forEach( cell => {cell.style.display = "block"})
     restartBtn.style.display = "block"
 }
+
+document.getElementById("title").addEventListener("click", async function (e) {
+    const docRef = doc(db, "TTT", game.gameId);
+    await deleteDoc(docRef);
+})
