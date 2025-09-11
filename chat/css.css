@@ -8,6 +8,12 @@ margin-bottom: 100px;}
     display: none;
 }
 
+@keyframes zoomin {
+  0% {scale:0}
+  100% {scale:1}
+}
+
+
 button
 {width:150px; height: 35px;
   border: 1px solid white;
@@ -227,6 +233,8 @@ a:active {
   z-index: 20;
   display: none;
   -webkit-user-drag:element;
+  animation-name: zoomin;
+  animation-duration: 0.4s;
 }
 
 
@@ -279,6 +287,8 @@ margin-right: 3px;
   height: 80px;
   display: none;
 }
+
+
 
 @media screen and (max-width: 600px) {
 

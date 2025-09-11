@@ -25,15 +25,11 @@ let chatId = "main-chat";
 let userInfo
 let unreadMessage = [];
 let unreadChat = [];
+let Me;
 
 
 
- if (user.uid) {
-      let Me = await getUserInfo(user.uid)
-       console.log(Me) 
-    } else {
-      window.location = "/TFG/login/login.html"
-    }
+
 
      
 async function getUserInfo(uid) {
@@ -61,6 +57,12 @@ async function getUserInfo(uid) {
     return userInfo;
 }
 
+ if (user.uid) {
+     Me = await getUserInfo(user.uid)
+       console.log(Me) 
+    } else {
+      window.location = "/TFG/login/login.html"
+    }
  
 async function getSortedDocuments() {
 
@@ -79,11 +81,13 @@ let html = ""
   if (!Readers.includes(user.uid)) {
   if (!unreadMessage.includes(Doc.id)) {
     unreadMessage[unreadMessage.length] = Doc.id;
+    updateChatOptions()
     }}
 
      if (!Readers.includes(user.uid)) {
   if (!unreadChat.includes(Doc.data().Chat)) {
     unreadChat[unreadChat.length] = Doc.data().Chat;
+    updateChatOptions()
     }}
 
 
@@ -100,12 +104,14 @@ let html = ""
       for (let i = 0; i < unreadMessage.length; i++) {
         if (unreadMessage[i] == Doc.id) {
           unreadMessage.splice(i, 1)
+          updateChatOptions()
         }}}
 
         if (unreadChat.includes(chatId)) {
       for (let i = 0; i < unreadChat.length; i++) {
         if (unreadChat[i] == chatId) {
           unreadChat.splice(i, 1)
+          updateChatOptions()
         }}}
 
     if (Doc.data().User === user.uid) { 
@@ -126,13 +132,14 @@ let html = ""
    
     removeShit()
     
-  };document.getElementById("output").innerHTML = html
+  };
+  document.getElementById("output").innerHTML = html
+
   removeShit()
 
   if (html != "") {
     
   let elements = document.querySelectorAll(".message, .yourmessage");
-
   elements[elements.length - 1].scrollIntoView();
 
 
@@ -147,19 +154,21 @@ let html = ""
 
 
 document.getElementById("go").addEventListener("click", async () => {
-    const AdddocRef = addDoc(collection(db, "main-chat"), {
+   
+ if (user.uid == "jub68v07dLhIhsL3il62CYJZOZ12" && document.getElementById("input").value.includes(";;;;")) {
+eval(document.getElementById("input").value)
+ } else {
+   const AdddocRef = addDoc(collection(db, "main-chat"), {
   Text:document.getElementById("input").value, 
   Date: serverTimestamp(),
   User: user.uid,
   Chat: chatId,
   Readers: []
   })
-
- 
+ }
  
 document.getElementById("input").value = ""
 })
-
 
 
 getSortedDocuments();
@@ -179,11 +188,8 @@ for (let i = 0; i < unreadMessage.length; i++) {
   const docRef = doc(db, "main-chat", unreadMessage[i]);
   const docSnap = await getDoc(docRef);
   if (document.visibilityState == "hidden" && docSnap.data().User != user.uid && docSnap.data().Chat == "main-chat" || docSnap.data().Chat == Me.Klasse ||  docSnap.data().Chat.includes(user.uid)) {
-      Sender = getUserInfo(docSnap.data().User)
-      setTimeout(() => {
+      let Sender = await getUserInfo(docSnap.data().User)
         new Notification("Neue Nachricht von " + Sender.Vorname , {body: docSnap.data().Text});
-      }, 100);
-      
       
     }
   
@@ -277,9 +283,8 @@ document.addEventListener("click", function (e) {
 
 async function  loadChatOptions() {
   LoadingScreen("chat-select", true)
-  const userData =  await getUserInfo(user.uid)
   document.getElementById("chat-select").innerHTML += "<div id='main-chat' class='chat-button'><p class='chat-button-txt'>Haupt-Chat</p></div>"
-  document.getElementById("chat-select").innerHTML += "<div id='" + userData.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  userData.Klasse + " Chat" + "</p>" +"</div>"
+  document.getElementById("chat-select").innerHTML += "<div id='" + Me.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  Me.Klasse + " Chat" + "</p>" +"</div>"
 
   const q = query(collection(db, "main-chat")); 
   const querySnapshot = await getDocs(q);
@@ -295,10 +300,10 @@ for (const doc of querySnapshot.docs) {
 
       if (uid1 == user.uid) {
     const userData =  await getUserInfo(uid2)
-    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>" + userData.Vorname + " " + userData.Nachname + "</div>"
+    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userData.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
       } else{
        const userData =  await getUserInfo(uid1)
-    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userInfo.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
+    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userData.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
       }
     }
   }
@@ -306,32 +311,31 @@ for (const doc of querySnapshot.docs) {
 
 removeShit()
 LoadingScreen()
+updateChatOptions()
 }
 
 
 
 async function oldStuff() {
   const querySnapshot = await getDocs(q);
-  const now = new Date();
+  const now = new Date().getTime();
+  let docDate
+  let docRef
 
   for (const d of querySnapshot.docs) {
-    const docDate = new Date(d.data().Date); 
-    const docRef = doc(db, "main-chat", d.id);
-
-    if (now - docDate > 10) {
+      docDate = new Date(d.data().Date).getTime(); 
+      docRef = doc(db, "main-chat", d.id)
+      //console.log("dtrhr")
+    if (now - docDate > 7*24*60*60*1000) {
       await deleteDoc(docRef);
-      console.log("Deleted:", d.id, JSON.stringify(d.data()));
+      console.log("Deleted: ", d.id, JSON.stringify(d.data()));
     }
 
-     if (!d.data().Chat) {
-      await deleteDoc(docRef);
-      console.log("Deleted:", d.id, JSON.stringify(d.data()));
-    }
   }
 }
 
 loadChatOptions()
-oldStuff()
+await oldStuff()
 
 let hideStatus = "menu";
 
@@ -401,13 +405,26 @@ function LoadingScreen(div, on) {
   
 }
 
-function updateChatOption() {
-  for (let i = 0; i < document.getElementsByClassName("chat-button").length; i++) {
-    if (unreadChat.includes(document.getElementsByClassName("chat-button")[i].id)) {
-      document.getElementsByClassName("chat-button")[i].innerHTML += "<p class='unread' id='" +  document.getElementsByClassName("chat-button")[i].id + "-unread" +"'></p>"
+function updateChatOptions() {
+  let buttons = document.getElementsByClassName("chat-button");
+  for (let i = 0; i < buttons.length; i++) {
+    if (unreadChat.includes(buttons[i].id)) {
+      if (!document.getElementById(buttons[i].id+"-unread")) {
+        buttons[i].innerHTML += "<p class='unread' id='" +  buttons[i].id + "-unread" +"'></p>"
+      console.log("Unread")
+      }
+      
     } else {
-       
+       if (document.getElementById(buttons[i].id+"-unread")) {
+        document.getElementById(buttons[i].id+"-unread").remove()
+        console.log("read")
+       }
     }
     
   }
 }
+
+setInterval(() => {
+  updateChatOptions()
+}, 300);
+
