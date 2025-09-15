@@ -43,7 +43,7 @@ async function getUserInfo(uid) {
         userInfo.Nachname = doc.data().Nachname;
         userInfo.Vorname = doc.data().Vorname;
         userInfo.Klasse = doc.data().Klasse;
-        if (doc.data().Photo) {
+        if (doc.data().Photo && doc.data().Photo != "undifined" || "") {
           userInfo.Photo = doc.data().Photo;
         } else {
           userInfo.Photo = "/TFG/assets/user.png"
@@ -375,7 +375,10 @@ async function loaddmoptions() {
   const querySnapshot = await getDocs(q);
 
 for (const doc of querySnapshot.docs) { 
-  document.getElementById("dms").innerHTML += "<div id='" + doc.data().Uid + "' class='dm-option'>"+  "<img class='profilepic big' src='" +  doc.data().Photo + "'>" + doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
+  let UserData = await getUserInfo(doc.data().Uid)
+   console.log(UserData)
+
+  document.getElementById("dms").innerHTML += "<div id='" + doc.data().Uid + "' class='dm-option'>"+  "<img class='profilepic big' src='" +  UserData.Photo + "'>" + doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
 
 }
 

@@ -176,7 +176,12 @@ async function GameSearch() {
     let PlayerX;
 
     for (const document of querySnapshot.docs) {
-    if (!document.data().PlayerO) {
+        if (document.data().PlayerO == user.uid || document.data().PlayerX == user.uid) {
+            const docRef = doc(db, "TTT", document.id);
+            await deleteDoc(docRef);
+        }
+         else {
+         if (!document.data().PlayerO) {
        gameId = document.id
        PlayerO = user.uid;
        PlayerX = document.data().PlayerX;
@@ -192,7 +197,9 @@ async function GameSearch() {
     Oppponenttxt.innerHTML = "Du spielst gegen " + userInfo.Vorname + " " + userInfo.Nachname
        console.log("Game Found: " + gameId, " ", PlayerX + " " + PlayerO)
         await updateDoc(doc(db, "TTT", gameId), {PlayerX: user.uid },);
-    }
+    }   
+        }
+    
 }
 
 if (gameId == "") {

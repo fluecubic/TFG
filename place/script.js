@@ -185,11 +185,13 @@ function applyZoom() {
 function zoomIn() {
   scale += 0.1;
   applyZoom();
+  document.getElementById("canva").scrollIntoView();
 }
 
 function zoomOut() {
   scale = Math.max(0.1, scale - 0.1);
   applyZoom();
+  document.getElementById("canva").scrollIntoView();
 }
 
 
@@ -212,19 +214,19 @@ color = "black"
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("color")) {
       color = event.target.id;  
-      document.getElementById("black").style.border ="0px";
-      document.getElementById("white").style.border ="0px";
-      document.getElementById("green").style.border ="0px";
-      document.getElementById("blue").style.border ="0px";
-      document.getElementById("red").style.border ="0px";
-      document.getElementById("pink").style.border ="0px";
-      document.getElementById("purple").style.border ="0px";
-      document.getElementById("orange").style.border ="0px";
-      document.getElementById("brown").style.border ="0px";
-      document.getElementById("yellow").style.border ="0px";
-      document.getElementById("gray").style.border ="0px";
+      document.getElementById("black").style.scale ="1";
+      document.getElementById("white").style.scale ="1";
+      document.getElementById("green").style.scale ="1";
+      document.getElementById("blue").style.scale ="1";
+      document.getElementById("red").style.scale="1";
+      document.getElementById("pink").style.scale ="1";
+      document.getElementById("purple").style.scale ="1";
+      document.getElementById("orange").style.scale ="1";
+      document.getElementById("brown").style.scale ="1";
+      document.getElementById("yellow").style.scale ="1";
+      document.getElementById("gray").style.scale ="1";
      
-      document.getElementById(event.target.id).style.border = "5px solid white"
+      document.getElementById(event.target.id).style.scale = "1.2"
     
     }
   });
@@ -253,6 +255,8 @@ document.getElementById("name").style.display = "none"
     document.getElementById("classinf").style.display = "none"
     document.getElementById("surname").style.display = "none"
     document.getElementById("fertig").style.display = "none"
+    document.getElementById("URL").style.display = "none"
+    document.getElementById("q").style.display = "none"
 
 
     
