@@ -288,8 +288,30 @@ margin-right: 3px;
   display: none;
 }
 
+label {
+   cursor: pointer;
+   background-color: orange;
+  width: 35px;
+  height: 35px;
+  margin: 5px;
+  border-radius: 10px;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
 
 
+#fileInput{
+  opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
+#fileimg{
+width: 35px;
+height: 35px;
+border-radius: 10px;
+background-color: orange;
+
+}
 @media screen and (max-width: 600px) {
 
 #user-icon{

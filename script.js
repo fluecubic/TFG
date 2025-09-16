@@ -1,4 +1,4 @@
-import {user} from "/TFG/login/login.js"
+import {user} from "./login/login.js"
 
   
     document.getElementById("name").style.display = "none"
