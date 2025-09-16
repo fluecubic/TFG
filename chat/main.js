@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, arrayUnion   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 import {user} from "/TFG/login/login.js"
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
   authDomain: "tfg-community.firebaseapp.com",
@@ -26,7 +27,6 @@ let userInfo
 let unreadMessage = [];
 let unreadChat = [];
 let Me;
-
 
 
 
@@ -149,7 +149,14 @@ let html = ""
 }
 
 
-         
+async function upload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'TFG-Community');
+    const res = await fetch('https://api.cloudinary.com/v1_1/drxgg0cwo/upload', {method: 'POST',body: formData});
+    const data = await res.json();
+    return data.secure_url
+    }         
 
 
 
