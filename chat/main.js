@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, arrayUnion   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 import {user} from "/TFG/login/login.js"
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
   authDomain: "tfg-community.firebaseapp.com",
@@ -26,7 +27,6 @@ let userInfo
 let unreadMessage = [];
 let unreadChat = [];
 let Me;
-
 
 
 
@@ -149,9 +149,22 @@ let html = ""
 }
 
 
-         
-
-
+async function upload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'TFG-Community');
+    const res = await fetch('https://api.cloudinary.com/v1_1/drxgg0cwo/upload', {method: 'POST',body: formData});
+    const data = await res.json();
+    return data.secure_url
+    }         
+let fileInput = document.getElementById("fileInput");
+fileInput.addEventListener("input", async function () {
+  if (fileInput.value[0].split('.').pop() == "png" || "jpeg" || "jpg" || "mov" || "gif" || "webp") {
+    let URL = await upload(fileInput.files[0]);
+    console.log(URL)
+    document.getElementById("input").value += "<img src='" + URL + "'>"
+  }
+})
 
 document.getElementById("go").addEventListener("click", async () => {
    
@@ -282,9 +295,10 @@ document.addEventListener("click", function (e) {
 })
 
 async function  loadChatOptions() {
+  let html = "";
   LoadingScreen("chat-select", true)
-  document.getElementById("chat-select").innerHTML += "<div id='main-chat' class='chat-button'><p class='chat-button-txt'>Haupt-Chat</p></div>"
-  document.getElementById("chat-select").innerHTML += "<div id='" + Me.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  Me.Klasse + " Chat" + "</p>" +"</div>"
+  html += "<div id='main-chat' class='chat-button'><p class='chat-button-txt'>Haupt-Chat</p></div>"
+  html += "<div id='" + Me.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  Me.Klasse + " Chat" + "</p>" +"</div>"
 
   const q = query(collection(db, "main-chat")); 
   const querySnapshot = await getDocs(q);
@@ -300,15 +314,15 @@ for (const doc of querySnapshot.docs) {
 
       if (uid1 == user.uid) {
     const userData =  await getUserInfo(uid2)
-    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userData.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
+    html += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userData.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
       } else{
        const userData =  await getUserInfo(uid1)
-    document.getElementById("chat-select").innerHTML += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userData.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
+    html += "<div id='" + uid1 + "-" + uid2 + "' class='chat-button' >" + "<img class='profilepic middle' src='" + userData.Photo + "'>"+ "<p class='chat-button-txt'>" + userData.Vorname + " " + userData.Nachname + "</p>" +"</div>"
       }
     }
   }
 }
-
+document.getElementById("chat-select").innerHTML = html;
 removeShit()
 LoadingScreen()
 updateChatOptions()
@@ -325,7 +339,6 @@ async function oldStuff() {
   for (const d of querySnapshot.docs) {
       docDate = new Date(d.data().Date).getTime(); 
       docRef = doc(db, "main-chat", d.id)
-      //console.log("dtrhr")
     if (now - docDate > 7*24*60*60*1000) {
       await deleteDoc(docRef);
       console.log("Deleted: ", d.id, JSON.stringify(d.data()));
@@ -369,20 +382,19 @@ document.getElementById("esc").addEventListener("click", function () {
 })
 
 async function loaddmoptions() {
-
+  let html
   const q = query(collection(db, "users")); 
 
   const querySnapshot = await getDocs(q);
 
 for (const doc of querySnapshot.docs) { 
   let UserData = await getUserInfo(doc.data().Uid)
-   console.log(UserData)
-
-  document.getElementById("dms").innerHTML += "<div id='" + doc.data().Uid + "' class='dm-option'>"+  "<img class='profilepic big' src='" +  UserData.Photo + "'>" + doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
+  html += "<div id='" + doc.data().Uid + "' class='dm-option'>"+  "<img class='profilepic big' src='" +  UserData.Photo + "'>" + doc.data().Vorname+ " " + doc.data().Nachname + " "+ doc.data().Klasse + "</div>"
+  
 
 }
 
-
+document.getElementById("dms").innerHTML += html
 }
 
 document.addEventListener("click", async function (e) {
@@ -400,11 +412,6 @@ document.addEventListener("click", async function (e) {
 
 
 function LoadingScreen(div, on) {
-  if (on) {
-    document.getElementById(div).innerHTML = "<img src='/TFG/assets/loading.gif' class='loadingscreen'>"
-  } else {
-    document.querySelector(".loadingscreen").remove()
-  }
   
 }
 

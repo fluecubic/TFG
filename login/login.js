@@ -56,12 +56,12 @@ async  function uilogedin() {
     document.getElementById("surname").style.display = "none"
     document.getElementById("fertig").style.display = "block"
     document.getElementById("mecker").style.color = "white"
-    document.getElementById("URL").style.display = "block"
+    document.getElementById("fileInput").style.display = "block"
     document.getElementById("q").style.display = "block"
     const userInfo = await getUserInfo(user.uid)
     document.getElementById("q").src = userInfo.Photo
     document.getElementById("user-icon").src = userInfo.Photo
-    document.getElementById("URL").value = userInfo.Photo
+    document.getElementById("profilepic-info").style.display = "block"
     setTimeout(() => {
         document.getElementById("mecker").innerHTML = "Willkomen in der Hood, " + user.displayName     
     }, 300);
@@ -81,12 +81,12 @@ async function uilogedout() {
     document.getElementById("surname").style.display = "block"
     document.getElementById("fertig").style.display = "none"
     document.getElementById("mecker").style.color = "red"
-    document.getElementById("URL").style.display = "none"
+    document.getElementById("fileInput").style.display = "none"
     document.getElementById("q").style.display = "none"
     const userInfo = await getUserInfo(user.uid)
     document.getElementById("q").src = userInfo.Photo
     document.getElementById("user-icon").src = userInfo.Photo
-    document.getElementById("URL").value = userInfo.Photo
+    document.getElementById("profilepic-info").style.display = "none"
  }
 
  function LoadingScreen(div, on) {
@@ -261,11 +261,27 @@ async  function SetProfilePic(url) {
         document.getElementsByClassName("profilepic")[0].src = userInfo.Photo
       }
    
+
+async function upload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'TFG-Community');
+    const res = await fetch('https://api.cloudinary.com/v1_1/drxgg0cwo/upload', {method: 'POST',body: formData});
+    const data = await res.json();
+    return data.secure_url
+    }         
+let fileInput = document.getElementById("fileInput");
+fileInput.addEventListener("input", async function () {
+  if (fileInput.value[0].split('.').pop() == "png" || "jpeg" || "jpg" || "mov" || "gif" || "webp") {
+    let URL = await upload(fileInput.files[0]);
+    console.log(URL)
+    document.getElementsByClassName("profilepic")[0].src = URL
+    document.getElementsByClassName("profilepic")[1].src = URL
+    await SetProfilePic(URL);
+  }
+})      
     
  
-document.getElementById("URL").addEventListener("input", async () => {
-  await SetProfilePic(document.getElementById("URL").value);
-});
 
 
 

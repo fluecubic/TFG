@@ -127,13 +127,34 @@ border-radius: 40px;
 margin-top: 0px;
 }
 
-#URL{
-    margin: 5px;
-    margin-bottom: 40px;
-    border: 1px solid white;
-    margin-top: 23px;
+
+
+
+label {
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  margin: 5px;
+  border-radius: 10px;
+  margin-top: 0px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
 }
 
+#profilepic-info{
+    display: none;
+    font-size: 25px;
+    margin-top: 24px;
+    margin-left: 20px;
+}
+
+
+#fileInput{
+  opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
 
 @media screen and (max-width: 600px) {
     
