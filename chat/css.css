@@ -198,6 +198,7 @@ a:active {
 
 #main-chat{
       margin-top: 50px;
+      border-width: 2px;
     }
 
 
@@ -289,8 +290,8 @@ margin-right: 3px;
 }
 
 label {
-   cursor: pointer;
-   background-color: orange;
+  cursor: pointer;
+  background-color: orange;
   width: 35px;
   height: 35px;
   margin: 5px;
