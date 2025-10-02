@@ -78,7 +78,9 @@ p{
 
   img{
     max-width: 1000px;
-    max-height: 400px;
+    max-height: 250px;
+    border-radius: 15px;
+    margin-top: 0px;
   }
 
   
@@ -89,7 +91,7 @@ p{
 }
   
 .unread{
-  margin-left: 50px;
+  margin-left: auto;
   background-color: blue;
   height: 20px;
   border-radius: 30px;
@@ -149,9 +151,10 @@ a:active {
   background-color: rgb(150, 150, 160);
   border-radius: 5px;
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
   font-size: 14px;
   padding: 2px;
+
 }
 
 .userinfos{
@@ -198,7 +201,7 @@ a:active {
 
 #main-chat{
       margin-top: 50px;
-      border-width: 2px;
+      border-width: 3px;
     }
 
 

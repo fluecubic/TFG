@@ -56,7 +56,7 @@ async  function uilogedin() {
     document.getElementById("surname").style.display = "none"
     document.getElementById("fertig").style.display = "block"
     document.getElementById("mecker").style.color = "white"
-    document.getElementById("fileInput").style.display = "block"
+    document.getElementById("fileinput").style.display = "block"
     document.getElementById("q").style.display = "block"
     const userInfo = await getUserInfo(user.uid)
     document.getElementById("q").src = userInfo.Photo
@@ -81,7 +81,7 @@ async function uilogedout() {
     document.getElementById("surname").style.display = "block"
     document.getElementById("fertig").style.display = "none"
     document.getElementById("mecker").style.color = "red"
-    document.getElementById("fileInput").style.display = "none"
+    document.getElementById("fileinput").style.display = "none"
     document.getElementById("q").style.display = "none"
     const userInfo = await getUserInfo(user.uid)
     document.getElementById("q").src = userInfo.Photo
@@ -270,7 +270,7 @@ async function upload(file) {
     const data = await res.json();
     return data.secure_url
     }         
-let fileInput = document.getElementById("fileInput");
+let fileInput = document.getElementById("fileinput");
 fileInput.addEventListener("input", async function () {
   if (fileInput.value[0].split('.').pop() == "png" || "jpeg" || "jpg" || "mov" || "gif" || "webp") {
     let URL = await upload(fileInput.files[0]);
