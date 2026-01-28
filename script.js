@@ -12,5 +12,5 @@ import {user} from "./login/login.js"
     if (user.uid) {
        console.log(user) 
     } else {
-      window.location = "/TFG/login/login.html"
+      window.location = "./login/login.html"
     }

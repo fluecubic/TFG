@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, arrayUnion   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
-import {user} from "/TFG/login/login.js"
+import {user} from "../login/login.js"
 
 
 const firebaseConfig = {
@@ -46,7 +46,7 @@ async function getUserInfo(uid) {
         if (doc.data().Photo && doc.data().Photo != "undifined" || "") {
           userInfo.Photo = doc.data().Photo;
         } else {
-          userInfo.Photo = "/TFG/assets/user.png"
+          userInfo.Photo = "../assets/user.png"
         }
         
         
@@ -61,7 +61,7 @@ async function getUserInfo(uid) {
      Me = await getUserInfo(user.uid)
        console.log(Me) 
     } else {
-      window.location = "/TFG/login/login.html"
+      window.location = "../login/login.html"
     }
  
 async function getSortedDocuments() {
@@ -355,14 +355,14 @@ let hideStatus = "menu";
 document.getElementById("hide").addEventListener("click", function () {
   if (hideStatus === "menu") {
     hideStatus = "cross";
-    document.getElementById("hide").src = "/TFG/assets/cross.png";
+    document.getElementById("hide").src = "../assets/cross.png";
     document.getElementById("select-chat").style.display = "block";
     document.getElementById("hide").style.left = "265px";
 
   } 
   else if (hideStatus === "cross") {
     hideStatus = "menu";
-    document.getElementById("hide").src = "/TFG/assets/menu.png";
+    document.getElementById("hide").src = "../assets/menu.png";
     document.getElementById("select-chat").style.display = "none";
     document.getElementById("hide").style.left = "5px";
   }

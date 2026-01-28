@@ -1,5 +1,5 @@
 
-import {user} from "/TFG/login/login.js"
+import {user} from "../login/login.js"
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
 
@@ -256,7 +256,7 @@ remaininTime = 4;
     if (user.uid) {
        console.log(user) 
     } else {
-      window.location = "/TFG/login/login.html"
+      window.location = "../login/login.html"
     }
     
 

@@ -91,7 +91,7 @@ async function uilogedout() {
 
  function LoadingScreen(div, on) {
   if (on) {
-    document.getElementsByTagName(div).innerHTML = "<img src='/TFG/assets/loading.gif' class='loadingscreen'>"
+    document.getElementsByTagName(div).innerHTML = "<img src='../assets/loading.gif' class='loadingscreen'>"
     console.log("added")
   } else {
     document.querySelector(".loadingscreen").remove()
@@ -227,11 +227,11 @@ uilogedout()
           if (doc.data().Photo != "") {
             userInfo.Photo = doc.data().Photo;
           } else {
-            userInfo.Photo = "/TFG/assets/user.png"
+            userInfo.Photo = "../assets/user.png"
           }
           
         } else {
-          userInfo.Photo = "/TFG/assets/user.png"
+          userInfo.Photo = "../assets/user.png"
         }
          
          break;
