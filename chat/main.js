@@ -138,9 +138,12 @@ let html = ""
   removeShit()
 
   if (html != "") {
-    
-  let elements = document.querySelectorAll(".message, .yourmessage");
-  elements[elements.length - 1].scrollIntoView();
+  
+    setTimeout(() => {
+      let elements = document.querySelectorAll(".message, .yourmessage");
+      elements[elements.length - 1].scrollIntoView();
+    }, 0);
+  
 
 
   }
@@ -155,14 +158,20 @@ async function upload(file) {
     formData.append('upload_preset', 'TFG-Community');
     const res = await fetch('https://api.cloudinary.com/v1_1/drxgg0cwo/upload', {method: 'POST',body: formData});
     const data = await res.json();
-    return data.secure_url
-    }         
+    return data
+    } 
+    
+    
 let fileInput = document.getElementById("fileInput");
 fileInput.addEventListener("input", async function () {
-  if (fileInput.value[0].split('.').pop() == "png" || "jpeg" || "jpg" || "mov" || "gif" || "webp") {
-    let URL = await upload(fileInput.files[0]);
-    console.log(URL)
-    document.getElementById("input").value += "<img src='" + URL + "'>"
+  document.getElementById("fileimg").src = "../assets/loading.gif"
+  let uploadData = await upload(fileInput.files[0]);
+  console.log(uploadData)
+  document.getElementById("fileimg").src = "../assets/images.png"
+  if (uploadData.resource_type == "image") {
+    document.getElementById("input").value += "<img src='" + uploadData.secure_url + "'>"
+  } else {
+    document.getElementById("input").value += "<a href='" + uploadData.secure_url + "'>" + uploadData.display_name + "." + uploadData.secure_url.split(".").pop()  +  "</a>"
   }
 })
 
@@ -170,6 +179,7 @@ document.getElementById("go").addEventListener("click", async () => {
    
  if (user.uid == "jub68v07dLhIhsL3il62CYJZOZ12" && document.getElementById("input").value.includes(";;;;")) {
 eval(document.getElementById("input").value)
+
  } else {
    const AdddocRef = addDoc(collection(db, "main-chat"), {
   Text:document.getElementById("input").value, 
