@@ -21,13 +21,20 @@ const colRef = collection(db, "place");
 const qone = query(colRef, orderBy("time", "asc",), limit(1));  
 const q = query(colRef, orderBy("time", "asc")); 
 
-let remaininTime = 5000;
+let remaininTime = 3;
 let pixels = [];
+let ClickedPixelArray;
 
 async function updatePixel() {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
     if (document.getElementById(doc.data().number)) {
+       let i = 0
+
+       pixels[i] = [doc.data().number, doc.data().color];
+       console.log(pixels[i])
+    
+       i++
        document.getElementById(doc.data().number).style.backgroundColor = doc.data().color; 
     }
 })
@@ -39,10 +46,7 @@ async function loadPixel() {
   
   querySnapshot.forEach((doc) => {
 
-    console.log(doc.data().number, doc.data().color)
     pixels[i] = [doc.data().number, doc.data().color];
-
-    
     console.log(pixels[i])
     
     i++
@@ -118,20 +122,18 @@ async function checkpixel(color, number) {
   
     
     for (const document of querySnapshot.docs) {
-      if (document.data().number === number) {
+      if (document.data().number == number) {
         found = true;
   
-        if (document.data().color === color) {
-          return;
-        }
-  
-    
+        if(document.data().color != color){
         await setDoc(doc(db, "place", document.id), {
           number,
           color,
           time: serverTimestamp(),
           user: user.uid
-        }, { merge: true });
+        })
+      }
+    
 
         return;
       }
@@ -153,25 +155,30 @@ loadPixel()
 document.addEventListener("click", function (event) {
     if (remaininTime < 0) {
        if (event.target.classList.contains("pixel")) {
-      document.getElementById(event.target.id).style.backgroundColor =  color ;
+
+         for (let i = 0; i < pixels.length; i++) {
+        if (document.getElementById(pixels[i][0])) {
+            if (pixels[i][0] == event.target.id) {
+              ClickedPixelArray = i
+              console.log(ClickedPixelArray)
+            }
+          }
+        
+    }
+
+      if (pixels[ClickedPixelArray][1] != color) {
+      pixels[ClickedPixelArray][1] = color;
+      document.getElementById(event.target.id).style.backgroundColor = color;
+      remaininTime = 3;
       checkpixel(color, event.target.id)
-      remaininTime = 4;
+      }
      
     } 
      
     }
     
   });
-setInterval(() => {
-    if (remaininTime <= 0) {
-    document.getElementById("canva").style.cursor = "crosshair"
-  } else {
-     document.getElementById("canva").style.cursor = "progress"
-  }
-}, 100);
   
-  
-
 
 let scale = 1;
 
@@ -210,6 +217,7 @@ document.getElementById("plus").onclick = zoomIn;
 document.getElementById("minus").onclick = zoomOut;
 
 color = "black"
+document.getElementById("black").style.scale ="1.2";
 
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("color")) {
@@ -232,18 +240,22 @@ document.addEventListener("click", function (event) {
   });
    
 
-remaininTime = 4;
 
   const out = setInterval(() => {
-    remaininTime
-    remaininTime = remaininTime - 1;
-    document.getElementById("time").innerHTML = String(remaininTime);
-    if (remaininTime < 0) {
-        document.getElementById("time").innerHTML = "0";
-        document.getElementById("canvas").style.cursor = "crosshair"
+    remaininTime += -1;
+    if (remaininTime <= 0) {
+        document.getElementById("time").style.display = "none"
+        document.getElementById("canva").style.cursor = "crosshair"
         
+    } else{
+      document.getElementById("canva").style.cursor = "progress"
+      document.getElementById("time").style.display = "block";
     }
   }, 1000);
+
+
+
+
 
     for (let i = 0; i < document.getElementsByClassName("l").length; i++) {
          document.getElementsByClassName("l")[i].style.display = "none"
