@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fluecubic.github.io/TFG/important/sitemap.txt
+Sitemap: https://fluecubic.github.io/TFG/sitemap.txt
