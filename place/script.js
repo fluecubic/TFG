@@ -265,11 +265,14 @@ document.addEventListener("click", function (event) {
 
     
 
-    if (user.uid) {
+    const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
+
+    if (user.uid || isBot) {
        console.log(user) 
     } else {
       window.location = "../login/login.html"
     }
+
     
 
 

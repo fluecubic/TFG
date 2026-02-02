@@ -29,6 +29,14 @@ let unreadChat = [];
 let Me;
 
 
+const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
+
+    if (user.uid || isBot) {
+       console.log(user) 
+    } else {
+      window.location = "../login/login.html"
+    }
+
 
 
      
@@ -57,12 +65,6 @@ async function getUserInfo(uid) {
     return userInfo;
 }
 
- if (user.uid) {
-     Me = await getUserInfo(user.uid)
-       console.log(Me) 
-    } else {
-      window.location = "../login/login.html"
-    }
  
 async function getSortedDocuments() {
 
