@@ -61,12 +61,27 @@ p{
     
 }
 
-.link-app:hover{
+
+
+@keyframes hover {
+  0% {
+    border: 1px solid white;
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+    margin: 30px;
+  }
+  100% {
     border: 2px solid white;
     width: 420px;
     height: 420px;
     border-radius: 20px;
     margin: 30px;
+  }
+}
+
+.link-app:hover{
+    animation: hover 0.3s linear 0s 1 alternate forwards;
 }
 
 

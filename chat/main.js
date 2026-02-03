@@ -26,7 +26,7 @@ let chatId = "main-chat";
 let userInfo
 let unreadMessage = [];
 let unreadChat = [];
-let Me;
+
 
 
 const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
@@ -65,6 +65,8 @@ async function getUserInfo(uid) {
     return userInfo;
 }
 
+
+let Me = await getUserInfo(user.uid)
  
 async function getSortedDocuments() {
 
@@ -75,10 +77,10 @@ async function getSortedDocuments() {
 let html = ""
   for (const Doc of querySnapshot.docs) {
 
-  let Readers
+    let Readers;          
   
-    Readers = Doc.data().Readers
-
+    Readers = Doc.data().Readers;
+ 
 
   if (!Readers.includes(user.uid)) {
   if (!unreadMessage.includes(Doc.id)) {
@@ -308,7 +310,7 @@ document.addEventListener("click", function (e) {
 
 async function  loadChatOptions() {
   let html = "";
-  LoadingScreen("chat-select", true)
+  LoadingScreen("chat-select")
   html += "<div id='main-chat' class='chat-button'><p class='chat-button-txt'>Haupt-Chat</p></div>"
   html += "<div id='" + Me.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  Me.Klasse + " Chat" + "</p>" +"</div>"
 
@@ -336,7 +338,6 @@ for (const doc of querySnapshot.docs) {
 }
 document.getElementById("chat-select").innerHTML = html;
 removeShit()
-LoadingScreen()
 updateChatOptions()
 }
 
@@ -383,6 +384,18 @@ document.getElementById("hide").addEventListener("click", function () {
 
  await loaddmoptions()
 
+
+ const zoomOut = [
+  { transform: "scale(1)" },
+  { transform: "scale(0)" },
+];
+
+const zoomTiming = {
+  duration: 400,
+  iterations: 1,
+};
+
+
 document.getElementById("new-dm").addEventListener("click", function () {
   document.getElementById("dms").style.display = "block"
   
@@ -390,7 +403,9 @@ document.getElementById("new-dm").addEventListener("click", function () {
 })
 
 document.getElementById("esc").addEventListener("click", function () {
-  document.getElementById("dms").style.display = "none"
+  document.getElementById("dms").animate(zoomOut, zoomTiming);
+  setTimeout(() => {document.getElementById("dms").style.display = "none"}, 370);
+  
 })
 
 async function loaddmoptions() {
@@ -423,8 +438,11 @@ document.addEventListener("click", async function (e) {
 })
 
 
-function LoadingScreen(div, on) {
-  
+function LoadingScreen(div) {
+  document.getElementById(div).innerHTML = "<img class='loadingscreen' id='" + div + "-Loadingscreen" + "' src='../assets/loading.gif'>"
+}
+function removeLoadingScreen(div) {
+  document.getElementById(div + "-Loadingscreen").style.display = "none"
 }
 
 function updateChatOptions() {

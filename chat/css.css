@@ -22,8 +22,9 @@ button
   margin-left: 15px;
 }
 
-#input{margin-left: 350px;
-   border: 1px solid white;
+#input{
+  margin-left: 350px;
+  border: 1px solid white;
   border-radius: 5px;
   background-color: rgb(65, 64, 63);
   color: whitesmoke;
@@ -34,8 +35,10 @@ button
 
 
 
-h1{font-family: Arial;
-font-size: large;}
+h1{
+  font-family: Arial;
+  font-size: large;
+  }
 
 .message{
     font-family: Arial;
@@ -236,7 +239,8 @@ a:active {
   border-radius: 15px;
   z-index: 20;
   display: none;
-  -webkit-user-drag:element;
+  overflow-y: scroll;
+  overflow-x: hidden;
   animation-name: zoomin;
   animation-duration: 0.4s;
 }
@@ -250,7 +254,7 @@ a:active {
 }
 
 .dm-option{
-  font-size: 32px;
+  font-size: 26px;
   padding: 5px;
   padding-left: 1px;
   font-family: Arial, Helvetica, sans-serif;
@@ -260,7 +264,7 @@ a:active {
   color: white;
   padding-bottom: 0px;
   padding-top: 2px;
-  
+  margin-bottom: 0px;
 }
 
 .profilepic{
@@ -289,7 +293,6 @@ margin-right: 3px;
   margin: 100px;
   width: 80px;
   height: 80px;
-  display: none;
 }
 
 label {
