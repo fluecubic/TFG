@@ -1,14 +1,18 @@
 body{
     background-color: black;
+    font-family: Uncut;
 }
 
 .l{
     display: none;
 }
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
+}
 
 h1{
     font-size: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color:rgb(253, 181, 48);
     margin-bottom: 50px;
     margin-right: 0px;

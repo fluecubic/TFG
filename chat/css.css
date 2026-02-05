@@ -1,11 +1,21 @@
-#output
-{
+#output{
 margin-left: 50px;
 margin-top: 100px;
-margin-bottom: 100px;}
+margin-bottom: 100px;
+}
 
 .l{
     display: none;
+}
+
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
+}
+
+@font-face {
+    font-family: UncutBook;
+    src: url(../assets/UncutSans-Book.woff2);
 }
 
 @keyframes zoomin {
@@ -36,12 +46,10 @@ button
 
 
 h1{
-  font-family: Arial;
   font-size: large;
   }
 
 .message{
-    font-family: Arial;
     background-color: rgb(49, 118, 245);
     border-radius: 20px;
     width:fit-content;
@@ -52,7 +60,6 @@ h1{
 }
 
 .yourmessage{
-    font-family: Arial;
     background-color: rgb(163, 211, 255);
     border-radius: 20px;
     width:fit-content;
@@ -91,6 +98,7 @@ p{
   body{
     margin-top: 0px;
     background-color: black;
+    font-family: UncutBook;
 }
   
 .unread{
@@ -105,7 +113,7 @@ p{
   
 h1{
     font-size: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Uncut;
     color:rgb(253, 181, 48);
     margin-bottom: 5px;
     margin-right: 0px;
@@ -194,7 +202,6 @@ a:active {
 }
 
 .chat-button-txt{
-  font-family: Arial;
   margin: 0px;
   margin-left: 5px;
   margin-top: 3px;
@@ -257,7 +264,6 @@ a:active {
   font-size: 26px;
   padding: 5px;
   padding-left: 1px;
-  font-family: Arial, Helvetica, sans-serif;
   margin-left: 0px;
   border: 0px;
   border-top: 1px solid white;
@@ -340,10 +346,12 @@ background-color: orange;
     margin-left: 100px;
     font-size: 20px;
 }
-  h1{font-family: Arial;
+
+h1{
 font-size: 35px;
 max-width: 250px;
-height: 70px;}
+height: 70px;
+}
 
 #select-chat{
   display: none;

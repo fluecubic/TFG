@@ -8,8 +8,12 @@
     cursor: pointer;
 }
 
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
+}
+
 #gameContainer{
-    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: white;
     margin-top: 120px;
@@ -33,11 +37,11 @@ button
  body{
     margin-top: 0px;
     background-color: black;
+    font-family: "Uncut";
 }
 
 h1{
-    font-size: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 40px;;
     color:rgb(253, 181, 48);
     margin-bottom: 5px;
     margin-right: 0px;

@@ -3,12 +3,18 @@ body{
     height: 800px;
     margin-left: 35vw;
     background-color: black;
+    font-family: Uncut;
 }
 
 #inputs{
     margin: 50px;
     margin-top: 130px;
     bottom: 5px;
+}
+
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
 }
 
 input{
@@ -106,7 +112,6 @@ a:active {
 
 h1{
     font-size: 30px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color:rgb(253, 181, 48);
     margin-bottom: 5px;
     margin-right: 0px;
