@@ -1,0 +1,135 @@
+body{
+    background-color: black;
+    padding: 0px;
+    font-family: Uncut;
+}
+
+
+.l{
+    display: none;
+}
+
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
+}
+
+h1{
+    font-size: 40px;
+    color:rgb(253, 181, 48);
+    margin-bottom: 5px;
+    margin-right: 0px;
+    width: 350px;
+    margin-left: 20px;
+}
+
+#leiste{
+    display: flex;
+    flex-direction:row;
+    background-color: rgb(27, 27, 31);
+    position: fixed;
+    top: 0px;
+    width: 1910px;
+}
+
+#user-icon{
+    margin-left: 1450px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    width:70px;
+    height:70px;
+}
+
+p{
+    color:rgb(253, 181, 48);
+    font-size: 25px;
+    text-decoration: none;
+    margin: 0px;
+    margin-left: 20px;
+}
+
+
+
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color:rgb(253, 181, 48);
+  font-size: 35px;
+  text-decoration: none;
+
+}
+
+
+
+.profilepic{
+width: 80px;
+height: 80px;
+border-radius: 40px;
+margin-top: 0px;
+}
+
+#BarBottom{
+    width: 1910px;
+    height: 80px;
+    top: 863px;
+    background-color: rgb(27, 27, 31);
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    position: fixed;
+}
+
+.LinkBottom{
+    margin-left: 400px;
+    margin-top: 35px;
+}
+
+#InfoH1{
+    margin-top: 100px;
+    margin-bottom: 25px;
+}
+
+.Card{
+    width: 250px;
+    height: 350px;
+    position: relative;
+}
+
+.CardImg{
+    width: 210px;
+    height: 295px;
+    margin: 20px;
+    margin-bottom: 0px;
+}
+
+
+
+.Card::before{
+    position: absolute;
+    content: attr(data-before);
+    font-size: 25px;
+    background-color: rgb(253, 181, 48);
+    color: black;
+    width: min-content;
+    height: min-content;
+    padding: 10.5px;
+    padding-left: 17.8px ;
+    padding-right: 17.8px ;
+    border-radius: 50px;
+    bottom: 290px;
+    left: 195px;
+    top:0px;
+    right: 0px;
+    z-index: 150;
+}
+
+@media screen and (max-width: 600px) {
+    
+}
+
+
+

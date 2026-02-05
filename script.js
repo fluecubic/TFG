@@ -5,12 +5,10 @@ import {user} from "./login/login.js"
          document.getElementsByClassName("l")[i].style.display = "none" 
     }
 
+    const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
 
-
-    
-
-    if (user.uid) {
+    if (user.uid || isBot) {
        console.log(user) 
     } else {
-      window.location = "/TFG/login/login.html"
+      window.location = "./login/login.html"
     }

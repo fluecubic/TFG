@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="8WiHVxn3sWhVbZE54_ZJwJVY8a9GUQAO_AblSlDp9NY" />
     <title>TFG-Community</title>
-    <meta property="og:description" content="Ob Chat, r/place Klon oder TicTacToe, hier gibts immer was zu tun." />
-    <meta property="og:keywords" content="fluecubic, TFG, Scheiße, Place, Chat, Github, Jonas, TicTacToe, TFG-Community, Community " />
+    <meta property="og:description" content="Sammle und kämpfe mit speziellen Karten..." />
+    <meta property="og:keywords" content="fluecubic, TFG, Scheiße, Pokemon, Karten, TFG-Community, Community " />
       <meta property="og:author" content="Jonas Lorenz" />
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="./assets/LOGO.png" type="image/x-icon">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="shortcut icon" href="../../assets/LOGO.png" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     
 </head>
@@ -18,16 +19,32 @@
 <body>
 
     <div id="leiste">
+        <a href="../../index.html">
         <h1 id="">TFG-Community</h1>
-        <a href="./login/login.html">
-        <img id="user-icon" class="profilepic" src="./assets/user.png">
+        </a>
+        <a href="../../login/login.html">
+        <img id="user-icon" class="profilepic" src="../../assets/user.png">
         </a>
     </div>
-    <div id="links">
-    <a href="./chat/"><div class="link-app" id="discord-link"><p class="link-name">Chat</p></div></a> 
-    <a href="./place/#canva"><div class="link-app" id="place-link"><p class="link-name">Place</p></div></a>
-    <a href="./TicTacToe/"><div class="link-app" id="tictactoe-link"><p class="link-name">TicTacToe</p></div></a>
+    <h1 id="InfoH1">Meine Karten</h1>
+    <div id="MyCards">
+    
     </div>
+
+
+
+
+    <div id="BarBottom">
+        <a class="LinkBottom"  href="../Cards/index.html">Karten</a>
+        <a class="LinkBottom"  href="../">Auktionen</a>
+        <a class="LinkBottom"  href="../">Duelle</a>
+    </div>
+
+
+
+
+
+       <div class="l">
       <div id="inputs" class="l">
      <input id="name" type="text" placeholder="Benutzername">
      <input id="surname" type="text" placeholder="Nachname">
@@ -35,14 +52,12 @@
      <input id="password" class="l" type="password" placeholder="Passwort">
      <br>
      <p id="mecker" class="l"> </p>
-    
         <p id="bla" class="l"></p>
         <br>
         <p class="l" id="classinf">Klasse:</p>
         <select  id="class" class="l">
         </select>
      </div>
-    
         </div>
         <div id="options" class="l">
      <button id="login"></button>
@@ -51,11 +66,12 @@
      <button id="logout" class="l"></button>
      <button id="fertig" class="l"></button>
      <img src="" id="q"  class="l">
-      <label for="fileInput" class="l"><img src="./assets/user.png" id="q"  class="profilepic l"> <p id="profilepic-info" class="l">Profilbild</p> </label>
+      <label for="fileInput" class="l"><img src="../../assets/user.png" id="q"  class="profilepic l"> <p id="profilepic-info" class="l">Profilbild</p> </label>
     <input type="file" class="l"  id="fileinput">
+     </div>
+
 </body>
 <script type="module" src="./script.js"></script>
 </html>
-
 
 

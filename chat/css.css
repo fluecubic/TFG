@@ -1,11 +1,21 @@
-#output
-{
+#output{
 margin-left: 50px;
 margin-top: 100px;
-margin-bottom: 100px;}
+margin-bottom: 100px;
+}
 
 .l{
     display: none;
+}
+
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
+}
+
+@font-face {
+    font-family: UncutBook;
+    src: url(../assets/UncutSans-Book.woff2);
 }
 
 @keyframes zoomin {
@@ -22,8 +32,9 @@ button
   margin-left: 15px;
 }
 
-#input{margin-left: 350px;
-   border: 1px solid white;
+#input{
+  margin-left: 350px;
+  border: 1px solid white;
   border-radius: 5px;
   background-color: rgb(65, 64, 63);
   color: whitesmoke;
@@ -34,11 +45,11 @@ button
 
 
 
-h1{font-family: Arial;
-font-size: large;}
+h1{
+  font-size: large;
+  }
 
 .message{
-    font-family: Arial;
     background-color: rgb(49, 118, 245);
     border-radius: 20px;
     width:fit-content;
@@ -49,7 +60,6 @@ font-size: large;}
 }
 
 .yourmessage{
-    font-family: Arial;
     background-color: rgb(163, 211, 255);
     border-radius: 20px;
     width:fit-content;
@@ -78,7 +88,9 @@ p{
 
   img{
     max-width: 1000px;
-    max-height: 400px;
+    max-height: 250px;
+    border-radius: 15px;
+    margin-top: 0px;
   }
 
   
@@ -86,10 +98,11 @@ p{
   body{
     margin-top: 0px;
     background-color: black;
+    font-family: UncutBook;
 }
   
 .unread{
-  margin-left: 50px;
+  margin-left: auto;
   background-color: blue;
   height: 20px;
   border-radius: 30px;
@@ -100,7 +113,7 @@ p{
   
 h1{
     font-size: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Uncut;
     color:rgb(253, 181, 48);
     margin-bottom: 5px;
     margin-right: 0px;
@@ -149,9 +162,10 @@ a:active {
   background-color: rgb(150, 150, 160);
   border-radius: 5px;
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
   font-size: 14px;
   padding: 2px;
+
 }
 
 .userinfos{
@@ -188,7 +202,6 @@ a:active {
 }
 
 .chat-button-txt{
-  font-family: Arial;
   margin: 0px;
   margin-left: 5px;
   margin-top: 3px;
@@ -198,7 +211,7 @@ a:active {
 
 #main-chat{
       margin-top: 50px;
-      border-width: 2px;
+      border-width: 3px;
     }
 
 
@@ -233,7 +246,8 @@ a:active {
   border-radius: 15px;
   z-index: 20;
   display: none;
-  -webkit-user-drag:element;
+  overflow-y: scroll;
+  overflow-x: hidden;
   animation-name: zoomin;
   animation-duration: 0.4s;
 }
@@ -247,17 +261,16 @@ a:active {
 }
 
 .dm-option{
-  font-size: 32px;
+  font-size: 26px;
   padding: 5px;
   padding-left: 1px;
-  font-family: Arial, Helvetica, sans-serif;
   margin-left: 0px;
   border: 0px;
   border-top: 1px solid white;
   color: white;
   padding-bottom: 0px;
   padding-top: 2px;
-  
+  margin-bottom: 0px;
 }
 
 .profilepic{
@@ -286,7 +299,6 @@ margin-right: 3px;
   margin: 100px;
   width: 80px;
   height: 80px;
-  display: none;
 }
 
 label {
@@ -334,10 +346,12 @@ background-color: orange;
     margin-left: 100px;
     font-size: 20px;
 }
-  h1{font-family: Arial;
+
+h1{
 font-size: 35px;
 max-width: 250px;
-height: 70px;}
+height: 70px;
+}
 
 #select-chat{
   display: none;

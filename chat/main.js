@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, arrayUnion   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
-import {user} from "/TFG/login/login.js"
+import {user} from "../login/login.js"
 
 
 const firebaseConfig = {
@@ -26,8 +26,16 @@ let chatId = "main-chat";
 let userInfo
 let unreadMessage = [];
 let unreadChat = [];
-let Me;
 
+
+
+const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
+
+    if (user.uid || isBot) {
+       console.log(user) 
+    } else {
+      window.location = "../login/login.html"
+    }
 
 
 
@@ -46,7 +54,7 @@ async function getUserInfo(uid) {
         if (doc.data().Photo && doc.data().Photo != "undifined" || "") {
           userInfo.Photo = doc.data().Photo;
         } else {
-          userInfo.Photo = "/TFG/assets/user.png"
+          userInfo.Photo = "../assets/user.png"
         }
         
         
@@ -57,12 +65,8 @@ async function getUserInfo(uid) {
     return userInfo;
 }
 
- if (user.uid) {
-     Me = await getUserInfo(user.uid)
-       console.log(Me) 
-    } else {
-      window.location = "/TFG/login/login.html"
-    }
+
+let Me = await getUserInfo(user.uid)
  
 async function getSortedDocuments() {
 
@@ -73,10 +77,10 @@ async function getSortedDocuments() {
 let html = ""
   for (const Doc of querySnapshot.docs) {
 
-  let Readers
+    let Readers;          
   
-    Readers = Doc.data().Readers
-
+    Readers = Doc.data().Readers;
+ 
 
   if (!Readers.includes(user.uid)) {
   if (!unreadMessage.includes(Doc.id)) {
@@ -138,9 +142,12 @@ let html = ""
   removeShit()
 
   if (html != "") {
-    
-  let elements = document.querySelectorAll(".message, .yourmessage");
-  elements[elements.length - 1].scrollIntoView();
+  
+    setTimeout(() => {
+      let elements = document.querySelectorAll(".message, .yourmessage");
+      elements[elements.length - 1].scrollIntoView();
+    }, 0);
+  
 
 
   }
@@ -155,14 +162,20 @@ async function upload(file) {
     formData.append('upload_preset', 'TFG-Community');
     const res = await fetch('https://api.cloudinary.com/v1_1/drxgg0cwo/upload', {method: 'POST',body: formData});
     const data = await res.json();
-    return data.secure_url
-    }         
+    return data
+    } 
+    
+    
 let fileInput = document.getElementById("fileInput");
 fileInput.addEventListener("input", async function () {
-  if (fileInput.value[0].split('.').pop() == "png" || "jpeg" || "jpg" || "mov" || "gif" || "webp") {
-    let URL = await upload(fileInput.files[0]);
-    console.log(URL)
-    document.getElementById("input").value += "<img src='" + URL + "'>"
+  document.getElementById("fileimg").src = "../assets/loading.gif"
+  let uploadData = await upload(fileInput.files[0]);
+  console.log(uploadData)
+  document.getElementById("fileimg").src = "../assets/images.png"
+  if (uploadData.resource_type == "image") {
+    document.getElementById("input").value += "<img src='" + uploadData.secure_url + "'>"
+  } else {
+    document.getElementById("input").value += "<a href='" + uploadData.secure_url + "'>" + uploadData.display_name + "." + uploadData.secure_url.split(".").pop()  +  "</a>"
   }
 })
 
@@ -170,6 +183,7 @@ document.getElementById("go").addEventListener("click", async () => {
    
  if (user.uid == "jub68v07dLhIhsL3il62CYJZOZ12" && document.getElementById("input").value.includes(";;;;")) {
 eval(document.getElementById("input").value)
+
  } else {
    const AdddocRef = addDoc(collection(db, "main-chat"), {
   Text:document.getElementById("input").value, 
@@ -296,7 +310,7 @@ document.addEventListener("click", function (e) {
 
 async function  loadChatOptions() {
   let html = "";
-  LoadingScreen("chat-select", true)
+  LoadingScreen("chat-select")
   html += "<div id='main-chat' class='chat-button'><p class='chat-button-txt'>Haupt-Chat</p></div>"
   html += "<div id='" + Me.Klasse + "' class='chat-button' >" + "<p class='chat-button-txt'>" +  Me.Klasse + " Chat" + "</p>" +"</div>"
 
@@ -324,7 +338,6 @@ for (const doc of querySnapshot.docs) {
 }
 document.getElementById("chat-select").innerHTML = html;
 removeShit()
-LoadingScreen()
 updateChatOptions()
 }
 
@@ -355,14 +368,14 @@ let hideStatus = "menu";
 document.getElementById("hide").addEventListener("click", function () {
   if (hideStatus === "menu") {
     hideStatus = "cross";
-    document.getElementById("hide").src = "/TFG/assets/cross.png";
+    document.getElementById("hide").src = "../assets/cross.png";
     document.getElementById("select-chat").style.display = "block";
     document.getElementById("hide").style.left = "265px";
 
   } 
   else if (hideStatus === "cross") {
     hideStatus = "menu";
-    document.getElementById("hide").src = "/TFG/assets/menu.png";
+    document.getElementById("hide").src = "../assets/menu.png";
     document.getElementById("select-chat").style.display = "none";
     document.getElementById("hide").style.left = "5px";
   }
@@ -371,6 +384,18 @@ document.getElementById("hide").addEventListener("click", function () {
 
  await loaddmoptions()
 
+
+ const zoomOut = [
+  { transform: "scale(1)" },
+  { transform: "scale(0)" },
+];
+
+const zoomTiming = {
+  duration: 400,
+  iterations: 1,
+};
+
+
 document.getElementById("new-dm").addEventListener("click", function () {
   document.getElementById("dms").style.display = "block"
   
@@ -378,7 +403,9 @@ document.getElementById("new-dm").addEventListener("click", function () {
 })
 
 document.getElementById("esc").addEventListener("click", function () {
-  document.getElementById("dms").style.display = "none"
+  document.getElementById("dms").animate(zoomOut, zoomTiming);
+  setTimeout(() => {document.getElementById("dms").style.display = "none"}, 370);
+  
 })
 
 async function loaddmoptions() {
@@ -411,8 +438,11 @@ document.addEventListener("click", async function (e) {
 })
 
 
-function LoadingScreen(div, on) {
-  
+function LoadingScreen(div) {
+  document.getElementById(div).innerHTML = "<img class='loadingscreen' id='" + div + "-Loadingscreen" + "' src='../assets/loading.gif'>"
+}
+function removeLoadingScreen(div) {
+  document.getElementById(div + "-Loadingscreen").style.display = "none"
 }
 
 function updateChatOptions() {

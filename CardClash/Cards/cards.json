@@ -1,0 +1,25 @@
+
+[
+   {
+       "Name": "TestCard01",
+       "HP": 150,
+       "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+       "type": "card",
+       "NextStage": null,
+       "attacks" : [
+           {
+               "Name": "Damage Test",
+               "type": "InstantDamage",
+               "Damage": 50,
+               "Uses": 999
+           },
+           {
+               "Name": "KO Test",
+               "type": "KO",
+               "time": 2,
+               "Uses": 1,
+               "Damage": 0
+           }
+       ]
+   }
+]

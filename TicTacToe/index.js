@@ -1,4 +1,4 @@
-import {user} from "/TFG/login/login.js"
+import {user} from "../login/login.js"
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, FieldPath, deleteDoc  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -37,11 +37,14 @@ let running = false;
 let game = await GameSearch()
 let currentPlayer = game.Turn;
 
-if (user.uid) {
+const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
+
+    if (user.uid || isBot) {
        console.log(user) 
     } else {
-      window.location = "/TFG/login/login.html"
+      window.location = "../login/login.html"
     }
+
 
 initializeGame();
 
@@ -145,7 +148,7 @@ async function getUserInfo(uid) {
         if (doc.data().Photo) {
           userInfo.Photo = doc.data().Photo;
         } else {
-          userInfo.Photo = "/TFG/assets/user.png"
+          userInfo.Photo = "../assets/user.png"
         }
         
         

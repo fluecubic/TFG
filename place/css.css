@@ -1,14 +1,18 @@
 body{
     background-color: black;
+    font-family: Uncut;
 }
 
 .l{
     display: none;
 }
+@font-face {
+    font-family: Uncut;
+    src: url(../assets/UncutSans-Semibold.woff2);
+}
 
 h1{
     font-size: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color:rgb(253, 181, 48);
     margin-bottom: 50px;
     margin-right: 0px;
@@ -119,7 +123,7 @@ h1{
 #canvas{
     border: 0px;
     cursor: crosshair;
-    width: 1920px;
+    width: 1910px;
     height: 830px;
     background-color: black;
     top: 140px;
@@ -163,11 +167,8 @@ h1{
     width: 40px;
     margin:30px;
     margin-top: 15px;
-    font-size: 30px;
-    width: 80px;
     margin-left: 20px;
-    color: aquamarine;
-    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 20px;
 }
 
 
