@@ -6,6 +6,7 @@
        "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
        "type": "card",
        "NextStage": null,
+       "Rarety": "basic",
        "attacks" : [
            {
                "Name": "Damage Test",

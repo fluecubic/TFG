@@ -67,10 +67,23 @@ function loadCards() {
     for (let i = 0; i < Me.Cards.length; i++) {
         let Number = Me.Cards[i].split("x")[0]
         let Amount = Me.Cards[i].split("x")[1]
-        document.getElementById("MyCards").innerHTML += "<div id='" + "Card-"+ Number +"' class='Card'><img class='CardImg' src='"+ CardInfo[i].img +"'><p class='CardNameSmall'>" + CardInfo[i].Name + "</p> </div>"
+        document.getElementById("MyCards").innerHTML += "<div  class='Card " + "Card-"+ Number + "'><img class='CardImg " + "Card-"+ Number + "' src='"+ CardInfo[i].img +"'><p class='CardNameSmall " + "Card-"+ Number + "'>" + CardInfo[i].Name + "</p> </div>"
         document.getElementsByClassName("Card")[i].setAttribute('data-before', Amount)
         
      }
 }
     
 loadCards()
+
+document.addEventListener("click", function (event) {
+  if (event.target.classList[1] && event.target.classList[1].includes("Card")) {
+      console.log()
+     document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry'><div id='viewCard'><img id='CardBig' src='" + CardInfo[event.target.classList[1].split("-")[1]].img +"'><p id='esc'>x</p><button id='SellButton'>Angebot erstellen</button></div></div>";
+
+     document.getElementById("esc").addEventListener("click", function () {
+     document.getElementsByClassName("blurry")[0].remove()
+  })
+
+  }
+})
+
