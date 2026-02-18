@@ -30,6 +30,7 @@ h1{
     position: fixed;
     top: 0px;
     width: 1910px;
+    z-index: 30;
 }
 
 #user-icon{
@@ -88,15 +89,21 @@ margin-top: 0px;
     margin-top: 35px;
 }
 
-#InfoH1{
+.InfoH1{
     margin-top: 100px;
     margin-bottom: 25px;
 }
 
-.Card{
+.Card, .Pack{
     width: 250px;
     height: 350px;
     position: relative;
+    z-index: 0;
+    
+}
+
+.Pack{
+  margin-bottom: 250px;  
 }
 
 .CardImg{
@@ -111,6 +118,24 @@ margin-top: 0px;
 .Card::before{
     position: absolute;
     content: attr(data-before);
+    font-size: 25px;
+    background-color: rgb(253, 181, 48);
+    color: black;
+    width: min-content;
+    height: min-content;
+    padding: 10.5px;
+    padding-left: 17.8px ;
+    padding-right: 17.8px ;
+    border-radius: 50px;
+    bottom: 290px;
+    left: 195px;
+    top:0px;
+    right: 0px;
+    z-index: 5;
+}
+.Pack::before{
+    position: absolute;
+    content: attr(data-prize);
     font-size: 25px;
     background-color: rgb(253, 181, 48);
     color: black;
@@ -180,6 +205,32 @@ margin-top: 0px;
     z-index: 6;
 }
 
+#MyCards, #Cardpacks{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 100px;
+}
+
+.flex{
+ display: flex;
+ flex-direction: row;   
+}
+
+.Arrow{
+   rotate: -90deg;
+   color: gray;
+}
+
+.PackInfo{
+    color: gray;
+    font-size: 23px;
+    
+}
+
+.CardNameSmall{
+    color: gray;
+    font-size: 25px;
+}
 
 @media screen and (max-width: 600px) {
     

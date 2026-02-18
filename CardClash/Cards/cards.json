@@ -1,26 +1,72 @@
 
-[
-   {
-       "Name": "TestCard01",
-       "HP": 150,
-       "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
-       "type": "card",
-       "NextStage": null,
-       "Rarety": "basic",
-       "attacks" : [
-           {
-               "Name": "Damage Test",
-               "type": "InstantDamage",
-               "Damage": 50,
-               "Uses": 999
-           },
-           {
-               "Name": "KO Test",
-               "type": "KO",
-               "time": 2,
-               "Uses": 1,
-               "Damage": 0
-           }
-       ]
-   }
-]
+{
+
+    "Cards": [
+               {
+                   "Name": "TestCard01",
+                   "HP": 150,
+                   "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+                   "NextStage": null,
+                   "Rarety": "basic",
+                   "attacks" : [
+                       {
+                           "Name": "Damage Test",
+                           "type": "InstantDamage",
+                           "Damage": 50,
+                           "Uses": 999
+                       },
+                       {
+                           "Name": "KO Test",
+                           "type": "KO",
+                           "time": 2,
+                           "Uses": 1,
+                           "Damage": 0
+                       }
+                   ]
+               },
+            
+               
+               {
+                   "Name": "TestCard02",
+                   "HP": 170,
+                   "img": "./assets/16dcfee33f67d94e52fe3d9ed9a5502a2d4071b8.webp",
+                   "NextStage": null,
+                   "Rarety": "epic",
+                   "attacks" : [
+                       {
+                           "Name": "Damage Test",
+                           "type": "InstantDamage",
+                           "Damage": 50,
+                           "Uses": 999
+                       },
+                       {
+                           "Name": "KO Test",
+                           "type": "KO",
+                           "time": 2,
+                           "Uses": 1,
+                           "Damage": 0
+                       }
+                   ]
+               }
+ 
+             ],
+
+    "Packs" : [
+        {
+            "Name": "FirstTestPack",
+            "Price": 25,
+            "Cards": 3,
+            "Chances":[
+                0.4,
+                0.2,
+                0.1,
+                0.29,
+                0.01
+            ],
+            "img": "./assets/images.jfif"
+        }
+
+    ]
+
+} 
+   
