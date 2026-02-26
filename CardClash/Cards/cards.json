@@ -47,6 +47,59 @@
                            "Damage": 0
                        }
                    ]
+               },
+
+               {
+                   "Name": "NormalCard",
+                   "HP": 140,
+                   "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+                   "NextStage": null,
+                   "Rarety": "basic",
+                   "attacks" : [
+                       {
+                           "Name": "Aua",
+                           "type": "InstantDamage",
+                           "Damage": 45,
+                           "Uses": 999
+                       },
+                       {
+                           "Name": "Doing",
+                           "type": "KO",
+                           "time": 1,
+                           "Uses": 1,
+                           "Damage": 0
+                       }
+                   ]
+               },
+
+               {
+                   "Name": "RareCard",
+                   "HP": 180,
+                   "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+                   "NextStage": null,
+                   "Rarety": "rare",
+                   "attacks" : [
+                       {
+                           "Name": "Picks",
+                           "type": "InstantDamage",
+                           "Damage": 60,
+                           "Uses": 999
+                       },
+                       {
+                           "Name": "Bombe",
+                           "type": "InstantDamage",
+                           "Uses": 1,
+                           "Damage": 100
+                       }
+                   ]
+               },
+               {
+                   "Name": "Supporter",
+                   "img": "./assets/images (1).jfif",
+                   "Rarety": "supporter",
+                   "function": "heal",
+                   "hp": "50"
+
                }
  
              ],

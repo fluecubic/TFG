@@ -167,7 +167,7 @@ margin-top: 0px;
     margin-left: 100px;
     margin-top: 50px;
     border: 0px;
-    z-index: 30;
+    z-index: 40;
 }
 
 #esc{
@@ -202,7 +202,7 @@ margin-top: 0px;
     position: fixed;
     top: 0px;
     left: 0px;
-    z-index: 6;
+    z-index: 35;
 }
 
 #MyCards, #Cardpacks{

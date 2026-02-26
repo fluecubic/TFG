@@ -70,6 +70,7 @@ console.log(CardInfo)
      //await getUserInfo(user.uid)
 
 function loadCards() {
+  document.getElementById("MyCards").innerHTML = ""
     for (let i = 0; i < Me.Cards.length; i++) {
         let Number = Me.Cards[i].split("x")[0]
         let Amount = Me.Cards[i].split("x")[1]
@@ -95,7 +96,7 @@ document.addEventListener("click", function (event) {
 
 function loadPacks() {
   for (let i = 0; i < CardInfo.Packs.length; i++) {
-        document.getElementById("CardPacks").innerHTML += "<div  class='Pack " + "Pack-"+ i + "'><img class='CardImg " + "PackImg-"+ i + "' src='"+ CardInfo.Packs[i].img +"'> <div class='flex'> <p class='CardNameSmall " + "Card-"+ i + "'>" + CardInfo.Packs[i].Name + "</p> <p class='Arrow " + "Arrow-" + i + "'> < </p> </div></div>"
+        document.getElementById("CardPacks").innerHTML += "<div  class='Pack " + "Pack-"+ i + "' id = '" + "Pack-"+ i + "'><img class='CardImg " + "PackImg-"+ i + "' id = '" + "Pack-"+ i + "' src='"+ CardInfo.Packs[i].img +"'> <div class='flex'> <p class='CardNameSmall " + "Card-"+ i + "'>" + CardInfo.Packs[i].Name + "</p> <p class='Arrow " + "Arrow-" + i + "'> < </p> </div></div>"
         document.getElementsByClassName("Pack")[i].setAttribute('data-prize', String(CardInfo.Packs[i].Price) + "₦")
         console.log(String(CardInfo.Packs[i].Price))
         
@@ -126,27 +127,65 @@ let tries = 0;
 let clickedNumber = 0;
 
 function gamble() {
-  if (tries < CardInfo.Packs[clickedNumber].Cards) {
+  let P = CardInfo.Packs[clickedNumber];
+  if (tries < P.Cards) {
     let RNG = Math.random();
-    if (RNG < CardInfo.Packs[clickedNumber].Chances[0]) //Baustelle
+    if (RNG < P.Chances[0]){ 
+        rarity = "basic"
+      } else if (P.Chances[0] < RNG && RNG< P.Chances[1]  + P.Chances[0] ) {
+        rarity = "rare"
+      } else if (P.Chances[0] + P.Chances[1] < RNG && RNG< P.Chances[2] + P.Chances[1] + P.Chances[0] ) {
+        rarity = "epic"
+      } else if (P.Chances[0] + P.Chances[1] + P.Chances[2] < RNG && RNG< P.Chances[3] + P.Chances[2] + P.Chances[1] + P.Chances[0]){
+        rarity = "supporter"
+      } else if (P.Chances[0] + P.Chances[1] + P.Chances[2] + P.Chances[3] < RNG && RNG< P.Chances[4] + P.Chances[3] + P.Chances[2] + P.Chances[1] + P.Chances[0]){
+        rarity = "legendary"
+      }
       
       
-      
-      console.log(rarity)
+      let ValidCards = []
+      for (let i = 0; i < CardInfo.Cards.length; i++) {
+        if (CardInfo.Cards[i].Rarety == rarity) {
+          ValidCards[ValidCards.length] = i;
+        }
+        
+      }
       tries++
+
+     let Pull = ValidCards[Math.floor(Math.random() * ValidCards.length)]
+     if (document.getElementById("CardBig")) {document.getElementById("CardBig").remove()}
+     
+     document.getElementsByClassName("blurry")[0].innerHTML += "<img id='CardBig' style='margin-left: 500px' src='" + CardInfo.Cards[Pull].img +"'>"
+     let found = false
+     for (let i = 0; i < Me.Cards.length; i++) {
+        if (Number(Me.Cards[i].split("x")[0]) == Pull) {
+          Me.Cards[i] = String(Pull) + "x" + String(Number(Me.Cards[i].split("x")[1]) + 1)
+          found = true;
+        }
+     }
+    
+     if (!found) {
+      Me.Cards[Me.Cards.length] = String(Pull) + "x" + "1"
+     }
+     console.log(Pull)
+     console.log(Me.Cards)
     } else {
       document.getElementsByClassName("blurry")[0].removeEventListener("click", gamble)
       document.getElementsByClassName("blurry")[0].remove() 
+      loadCards()
     }
 }
 
 function OpenPack() {
+  tries = 0;
   document.getElementsByTagName("body")[0].innerHTML +=  "<div class='blurry'><div>"
-  
-
-    document.getElementsByClassName("blurry")[0].addEventListener("click", gamble)
-    
+  document.getElementsByClassName("blurry")[0].addEventListener("click", gamble)   
 }
 
 
-OpenPack()
+document.addEventListener("click", function (event) {
+  if (event.target.id.includes("Pack")) {
+    clickedNumber = Number(event.target.id.split("-")[1])
+    OpenPack()
+  }
+})
