@@ -1,7 +1,8 @@
-import {user} from "../../login/login.js"
+//import {user} from "../../login/login.js"
+let user = {uid : "Jonas"}
 //import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
 //import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
-
+//firebase!
 const firebaseConfig = {
     apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
     authDomain: "tfg-community.firebaseapp.com",
@@ -13,7 +14,7 @@ const firebaseConfig = {
   };
 
 //const db = getFirestore(initializeApp(firebaseConfig));
-
+//firebase!
 const response = await fetch("./cards.json");
 const CardInfo = await response.json();
 
@@ -32,11 +33,13 @@ console.log(CardInfo)
        console.log(user) 
     } else {
       //window.location = "../../login/login.html"
+      //firebase!
     }
 
 
     async function getUserInfo(uid) {
         //const q = query(collection(db, "users"));
+        //firebase!
         let userInfo = new Object();
     
          const Snapshot = await getDocs(q);
@@ -65,39 +68,51 @@ console.log(CardInfo)
       Vorname: "Jonas",
       Nachname: "Lorenz",
       Klasse: "8/6",
-      Cards: ["0x5", "1x3"]
+      Cards: ["0x5", "1x3"],
+      Eyro: 9999
      }
      //await getUserInfo(user.uid)
+     //firebase!
 
 function loadCards() {
   document.getElementById("MyCards").innerHTML = ""
     for (let i = 0; i < Me.Cards.length; i++) {
         let Number = Me.Cards[i].split("x")[0]
         let Amount = Me.Cards[i].split("x")[1]
-        document.getElementById("MyCards").innerHTML += "<div  class='Card " + "Card-"+ Number + "'><img class='CardImg " + "Card-"+ Number + "' src='"+ CardInfo.Cards[i].img +"'><p class='CardNameSmall " + "Card-"+ Number + "'>" + CardInfo.Cards[i].Name + "</p> </div>"
-        document.getElementsByClassName("Card")[i].setAttribute('data-before', Amount)
+        if (Amount > 0) {
+          document.getElementById("MyCards").innerHTML += "<div  class='Card " + "Card-"+ Number + "'><img class='CardImg " + "Card-"+ Number + "' src='"+ CardInfo.Cards[Number].img +"'><p class='CardNameSmall " + "Card-"+ Number + "'>" + CardInfo.Cards[Number].Name + "</p> </div>"
+          document.getElementsByClassName("Card Card-" + Number)[0].setAttribute("data-before", Amount)
+          
+        }
+        
         
      }
 }
     
 loadCards()
 
-document.addEventListener("click", function (event) {
-  if (event.target.classList[1] && event.target.classList[1].includes("Card")) {
-      console.log()
-     document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry'><div id='viewCard'><img id='CardBig' src='" + CardInfo.Cards[event.target.classList[1].split("-")[1]].img +"'><p id='esc'>x</p><button id='SellButton'>Angebot erstellen</button></div></div>";
 
-     document.getElementById("esc").addEventListener("click", function () {
-     document.getElementsByClassName("blurry")[0].remove()
-  })
+  document.addEventListener("click", function (event) {
+  if (event.target.classList[1] && event.target.classList[1].includes("Card")) {
+     document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryC'><div id='viewCard'><img id='CardBig' src='" + CardInfo.Cards[event.target.classList[1].split("-")[1]].img +"'><p id='esc'>x</p><button class='SellButton' id='SellButton" + event.target.classList[1].split("-")[1] + "'>Verkaufen</button></div></div>";
+
+     addEsc()
 
   }
 })
 
+function addEsc() {
+  document.getElementById("esc").addEventListener("click", function () {
+     document.getElementsByClassName("blurryC")[0].remove()
+})
+}
+
+
+
 function loadPacks() {
   for (let i = 0; i < CardInfo.Packs.length; i++) {
-        document.getElementById("CardPacks").innerHTML += "<div  class='Pack " + "Pack-"+ i + "' id = '" + "Pack-"+ i + "'><img class='CardImg " + "PackImg-"+ i + "' id = '" + "Pack-"+ i + "' src='"+ CardInfo.Packs[i].img +"'> <div class='flex'> <p class='CardNameSmall " + "Card-"+ i + "'>" + CardInfo.Packs[i].Name + "</p> <p class='Arrow " + "Arrow-" + i + "'> < </p> </div></div>"
-        document.getElementsByClassName("Pack")[i].setAttribute('data-prize', String(CardInfo.Packs[i].Price) + "₦")
+        document.getElementById("Cardpacks").innerHTML += "<div  class='Pack " + "Pack-"+ i + "' id = '" + "Pack-"+ i + "'><img class='CardImg " + "PackImg-"+ i + "' id = '" + "Pack-"+ i + "' src='"+ CardInfo.Packs[i].img +"'> <div class='flex'> <p class='CardNameSmall " + "Card-"+ i + "'>" + CardInfo.Packs[i].Name + "</p> <p class='Arrow " + "Arrow-" + i + "'> < </p> </div></div>"
+        document.getElementsByClassName("Pack")[i].setAttribute('data-prize', String(CardInfo.Packs[i].Price) + "€")
         console.log(String(CardInfo.Packs[i].Price))
         
      }
@@ -153,9 +168,8 @@ function gamble() {
       tries++
 
      let Pull = ValidCards[Math.floor(Math.random() * ValidCards.length)]
-     if (document.getElementById("CardBig")) {document.getElementById("CardBig").remove()}
-     
-     document.getElementsByClassName("blurry")[0].innerHTML += "<img id='CardBig' style='margin-left: 500px' src='" + CardInfo.Cards[Pull].img +"'>"
+     document.getElementsByClassName("blurry")[0].innerHTML = "<img id='CardBig' style='margin-left: 500px' src='" + CardInfo.Cards[Pull].img +"'>"
+     document.getElementsByClassName("blurry")[0].innerHTML += "<p id='Tries'>" + tries + "/" + P.Cards + "</p>"
      let found = false
      for (let i = 0; i < Me.Cards.length; i++) {
         if (Number(Me.Cards[i].split("x")[0]) == Pull) {
@@ -177,9 +191,18 @@ function gamble() {
 }
 
 function OpenPack() {
+  
+  if (Me.Eyro >= CardInfo.Packs[clickedNumber].Price) {
+  Me.Eyro -= CardInfo.Packs[clickedNumber].Price;  //firebase!
+  console.log(Me.Eyro)
   tries = 0;
   document.getElementsByTagName("body")[0].innerHTML +=  "<div class='blurry'><div>"
-  document.getElementsByClassName("blurry")[0].addEventListener("click", gamble)   
+  document.getElementsByClassName("blurry")[0].addEventListener("click", gamble)
+  gamble()   
+  } else{
+    
+  }
+  
 }
 
 
@@ -189,3 +212,83 @@ document.addEventListener("click", function (event) {
     OpenPack()
   }
 })
+
+document.addEventListener("click", function (event) {
+  if (event.target.id.includes("SellButton")) {
+    createOffer(Number(event.target.id.split("n")[1]))
+  }
+})
+
+function createOffer(Card) {
+  document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryOffer'><div class='Offer'><div id='escape'>x</div><h1 id='Offerh1'>Verkaufen</h1><div class='flex'><h1 class='Offertxt'>Anzahl</h1><input minlength='10' id='Anzahl' type='range'><p id='rangeInfo'>1</p></div><div class='flex'><h1 class='Offertxt'>Preis</h1><input type='number' id='Price'></div><p id='Mecker'></p><button id='Confirm'>Angebot Erstellen</button></div></div>";
+  addEsc()
+  document.getElementById("escape").addEventListener("click", function () {
+   document.getElementsByClassName("blurryOffer")[0].remove()
+  })
+  let Amount
+  let hasCards;
+  for (let i = 0; i < Me.Cards.length; i++) {
+    if (Me.Cards[i].split("x")[0] == Card) {
+       hasCards = Me.Cards[i].split("x")[1]
+       console.log(hasCards)
+    }
+    
+  }
+  document.getElementById("Anzahl").value = 100/hasCards
+
+  document.getElementById("Anzahl").addEventListener("mousemove" , function () {
+    //console.log(document.getElementById("Anzahl").value + " geteilt durch 100 und mal "+ hasCards + " = " + hasCards * (document.getElementById("Anzahl").valueAsNumber/100))
+    if ((hasCards * (document.getElementById("Anzahl").valueAsNumber/100)) < 1) {
+        document.getElementById("Anzahl").value = 100/hasCards
+    }
+
+    
+    Amount = Math.round(hasCards * (document.getElementById("Anzahl").valueAsNumber/100))
+    document.getElementById("rangeInfo").innerHTML = Amount;
+  })
+
+  document.getElementById("Price").value = 10;
+
+  document.getElementById("Confirm").addEventListener("click", (e) => {
+    e.preventDefault()
+
+    for (let i = 0; i < Me.Cards.length; i++) {
+      if (Me.Cards[i].split("x")[0] == Card) {
+           Me.Cards[i] = Card + "x" + (Number(Me.Cards[i].split("x")[1]) - Amount)
+      }
+    }
+
+    console.log(Me.Cards)
+
+    makeOffer(Card, Math.round(hasCards * (document.getElementById("Anzahl").valueAsNumber/100)), document.getElementById("Price").value);
+    document.getElementsByClassName("blurryC")[0].remove()
+    document.getElementsByClassName("blurryOffer")[0].remove()
+    loadCards()
+  }
+)  
+    
+  
+  
+}
+
+let Offers = []
+async function makeOffer(Card, Amount, Price) {
+
+  //await addDoc(collection(db, "offers"), {
+  //        user: user.uid,
+  //        Card,
+  //        Amount,
+  //        Price
+  //      });
+  //firebase!
+  Offers[Offers.length] = {
+    user: user.uid,
+    Card,
+    Amount,
+    Price
+
+  }
+
+  console.log(Offers)
+}
+

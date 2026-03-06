@@ -182,9 +182,10 @@ margin-top: 0px;
     font-size: 50px;
     position: fixed;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: pointer;
 }
 
-#SellButton{
+.SellButton{
   width:155px;
   height: 40px;
   border: 1px solid white;
@@ -238,3 +239,86 @@ margin-top: 0px;
 
 
 
+.Offer{
+    width: 700px;
+    height: 400px;
+    background-color:rgb(27, 27, 31);
+    position: fixed;
+    top: 150px;
+    left: 650px;
+    border-radius: 20px;
+}
+
+#escape{
+    font-size: 55px;
+    color: white;
+    margin-left: 650px;
+    margin-top: 0px;
+    cursor: pointer;
+}
+
+.Offertxt{
+    margin-left: 15px;
+    color: white;
+    width: max-content;
+}
+
+#Offerh1{
+    margin-left: 250px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+#Anzahl{
+    width: 250px;
+    color:rgb(253, 181, 48);
+    margin-left: 20px;
+    height: 40px;
+    margin-top: 33px;
+}
+
+#rangeInfo{
+  color: white;
+  margin-top: 39px;
+
+}
+
+#Price{
+    height: 20px;
+    width: 100px;
+    margin-top: 45px;
+    margin-left: 20px;
+    border-radius: 5px;
+    border: 0px;
+}
+
+
+#Confirm{
+  width:200px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: orange;
+  margin-left: 250px;
+  cursor: pointer;
+  margin-top: 40px; 
+  font-size: 20px;
+  font-family: Uncut;
+  border: 0px;
+}
+
+
+#Mecker{
+    color:red;
+    margin-left: 10px;
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+
+#Tries{
+    color: white;
+    margin-left: 750px;
+    margin-top: 20px;
+    font-size: 35px;
+    width: max-content;
+    height: max-content;
+}
