@@ -92,6 +92,7 @@ margin-top: 0px;
 .InfoH1{
     margin-top: 100px;
     margin-bottom: 25px;
+    color: white;
 }
 
 .Card, .Pack{
@@ -239,7 +240,7 @@ margin-top: 0px;
 
 
 
-.Offer{
+.MakeOffer{
     width: 700px;
     height: 400px;
     background-color:rgb(27, 27, 31);
@@ -293,7 +294,7 @@ margin-top: 0px;
 }
 
 
-#Confirm{
+#Confirm, .Confirm{
   width:200px;
   height: 40px;
   border-radius: 5px;
@@ -321,4 +322,61 @@ margin-top: 0px;
     font-size: 35px;
     width: max-content;
     height: max-content;
+}
+
+
+.Offers, .MyOffers{
+    height: max-content;
+    width: min-content;
+    display: flex;
+    flex-direction: row;
+}
+
+.Offer{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.OfferUser{
+    display: flex;
+    flex-direction: row;
+    background-color:rgb(27, 27, 31);
+    padding: 10px;
+    width: max-content;
+    margin-top: 25px;
+    margin-left: 15px;
+    border-radius: 35px;
+
+}
+
+.OfferProfilePic{
+    width:  40px;
+    height: 40px;
+    margin-left: 15px;
+}
+
+.OfferUserName{
+    margin-top: 9.5px;
+    margin-left: 0px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+}
+
+
+
+.OfferPrice{
+    font-size: 35px;
+    margin-top: 35px;
+    margin-left: 85px;
+    color: white;
+}
+
+.Confirm{
+    margin-left: 15px;
+    margin-top: 35px;
+}
+
+.OfferName{
+    color: white;
 }

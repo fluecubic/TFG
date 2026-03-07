@@ -220,7 +220,7 @@ document.addEventListener("click", function (event) {
 })
 
 function createOffer(Card) {
-  document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryOffer'><div class='Offer'><div id='escape'>x</div><h1 id='Offerh1'>Verkaufen</h1><div class='flex'><h1 class='Offertxt'>Anzahl</h1><input minlength='10' id='Anzahl' type='range'><p id='rangeInfo'>1</p></div><div class='flex'><h1 class='Offertxt'>Preis</h1><input type='number' id='Price'></div><p id='Mecker'></p><button id='Confirm'>Angebot Erstellen</button></div></div>";
+  document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryOffer'><div class='MakeOffer'><div id='escape'>x</div><h1 id='Offerh1'>Verkaufen</h1><div class='flex'><h1 class='Offertxt'>Anzahl</h1><input minlength='10' id='Anzahl' type='range'><p id='rangeInfo'>1</p></div><div class='flex'><h1 class='Offertxt'>Preis</h1><input type='number' id='Price'></div><p id='Mecker'></p><button id='Confirm'>Angebot Erstellen</button></div></div>";
   addEsc()
   document.getElementById("escape").addEventListener("click", function () {
    document.getElementsByClassName("blurryOffer")[0].remove()
