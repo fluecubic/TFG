@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<input type="file" id="fileInput" />
+<button id="uploadBtn">Upload</button>
+
+<script type="module">
+  const fileInput = document.getElementById('fileInput');
+  const uploadBtn = document.getElementById('uploadBtn');
+
+  uploadBtn.addEventListener('click', async () => {
+    const File = fileInput.files[0];
+    if (!File) return alert('Select a file');
+     upload(File)
+  });
+   async function upload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'TFG-Community');
+    const res = await fetch('https://api.cloudinary.com/v1_1/drxgg0cwo/upload', {method: 'POST',body: formData});
+    const data = await res.json();
+    return data.secure_url
+    }
+    
+
+
+    const img = document.createElement('img');
+    img.src = data.secure_url;
+    document.body.appendChild(img);
+
+</script>
+
+</body>
+</html>
