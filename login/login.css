@@ -95,7 +95,7 @@ select{
 }
 
 #user-icon{
-    margin-left: 50px;
+    margin-left: 5px;
     margin-top: 10px;
     margin-bottom: 5px;
     
@@ -115,7 +115,7 @@ h1{
     color:rgb(253, 181, 48);
     margin-bottom: 5px;
     margin-right: 0px;
-    width: 350px;
+    width: 250px;
     margin-left: 20px;
 }
 
@@ -160,6 +160,22 @@ label {
    position: absolute;
    z-index: -1;
 }
+
+#MoneyCount{
+    color: rgb(252, 255, 46);
+    font-size: 35px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    height: max-content;
+    margin-left: 10px;
+}
+
+#MoneyImg{
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+}
+
 
 @media screen and (max-width: 600px) {
     

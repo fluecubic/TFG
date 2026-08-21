@@ -1,8 +1,7 @@
-//import {user} from "../../login/login.js"
-let user = {uid : "Jonas"}
-//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
-//import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
-//firebase!
+import {user} from "../../login/login.js"
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
+
 const firebaseConfig = {
     apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
     authDomain: "tfg-community.firebaseapp.com",
@@ -13,8 +12,8 @@ const firebaseConfig = {
     measurementId: "G-1QFPXXQSEF"
   };
 
-//const db = getFirestore(initializeApp(firebaseConfig));
-//firebase!
+const db = getFirestore(initializeApp(firebaseConfig));
+
 const response = await fetch("./cards.json");
 const CardInfo = await response.json();
 
@@ -32,28 +31,50 @@ console.log(CardInfo)
     if (user.uid || isBot) {
        console.log(user) 
     } else {
-      //window.location = "../../login/login.html"
-      //firebase!
+      window.location = "../../login/login.html"
+
     }
 
 
     async function getUserInfo(uid) {
-        //const q = query(collection(db, "users"));
-        //firebase!
+        const q = query(collection(db, "users"));
+
         let userInfo = new Object();
     
          const Snapshot = await getDocs(q);
     
-         for (const doc of Snapshot.docs) {
-         if (doc.data().Uid == uid) {
-            userInfo.Nachname = doc.data().Nachname;
-            userInfo.Vorname = doc.data().Vorname;
-            userInfo.Klasse = doc.data().Klasse;
-            userInfo.Cards = doc.data().Cards
-            if (doc.data().Photo && doc.data().Photo != "undifined" || "") {
-              userInfo.Photo = doc.data().Photo;
-            } else {
-              userInfo.Photo = "../assets/user.png"
+         for (const userDoc of Snapshot.docs) {
+         if (userDoc.data().Uid == uid) {
+            userInfo.Nachname = userDoc.data().Nachname;
+            userInfo.Vorname = userDoc.data().Vorname;
+            userInfo.Klasse = userDoc.data().Klasse;
+            userInfo.Money = userDoc.data().Money
+            userInfo.Id = userDoc.id
+
+            if (userDoc.data().Cards) {
+              userInfo.Cards = userDoc.data().Cards
+            } else {      
+                      
+                              await updateDoc(doc(db, "users", userDoc.id), {
+                                   Cards: []
+                                }
+                              )
+                      } 
+            
+            
+            if (userDoc.data().Photo) {
+          if (userDoc.data().Photo != undefined) {
+            userInfo.Photo = userDoc.data().Photo;
+          } else {
+            userInfo.Photo = "../../assets/user.png"
+          }
+          
+        } else {
+          userInfo.Photo = "../../assets/user.png"
+        }
+
+            if (userDoc.data().Online) {
+              userInfo.Online = userDoc.data().Online
             }
             
             
@@ -64,15 +85,12 @@ console.log(CardInfo)
         return userInfo;
     }
     
-     let Me = {
-      Vorname: "Jonas",
-      Nachname: "Lorenz",
-      Klasse: "8/6",
-      Cards: ["0x5", "1x3"],
-      Eyro: 9999
-     }
-     //await getUserInfo(user.uid)
-     //firebase!
+     
+     await getUserInfo(user.uid)
+
+     let Me = await getUserInfo(user.uid);
+     console.log(Me)
+
 
 function loadCards() {
   document.getElementById("MyCards").innerHTML = ""
@@ -92,9 +110,39 @@ function loadCards() {
 loadCards()
 
 
-  document.addEventListener("click", function (event) {
+async function getCardRarity(Card) {
+          
+           const Snapshot = await getDocs(query(collection(db, "users")));
+
+           let userCount = 0
+           let Count = 0
+      
+           for (const userDoc of Snapshot.docs) {
+            if (userDoc.data().Uid != user.uid) {
+              userCount++
+              
+              if (userDoc.data().Cards) {
+                for (const Item of userDoc.data().Cards) { 
+         
+                  if (Item.charAt(0) == Card) {
+                    Count++
+                  }
+                
+
+              }
+              }
+            }
+           }
+
+
+           return (Count / userCount) * 100
+}
+
+
+  document.addEventListener("click", async function (event) {
   if (event.target.classList[1] && event.target.classList[1].includes("Card")) {
-     document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryC'><div id='viewCard'><img id='CardBig' src='" + CardInfo.Cards[event.target.classList[1].split("-")[1]].img +"'><p id='esc'>x</p><button class='SellButton' id='SellButton" + event.target.classList[1].split("-")[1] + "'>Verkaufen</button></div></div>";
+      let CardRarity = "Seltenheit: " + await getCardRarity(event.target.classList[1].split("-")[1]) + "%"
+     document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryC'><div id='viewCard'><img id='CardBig' src='" + CardInfo.Cards[event.target.classList[1].split("-")[1]].img +"'><p id='esc'>x</p> <div class = 'options'><button class='SellButton' id='SellButton" + event.target.classList[1].split("-")[1] + "'>Verkaufen</button><p id='CardRarity'>"+ CardRarity +"</p></div></div></div>";
 
      addEsc()
 
@@ -127,10 +175,12 @@ document.addEventListener("click", function (event) {
       document.getElementsByClassName("PackInfo-" + String(n))[0].remove()
       PacksInfoOpen[n] = false
       document.getElementsByClassName("Arrow-" + String(n))[0].style.transform = "rotate(0deg)"
+      document.getElementsByClassName("Pack-" + String(n))[0].style.marginBottom = "0px"
     } else {
       PacksInfoOpen[n] = true
-      document.getElementsByClassName("Pack-" + String(n))[0].innerHTML += "<p class='PackInfo PackInfo-" + n + "'>Enthält "+ String(CardInfo.Packs[n].Cards) +" Karten <br>Gewönhlich: "+ String(CardInfo.Packs[n].Chances[0] * 100) +"%<br>Selten: "+ String(CardInfo.Packs[n].Chances[1] * 100) +" %<br>Episch: "+ String(CardInfo.Packs[n].Chances[2] * 100) +" %<br>Legendär: "+ String(CardInfo.Packs[n].Chances[4] * 100) +" %<br>Unterstützerkarten: "+ String(CardInfo.Packs[n].Chances[3] * 100) +" %<p>"
+      document.getElementsByClassName("Pack-" + String(n))[0].innerHTML += "<p class='PackInfo PackInfo-" + n + "'>Enthält "+ String(CardInfo.Packs[n].Cards) +" Karten <br>Gewönhlich: "+ String(CardInfo.Packs[n].Chances[0] * 100) +"%<br>Selten: "+ String(CardInfo.Packs[n].Chances[1] * 100) +" %<br>Episch: "+ String(CardInfo.Packs[n].Chances[2] * 100) +" %<br>Legendär: "+ String(CardInfo.Packs[n].Chances[3] * 100) + " %<br>Chance davon eine Unterstützerkarte zu ziehen: "+ String(CardInfo.Packs[n].SupporterChance * 100) +" %<p>"
       document.getElementsByClassName("Arrow-" + String(n))[0].style.transform = "rotate(180deg)"
+      document.getElementsByClassName("Pack-" + String(n))[0].style.marginBottom = "250px"
     }
   }
 })
@@ -141,7 +191,7 @@ let rarity;
 let tries = 0;
 let clickedNumber = 0;
 
-function gamble() {
+async function gamble() {
   let P = CardInfo.Packs[clickedNumber];
   if (tries < P.Cards) {
     let RNG = Math.random();
@@ -152,17 +202,24 @@ function gamble() {
       } else if (P.Chances[0] + P.Chances[1] < RNG && RNG< P.Chances[2] + P.Chances[1] + P.Chances[0] ) {
         rarity = "epic"
       } else if (P.Chances[0] + P.Chances[1] + P.Chances[2] < RNG && RNG< P.Chances[3] + P.Chances[2] + P.Chances[1] + P.Chances[0]){
-        rarity = "supporter"
-      } else if (P.Chances[0] + P.Chances[1] + P.Chances[2] + P.Chances[3] < RNG && RNG< P.Chances[4] + P.Chances[3] + P.Chances[2] + P.Chances[1] + P.Chances[0]){
         rarity = "legendary"
       }
       
-      
+      let IsCard = Math.random() > P.SupporterChance
       let ValidCards = []
       for (let i = 0; i < CardInfo.Cards.length; i++) {
-        if (CardInfo.Cards[i].Rarety == rarity) {
+         if (IsCard) {
+          if (CardInfo.Cards[i].Rarety == rarity &&  CardInfo.Cards[i].Type == "card" && CardInfo.Cards[i].Available) {
           ValidCards[ValidCards.length] = i;
         }
+         } else {
+          if (CardInfo.Cards[i].Rarety == rarity &&  CardInfo.Cards[i].Type == "supporter" && CardInfo.Cards[i].Available) {
+          ValidCards[ValidCards.length] = i;
+        }
+         }
+
+
+        
         
       }
       tries++
@@ -171,6 +228,9 @@ function gamble() {
      document.getElementsByClassName("blurry")[0].innerHTML = "<img id='CardBig' style='margin-left: 500px' src='" + CardInfo.Cards[Pull].img +"'>"
      document.getElementsByClassName("blurry")[0].innerHTML += "<p id='Tries'>" + tries + "/" + P.Cards + "</p>"
      let found = false
+
+     Me = await getUserInfo(user.uid)
+
      for (let i = 0; i < Me.Cards.length; i++) {
         if (Number(Me.Cards[i].split("x")[0]) == Pull) {
           Me.Cards[i] = String(Pull) + "x" + String(Number(Me.Cards[i].split("x")[1]) + 1)
@@ -181,7 +241,13 @@ function gamble() {
      if (!found) {
       Me.Cards[Me.Cards.length] = String(Pull) + "x" + "1"
      }
-     console.log(Pull)
+
+     await updateDoc(doc(db, "users", Me.Id), {
+                                   Cards: Me.Cards
+                                }
+                              )
+
+     console.log("Pull: " + Pull)
      console.log(Me.Cards)
     } else {
       document.getElementsByClassName("blurry")[0].removeEventListener("click", gamble)
@@ -190,17 +256,21 @@ function gamble() {
     }
 }
 
-function OpenPack() {
+async function OpenPack() {
+
+  Me = await getUserInfo(user.uid);
   
-  if (Me.Eyro >= CardInfo.Packs[clickedNumber].Price) {
-  Me.Eyro -= CardInfo.Packs[clickedNumber].Price;  //firebase!
-  console.log(Me.Eyro)
+  if (Me.Money >= CardInfo.Packs[clickedNumber].Price) {
   tries = 0;
   document.getElementsByTagName("body")[0].innerHTML +=  "<div class='blurry'><div>"
   document.getElementsByClassName("blurry")[0].addEventListener("click", gamble)
-  gamble()   
-  } else{
-    
+  gamble() 
+  await updateDoc(doc(db, "users", Me.Id), {
+      Money:  Me.Money - CardInfo.Packs[clickedNumber].Price
+                                      })
+  console.log(Me.Money)
+  document.getElementById("MoneyCount").innerHTML = Me.Money  
+  } else{  
   }
   
 }
@@ -219,7 +289,10 @@ document.addEventListener("click", function (event) {
   }
 })
 
-function createOffer(Card) {
+async function createOffer(Card) {
+
+  Me = await getUserInfo(user.uid);   
+
   document.getElementsByTagName("body")[0].innerHTML += "<div class='blurry blurryOffer'><div class='MakeOffer'><div id='escape'>x</div><h1 id='Offerh1'>Verkaufen</h1><div class='flex'><h1 class='Offertxt'>Anzahl</h1><input minlength='10' id='Anzahl' type='range'><p id='rangeInfo'>1</p></div><div class='flex'><h1 class='Offertxt'>Preis</h1><input type='number' id='Price'></div><p id='Mecker'></p><button id='Confirm'>Angebot Erstellen</button></div></div>";
   addEsc()
   document.getElementById("escape").addEventListener("click", function () {
@@ -249,7 +322,7 @@ function createOffer(Card) {
 
   document.getElementById("Price").value = 10;
 
-  document.getElementById("Confirm").addEventListener("click", (e) => {
+  document.getElementById("Confirm").addEventListener("click", async (e) => {
     e.preventDefault()
 
     for (let i = 0; i < Me.Cards.length; i++) {
@@ -259,6 +332,10 @@ function createOffer(Card) {
     }
 
     console.log(Me.Cards)
+
+    await updateDoc(doc(db, "users", Me.Id), {
+      Cards: Me.Cards
+                                      })
 
     makeOffer(Card, Math.round(hasCards * (document.getElementById("Anzahl").valueAsNumber/100)), document.getElementById("Price").value);
     document.getElementsByClassName("blurryC")[0].remove()
@@ -274,13 +351,13 @@ function createOffer(Card) {
 let Offers = []
 async function makeOffer(Card, Amount, Price) {
 
-  //await addDoc(collection(db, "offers"), {
-  //        user: user.uid,
-  //        Card,
-  //        Amount,
-  //        Price
-  //      });
-  //firebase!
+  await addDoc(collection(db, "offers"), {
+          user: user.uid,
+          Card,
+          Amount,
+          Price
+        });
+        
   Offers[Offers.length] = {
     user: user.uid,
     Card,

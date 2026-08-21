@@ -135,29 +135,41 @@ async function restartGame(){
 
 
 async function getUserInfo(uid) {
-    const q = query(collection(db, "users"));
-    let userInfo = new Object();
-
-     const Snapshot = await getDocs(q);
-
-     for (const doc of Snapshot.docs) {
-     if (doc.data().Uid == uid) {
-        userInfo.Nachname = doc.data().Nachname;
-        userInfo.Vorname = doc.data().Vorname;
-        userInfo.Klasse = doc.data().Klasse;
-        if (doc.data().Photo) {
-          userInfo.Photo = doc.data().Photo;
+     const q = query(collection(db, "users"));
+     let userInfo = new Object();
+ 
+      const Snapshot = await getDocs(q);
+ 
+      for (const doc of Snapshot.docs) {
+      if (doc.data().Uid == uid) {
+         userInfo.Nachname = doc.data().Nachname;
+         userInfo.Vorname = doc.data().Vorname;
+         userInfo.Klasse = doc.data().Klasse;
+         userInfo.Id = doc.id;
+         userInfo.Status = doc.data().Status
+         if (doc.data().Photo) {
+          if (doc.data().Photo != "") {
+            userInfo.Photo = doc.data().Photo;
+          } else {
+            userInfo.Photo = "../assets/user.png"
+          }
+          
         } else {
           userInfo.Photo = "../assets/user.png"
         }
-        
-        
-        break;
-     }
-    
-}
-    return userInfo;
-}
+
+        if (userInfo.Status == "banned") {
+          window.location = "about:blank"
+        }
+         
+         break;
+      }
+     
+ }
+     return userInfo;
+ }
+
+ console.log(await getUserInfo(user.uid))
 
 
 async function GameSearch() {

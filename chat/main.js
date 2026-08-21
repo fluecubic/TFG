@@ -363,6 +363,8 @@ async function oldStuff() {
 loadChatOptions()
 await oldStuff()
 
+
+
 let hideStatus = "menu";
 
 document.getElementById("hide").addEventListener("click", function () {

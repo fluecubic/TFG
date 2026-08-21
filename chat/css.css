@@ -325,6 +325,9 @@ border-radius: 10px;
 background-color: orange;
 
 }
+
+
+
 @media screen and (max-width: 600px) {
 
 #user-icon{

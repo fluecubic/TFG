@@ -43,6 +43,61 @@ const colRef = collection(db, "users");
 const q = query(colRef, orderBy("Uid", "asc")); 
 
 
+async function getUserInfo(uid) {
+     const q = query(collection(db, "users"));
+     let userInfo = new Object();
+ 
+      const Snapshot = await getDocs(q);
+ 
+      for (const Doc of Snapshot.docs) {
+      if (Doc.data().Uid == uid) {
+         userInfo.Nachname = Doc.data().Nachname;
+         userInfo.Vorname = Doc.data().Vorname;
+         userInfo.Klasse = Doc.data().Klasse;
+         userInfo.Id = Doc.id;
+         userInfo.Status = Doc.data().Status
+
+         if (Doc.data().Money !== undefined && Doc.data().Money !== null) {
+          
+          userInfo.Money = Doc.data().Money;
+  
+         } else {
+         
+              await updateDoc(doc(db, "users", userInfo.Id), {
+                  Money: 0
+                }
+              )
+              userInfo.Money = 0;
+              
+         }
+          
+         if (Doc.data().Photo) {
+          if (Doc.data().Photo != undefined) {
+            userInfo.Photo = Doc.data().Photo;
+          } else {
+            userInfo.Photo = "../assets/user.png"
+          }
+          
+        } else {
+          userInfo.Photo = "../assets/user.png"
+        }
+
+        if (userInfo.Status == "banned") {
+          window.location = "about:blank"
+        }
+         
+         break;
+      }
+     
+ }
+     return userInfo;
+ }
+
+ let Me
+
+
+
+
 
 
 async  function uilogedin() {
@@ -58,12 +113,15 @@ async  function uilogedin() {
     document.getElementById("mecker").style.color = "white"
     document.getElementById("fileinput").style.display = "block"
     document.getElementById("q").style.display = "block"
+    document.getElementById("MoneyCount").style.display = "block"
+    document.getElementById("MoneyImg").style.display = "block"
     const userInfo = await getUserInfo(user.uid)
+    document.getElementById("MoneyCount").innerHTML = userInfo.Money
     document.getElementById("q").src = userInfo.Photo
     document.getElementById("user-icon").src = userInfo.Photo
     document.getElementById("profilepic-info").style.display = "block"
     setTimeout(() => {
-        document.getElementById("mecker").innerHTML = "Willkomen in der Hood, " + user.displayName     
+        document.getElementById("mecker").innerHTML = "Willkomen, " + user.displayName     
     }, 300);
     
  
@@ -83,6 +141,8 @@ async function uilogedout() {
     document.getElementById("mecker").style.color = "red"
     document.getElementById("fileinput").style.display = "none"
     document.getElementById("q").style.display = "none"
+    document.getElementById("MoneyCount").style.display = "none"
+    document.getElementById("MoneyImg").style.display = "none"
     const userInfo = await getUserInfo(user.uid)
     document.getElementById("q").src = userInfo.Photo
     document.getElementById("user-icon").src = userInfo.Photo
@@ -124,8 +184,10 @@ uilogedout()
     LoadingScreen()
     
    
-    
+    Me = await getUserInfo(user.uid)
+    console.log(Me)
     return user
+    
    } catch (error) {
     document.getElementById("mecker").innerHTML = "Fehler. Überprüfe ob Name, Passwort und Klasse richtig sind. Wenn der Account noch nicht existiert, versuche dich zu registrieren"
     setTimeout(() => {
@@ -164,15 +226,19 @@ uilogedout()
      Uid: user.uid,
      Vorname: nameinput,
      Nachname: surnameinput,
-     Klasse: Klasse})
+     Klasse: Klasse,
+     Money: 0})
 
     uilogedin()
     LoadingScreen()
 
     
 
+    Me = await getUserInfo(user.uid)
+    console.log(Me)
+ 
     return user
-
+    
     
    } catch (error) {
     document.getElementById("mecker").innerHTML = "Fehler. Überprüfe ob Name, Password und Klasse vorhanden sind und das Passwort min. 6 Zeichen hat. Wenn der Account schon existiert, probiere dich anzumelden. "
@@ -185,11 +251,15 @@ uilogedout()
   }
 
   async function ausloggen() {
-    signOut(auth);
+    let UserInfo = await getUserInfo(user.uid)
+    if (UserInfo.Status != "banned") {
+      signOut(auth);
     uilogedout()
     localStorage.setItem("uid", "")
     localStorage.setItem("password", "")
     localStorage.setItem("email", "")
+    }
+    
   }
   
 
@@ -202,6 +272,9 @@ uilogedout()
 
      user = signin.user;
 
+     Me = await getUserInfo(user.uid)
+     console.log(Me)
+
     uilogedin()
     LoadingScreen()
     
@@ -212,34 +285,8 @@ uilogedout()
  }
 
 
- async function getUserInfo(uid) {
-     const q = query(collection(db, "users"));
-     let userInfo = new Object();
- 
-      const Snapshot = await getDocs(q);
- 
-      for (const doc of Snapshot.docs) {
-      if (doc.data().Uid == uid) {
-         userInfo.Nachname = doc.data().Nachname;
-         userInfo.Vorname = doc.data().Vorname;
-         userInfo.Klasse = doc.data().Klasse;
-         if (doc.data().Photo) {
-          if (doc.data().Photo != "") {
-            userInfo.Photo = doc.data().Photo;
-          } else {
-            userInfo.Photo = "../assets/user.png"
-          }
-          
-        } else {
-          userInfo.Photo = "../assets/user.png"
-        }
-         
-         break;
-      }
-     
- }
-     return userInfo;
- }
+
+
  
 
 async  function SetProfilePic(url) {

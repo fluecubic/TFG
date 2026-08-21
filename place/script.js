@@ -25,6 +25,47 @@ let remaininTime = 3;
 let pixels = [];
 let ClickedPixelArray;
 
+
+async function getUserInfo(uid) {
+     const q = query(collection(db, "users"));
+     let userInfo = new Object();
+ 
+      const Snapshot = await getDocs(q);
+ 
+      for (const doc of Snapshot.docs) {
+      if (doc.data().Uid == uid) {
+         userInfo.Nachname = doc.data().Nachname;
+         userInfo.Vorname = doc.data().Vorname;
+         userInfo.Klasse = doc.data().Klasse;
+         userInfo.Id = doc.id;
+         userInfo.Status = doc.data().Status
+         userInfo.Money = doc.data().Money
+         
+         if (doc.data().Photo) {
+          if (doc.data().Photo != "") {
+            userInfo.Photo = doc.data().Photo;
+          } else {
+            userInfo.Photo = "../assets/user.png"
+          }
+          
+        } else {
+          userInfo.Photo = "../assets/user.png"
+        }
+
+        if (userInfo.Status == "banned") {
+          window.location = "about:blank"
+        }
+         
+         break;
+      }
+     
+ }
+     return userInfo;
+ }
+
+ await getUserInfo(user.uid)
+
+
 async function updatePixel() {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -32,7 +73,6 @@ async function updatePixel() {
        let i = 0
 
        pixels[i] = [doc.data().number, doc.data().color];
-       console.log(pixels[i])
     
        i++
        document.getElementById(doc.data().number).style.backgroundColor = doc.data().color; 
@@ -47,7 +87,6 @@ async function loadPixel() {
   querySnapshot.forEach((doc) => {
 
     pixels[i] = [doc.data().number, doc.data().color];
-    console.log(pixels[i])
     
     i++
    
@@ -117,6 +156,7 @@ async function checkpixel(color, number) {
     const colRef = collection(db, "place");
     const q = query(colRef, orderBy("time", "desc"));
     const querySnapshot = await getDocs(q);
+    
   
     let found = false;
   
@@ -132,6 +172,8 @@ async function checkpixel(color, number) {
           time: serverTimestamp(),
           user: user.uid
         })
+        BotDetector()
+        addEyro(1)
       }
     
 
@@ -146,38 +188,67 @@ async function checkpixel(color, number) {
         time: serverTimestamp(),
         user: user.uid
       });
+      BotDetector()
+      addEyro(1)
     }
   }
   
 
 loadPixel()
 
-document.addEventListener("click", function (event) {
+document.addEventListener("click", async function (event) {
+    await getUserInfo(user.uid)
     if (remaininTime < 0) {
        if (event.target.classList.contains("pixel")) {
-
+        let found = false;
          for (let i = 0; i < pixels.length; i++) {
+
         if (document.getElementById(pixels[i][0])) {
             if (pixels[i][0] == event.target.id) {
               ClickedPixelArray = i
-              console.log(ClickedPixelArray)
+              console.log(event.target.id)
+              found = true;
             }
           }
-        
+        }
+
+    if (found) {
+      if (pixels[ClickedPixelArray]) {
+
+      if (pixels[ClickedPixelArray][1]) {
+
+       if (pixels[ClickedPixelArray][1] != color) {
+       ClickedPixel(ClickedPixelArray, event.target.id, color)
+      }
+        } else {
+         ClickedPixel(ClickedPixelArray, event.target.id, color) 
+        }
+
+     } else {
+     ClickedPixel(ClickedPixelArray, event.target.id, color)
+     }
+    } else {
+     pixels[pixels.length] = [event.target.id, color]
+     console.log(pixels[pixels.length-1])
+     document.getElementById(event.target.id).style.backgroundColor = color;
+     remaininTime = 3;
+     checkpixel(color, event.target.id)
+    }
+     
+     
+     
     }
 
-      if (pixels[ClickedPixelArray][1] != color) {
-      pixels[ClickedPixelArray][1] = color;
-      document.getElementById(event.target.id).style.backgroundColor = color;
-      remaininTime = 3;
-      checkpixel(color, event.target.id)
-      }
-     
-    } 
-     
     }
-    
   });
+
+  function ClickedPixel(ClickedArray,Pixelid,color) {
+     pixels[ClickedArray] = [Pixelid, color]
+     console.log(pixels[ClickedArray])
+     document.getElementById(Pixelid).style.backgroundColor = color;
+     remaininTime = 3;
+     checkpixel(color, Pixelid)
+  }
   
 
 let scale = 1;
@@ -216,23 +287,20 @@ document.getElementById("canvas").addEventListener("wheel", (e) => {
 document.getElementById("plus").onclick = zoomIn;
 document.getElementById("minus").onclick = zoomOut;
 
+for (let i = 0; i < document.querySelectorAll(".color").length; i++) {
+       document.querySelectorAll(".color")[i].style.backgroundColor = document.querySelectorAll(".color")[i].id
+    
+}
+
 color = "black"
 document.getElementById("black").style.scale ="1.2";
 
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("color")) {
-      color = event.target.id;  
-      document.getElementById("black").style.scale ="1";
-      document.getElementById("white").style.scale ="1";
-      document.getElementById("green").style.scale ="1";
-      document.getElementById("blue").style.scale ="1";
-      document.getElementById("red").style.scale="1";
-      document.getElementById("pink").style.scale ="1";
-      document.getElementById("purple").style.scale ="1";
-      document.getElementById("orange").style.scale ="1";
-      document.getElementById("brown").style.scale ="1";
-      document.getElementById("yellow").style.scale ="1";
-      document.getElementById("gray").style.scale ="1";
+    color = event.target.id
+      for (let i = 0; i < document.querySelectorAll(".color").length; i++) {
+             document.querySelectorAll(".color")[i].style.scale = "1"
+      }
      
       document.getElementById(event.target.id).style.scale = "1.2"
     
@@ -263,6 +331,63 @@ document.addEventListener("click", function (event) {
     }
 
 
+
+  async function addEyro(Eyros) {
+    let MyUserInfo = await getUserInfo(user.uid)
+
+     const q = doc(db, "users", MyUserInfo.Id);
+     const querySnapshot = await getDoc(q);
+     let LastMoney = querySnapshot.data().Money;
+     
+     
+    
+    await updateDoc(doc(db, "users", MyUserInfo.Id), {
+          Money: LastMoney + Eyros
+        })
+
+        document.getElementById("MoneyCount").innerHTML = LastMoney + Eyros
+  }
+
+  let clickTimes = []
+  let clickDistances = []
+  async function BotDetector() {
+  clickTimes[clickTimes.length] = Date.now()
+  clickDistances = []
+    for (let i = 0; i < clickTimes.length; i++) {
+        clickDistances[clickDistances.length] = clickTimes[i] - clickTimes[i-1] || 0
+      
+    }
+
+    console.log("Times: "+clickTimes+" Distances: " + clickDistances)
+
+    for (let i = 0; i < clickDistances.length; i++) {
+      if (clickDistances[i+1]) {
+      if (clickDistances[i] == clickDistances[i+1]) {
+        console.log("banned")
+        ban()
+      }
+      }
+      
+        
+      
+    }
+  }
+
+
+  async function ban() {
+  let MyUserInfo = await getUserInfo(user.uid)
+  await updateDoc(doc(db, "users", MyUserInfo.Id), {
+          Money: 0,
+          Status: "banned"
+        })
+  
+  }
+
+
+  
+  
+
+  
     
 
     const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
@@ -273,6 +398,7 @@ document.addEventListener("click", function (event) {
       window.location = "../login/login.html"
     }
 
+  
     
 
 

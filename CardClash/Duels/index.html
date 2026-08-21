@@ -26,25 +26,69 @@
         <img id="user-icon" class="profilepic" src="../../assets/user.png">
         </a>
     </div>
-    
-    
 
-<h1 class="InfoH1">Kartenpacks</h1>
-<div id="Cardpacks"></div>
-    
-<h1 class="InfoH1">Meine Karten</h1>
-    <div id="MyCards"></div>
-    
+    <div id="Buffer"></div>
 
-    
+    <h1 id="OlineUserInfoH1">Aktive Spieler</h1>
 
 
+
+    <div id="OnlineUsers">
+    
+    <div class="OnlineUser"><p class="OnlineUserName">Peter</p><img class="OnlineUserImg" src="../../assets/Screenshot (15).png"><button i class="StartButton">Spiel Starten</button></div>
+    
+    </div>
+
+
+    
+
+    
 
     <div id="BarBottom">
         <a class="LinkBottom"  href="../Cards/index.html">Karten</a>
         <a class="LinkBottom"  href="../Auctions">Auktionen</a>
         <a class="LinkBottom"  href="../Duels">Duelle</a>
     </div>
+
+    <div id="GameMenu">
+        <div class="options">
+          <p class="Text1" id="Name0">Du</p>
+          <p class="Text1" id="VS">vs.</p>
+          <p class="Text1"  id="Name1">Max</p>  
+        </div>
+
+        <div class="options">
+
+        <div id="BattleCards0">
+            <img class="BattleCard" id="BattleCard00" src="../../assets/EmptyCard.png">
+            <br>
+            <img class="BattleCard" id="BattleCard01" src="../../assets/EmptyCard.png">
+            <br>
+            <img class="BattleCard" id="BattleCard02" src="../../assets/EmptyCard.png">
+        </div>
+
+        <div id="BattleCards1">
+            <img class="BattleCard" id="BattleCard10" src="../../assets/EmptyCard.png">
+            <br>
+            <img class="BattleCard" id="BattleCard11" src="../../assets/EmptyCard.png">
+            <br>
+            <img class="BattleCard" id="BattleCard12" src="../../assets/EmptyCard.png">
+        </div>
+
+        <div id="ReadyButtonContainer">
+        <p class="Test1" id="Kartenauswahl">Kartenauswahl</p>
+        <div class="options"> <button id="leaveGame">Verlassen</button> <button id="ready">Bereit 0/2</button></div>
+        </div>
+
+        </div>
+        
+
+
+
+        
+        
+    </div>
+
 
 
 
@@ -75,9 +119,8 @@
       <label for="fileInput" class="l"><img src="../../assets/user.png" id="q"  class="profilepic l"> <p id="profilepic-info" class="l">Profilbild</p> </label>
     <input type="file" class="l"  id="fileinput">
      </div>
-
+    <script type="module" src="./script.js"></script>
 </body>
-<script type="module" src="./script.js"></script>
 </html>
 
 

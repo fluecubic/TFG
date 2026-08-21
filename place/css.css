@@ -34,12 +34,11 @@ h1{
 }
 
 #user-icon{
-    margin-left: auto;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    
-    width:65px;
-    height:65px;
+    margin-left: 25px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    width:70px;
+    height:70px;
 }
 
 #leistecolor{
@@ -68,57 +67,11 @@ h1{
     margin:20px;
     margin-top: 15px;
     border-radius: 5px;
-    border: 0px solid white;
+    background-color: rgb(255, 255, 255);
 }
 
 
 
-#red{
-    margin-left: 5px;
-    background-color: red;
-}
-
-#blue{
-    background-color: blue;
-}
-
-#green{
-    background-color: green;
-}
-
-#pink{
-
-    background-color: pink;
-}
-
-#black{
-    background-color: black;
-}
-
-#white{
-    background-color: white;
-}
-
-#purple{
-    background-color: purple;
-}
-
-#brown{
-
-    background-color: brown;
-}
-
-#yellow{
-    background-color: yellow;
-}
-
-#orange{
-    background-color: orange;
-}
-
-#gray{
-    background-color: gray;
-}
 
 #canvas{
     border: 0px;
@@ -184,6 +137,21 @@ width: 80px;
 height: 80px;
 border-radius: 40px;
 margin-top: 0px;
+}
+
+#MoneyCount{
+    color: rgb(252, 255, 46);
+    font-size: 35px;
+    margin-top: 15px;
+    margin-bottom: 0px;
+    height: max-content;
+    margin-left: 1300px;
+}
+
+#MoneyImg{
+    width: 40px;
+    height: 40px;
+    margin-top: 15px;
 }
 
 @media screen and (max-width: 600px) {

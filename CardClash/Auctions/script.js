@@ -1,8 +1,8 @@
-//import {user} from "../../login/login.js"
-let user = {uid : "Jonas"}
-//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
-//import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
-//firebase!
+import {user} from "../../login/login.js"
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";  
+import { getDoc, addDoc, doc, getFirestore, getDocs, getDocFromCache, collection, updateDoc, Timestamp, onSnapshot, query, orderBy, serverTimestamp, setDoc, deleteDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";//init befehle
+
 const firebaseConfig = {
     apiKey: "AIzaSyBL3-DyIr8JEiRbPfGcvfzQ0HLc6auHrvE",
     authDomain: "tfg-community.firebaseapp.com",
@@ -13,8 +13,8 @@ const firebaseConfig = {
     measurementId: "G-1QFPXXQSEF"
   };
 
-//const db = getFirestore(initializeApp(firebaseConfig));
-//firebase!
+const db = getFirestore(initializeApp(firebaseConfig));
+
 const response = await fetch("../Cards/cards.json");
 const CardInfo = await response.json();
 
@@ -32,29 +32,37 @@ console.log(CardInfo)
     if (user.uid || isBot) {
        console.log(user) 
     } else {
-      //window.location = "../../login/login.html"
-      //firebase!
+      window.location = "../../login/login.html"
+
     }
 
 
     async function getUserInfo(uid) {
-        //const q = query(collection(db, "users"));
-        //firebase!
+        const q = query(collection(db, "users"));
+
         let userInfo = new Object();
     
          const Snapshot = await getDocs(q);
     
-         for (const doc of Snapshot.docs) {
-         if (doc.data().Uid == uid) {
-            userInfo.Nachname = doc.data().Nachname;
-            userInfo.Vorname = doc.data().Vorname;
-            userInfo.Klasse = doc.data().Klasse;
-            userInfo.Cards = doc.data().Cards
-            if (doc.data().Photo && doc.data().Photo != "undifined" || "") {
-              userInfo.Photo = doc.data().Photo;
-            } else {
-              userInfo.Photo = "../assets/user.png"
-            }
+         for (const Doc of Snapshot.docs) {
+         if (Doc.data().Uid == uid) {
+            userInfo.Nachname = Doc.data().Nachname;
+            userInfo.Vorname = Doc.data().Vorname;
+            userInfo.Klasse = Doc.data().Klasse;
+            userInfo.Cards = Doc.data().Cards
+            userInfo.Money = Doc.data().Money
+            userInfo.Id = Doc.id
+
+            if (Doc.data().Photo) {
+          if (Doc.data().Photo != undefined) {
+            userInfo.Photo = Doc.data().Photo;
+          } else {
+            userInfo.Photo = "../../assets/user.png"
+          }
+          
+        } else {
+          userInfo.Photo = "../../assets/user.png"
+        }
             
             
             break;
@@ -63,32 +71,148 @@ console.log(CardInfo)
     }
         return userInfo;
     }
+
     
-     let Me = {
-      Vorname: "Jonas",
-      Nachname: "Lorenz",
-      Klasse: "8/6",
-      Cards: ["0x5", "1x3"],
-      Eyro: 9999
+    let Me = await getUserInfo(user.uid)
+
+
+
+     let Offers = []
+
+     let q = query(collection(db, "offers"))
+     
+    let Snapshot = await getDocs(q)
+
+   async function getOffers() {
+    Snapshot = await getDocs(query(collection(db, "offers")))
+    Me = await getUserInfo(user.uid)
+
+     Offers = []
+
+     for (const Doc of Snapshot.docs) {
+      Offers[Offers.length] = {
+        user: Doc.data().user,
+        Card: Doc.data().Card,
+        Amount: Doc.data().Amount,
+        Price: Doc.data().Price,
+        Id: Doc.id
+      };
      }
-     //await getUserInfo(user.uid)
-     //firebase!
+     console.log("getOffers called")
+     console.log(Offers)
+   }
+
+     onSnapshot(q, async (Snapshot) => {
+         console.log("onSnap happend")
+         await getOffers()
+         loadOffers()
+         
+         });
+     
 
 
-     let Offers = [{user: 'Jonas', Card: 1, Amount: 2, Price: '100'},
-                   {user: 'TimGiOh', Card: 4, Amount: 15, Price: '20'},
-                   {user: 'Patrick', Card: 2, Amount: 1, Price: '70'}
-     ]
-     //firebase!
 
+     async function loadOffers() {
 
-     function loadOffers() {
+      await getOffers()
+
+      document.getElementById("MyOffers").innerHTML = ""
+      document.getElementById("Offers").innerHTML = ""
+        
+      
       for (let i = 0; i < Offers.length; i++) {
+        if (Offers[i]) {
+
+         let Publisher = await getUserInfo(Offers[i].user)
+
         if (Offers[i].user == user.uid) {
-          
+            document.getElementById("MyOffers").innerHTML += "<div class='Offer'> <img class='CardImg' src='" + CardInfo.Cards[Offers[i].Card].img+ "'> <div class='OfferLeft "+  i +"'> <h1 class='OfferName'>"+ CardInfo.Cards[Offers[i].Card].Name +"</h1> <div class='OfferUser'> <p class='OfferUserName'>"+ Publisher.Vorname +"</p>  <img  src='" + Publisher.Photo + "' class='profilepic OfferProfilePic'> </div> <p class='OfferPrice'>"+ Offers[i].Price +"€</p> <button class='Confirm "+  i +" Delete'>Entfernen</button> </div></div>"
         } else {
+          document.getElementById("Offers").innerHTML += "<div class='Offer'> <img class='CardImg' src='" + CardInfo.Cards[Offers[i].Card].img + "'> <div class='OfferLeft "+  i +"'> <h1 class='OfferName'>"+ CardInfo.Cards[Offers[i].Card].Name +"</h1> <div class='OfferUser'> <p class='OfferUserName'>"+ Publisher.Vorname +"</p>  <img  src='" + Publisher.Photo + "' class='profilepic OfferProfilePic'> </div> <p class='OfferPrice'>"+ Offers[i].Price +"€</p> <button class='Confirm "+  i +"'>Kaufen</button> </div></div>"
+        }
+        document.getElementsByClassName("OfferLeft " + i)[0].setAttribute("amount", String(Offers[i].Amount))
+      }
+    }
+     }
+
+
+
+
+     document.addEventListener("click", async function(e) {
+      if (e.target.classList.contains("Confirm")) {
+          let thisOffer = Offers[Number(e.target.classList[1])];
+
+        if (e.target.classList.contains("Delete")) {
+
+             let found = false;
+
+        for (let i = 0; i < Me.Cards.length; i++) {
+           if (Number(Me.Cards[i].split("x")[0]) == thisOffer.Card) {
+             Me.Cards[i] = String(thisOffer.Card) + "x" + String(Number(Me.Cards[i].split("x")[1]) + thisOffer.Amount)
+             found = true;
+           }
+        }
+        if (!found) {
+         Me.Cards[Me.Cards.length] = String(thisOffer.Card) + "x" + String(thisOffer.Amount)
+        }
+        
+        await updateDoc(doc(db, "users", Me.Id), {
+                                           Cards: Me.Cards
+                                        }
+                                      )
+        
+          await deleteDoc(doc(db, "offers", Offers[Number(e.target.classList[1])].Id));
           
+
+          loadOffers()
+          console.log(Me.Cards)
+        } else {
+         
+        if (Me.Money >= thisOffer.Price) {
+           Me.Money -= thisOffer.Price;
+           await updateDoc(doc(db, "users", Me.Id), {
+                                           Money : Me.Money
+                                        }
+                                      )
+           console.log(Me.Money)
+
+           let Seller = await getUserInfo(thisOffer.user)
+
+           await updateDoc(doc(db, "users", Seller.Id), {
+                                           Money : Seller.Money + thisOffer.Price
+                                        }
+                                      )
+           
+           let found = false;
+
+        for (let i = 0; i < Me.Cards.length; i++) {
+           if (Number(Me.Cards[i].split("x")[0]) == thisOffer.Card) {
+             Me.Cards[i] = String(thisOffer.Card) + "x" + String(Number(Me.Cards[i].split("x")[1]) + thisOffer.Amount)
+             found = true;
+           }
+        }
+        if (!found) {
+         Me.Cards[Me.Cards.length] = String(thisOffer.Card) + "x" + String(thisOffer.Amount)
         }
 
+
+        await updateDoc(doc(db, "users", Me.Id), {
+                                           Cards: Me.Cards
+                                        }
+                                      )
+
+
+        await deleteDoc(doc(db, "offers", Offers[Number(e.target.classList[1])].Id));
+
+        loadOffers()
+        console.log(Me.Cards)
+          
+        }
+        }
       }
-     }
+     })
+
+
+
+
+     

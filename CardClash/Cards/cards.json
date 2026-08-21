@@ -5,9 +5,11 @@
                {
                    "Name": "TestCard01",
                    "HP": 150,
-                   "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+                   "img": "../Cards/assets/basic_Card.jpg",
                    "NextStage": null,
+                   "Type": "card",
                    "Rarety": "basic",
+                   "Available" : true,
                    "attacks" : [
                        {
                            "Name": "Damage Test",
@@ -29,9 +31,11 @@
                {
                    "Name": "TestCard02",
                    "HP": 170,
-                   "img": "./assets/16dcfee33f67d94e52fe3d9ed9a5502a2d4071b8.webp",
+                   "img": "../Cards/assets/epic_Card.jpg",
                    "NextStage": null,
                    "Rarety": "epic",
+                   "Type": "card",
+                   "Available" : true,
                    "attacks" : [
                        {
                            "Name": "Damage Test",
@@ -52,9 +56,11 @@
                {
                    "Name": "NormalCard",
                    "HP": 140,
-                   "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+                   "img": "../Cards/assets/NormalBasic_Card.jpg",
                    "NextStage": null,
+                   "Type": "card",
                    "Rarety": "basic",
+                   "Available" : true,
                    "attacks" : [
                        {
                            "Name": "Aua",
@@ -75,9 +81,11 @@
                {
                    "Name": "RareCard",
                    "HP": 180,
-                   "img": "./assets/xy-blanks-basic-fire-pokemon-card-template-png-clipart.jpg",
+                   "img": "../Cards/assets/Card_rare.jpg",
                    "NextStage": null,
+                   "Type": "card",
                    "Rarety": "rare",
+                   "Available" : true,
                    "attacks" : [
                        {
                            "Name": "Picks",
@@ -93,12 +101,67 @@
                        }
                    ]
                },
+                {
+                   "Name": "LegendaryCard",
+                   "HP": 250,
+                   "img": "../Cards/assets/Legendary_Card.jpg",
+                   "Type": "card",
+                   "NextStage": null,
+                   "Rarety": "legendary",
+                   "Available" : true,
+                   "attacks" : [
+                       {
+                           "Name": "Punch",
+                           "type": "InstantDamage",
+                           "Damage": 145,
+                           "Uses": 1
+                       },
+                       {
+                           "Name": "Kick",
+                           "type": "InstantDamage",
+                           "Uses": 999,
+                           "Damage": 70
+                       }
+                   ]
+               },
                {
                    "Name": "Supporter",
-                   "img": "./assets/images (1).jfif",
-                   "Rarety": "supporter",
+                   "Available": true,
+                   "Type": "supporter",
+                   "img": "../Cards/assets/SupporterBasic.jpg",
+                   "Rarety": "basic",
+                   "function": "heal",
+                   "hp": "40"
+
+               },
+               {
+                   "Name": "Supporter",
+                   "Available": true,
+                   "Type": "supporter",
+                   "img": "../Cards/assets/SupporterRare.jpg",
+                   "Rarety": "rare",
                    "function": "heal",
                    "hp": "50"
+
+               },
+               {
+                   "Name": "Supporter",
+                   "Available": true,
+                   "Type": "supporter",
+                   "img": "../Cards/assets/SupporterEpic.jpg",
+                   "Rarety": "epic",
+                   "function": "heal",
+                   "hp": "60"
+
+               },
+               {
+                   "Name": "Supporter",
+                   "Available": true,
+                   "Type": "supporter",
+                   "img": "../Cards/assets/SupporterLegendary.jpg",
+                   "Rarety": "legendary",
+                   "function": "heal",
+                   "hp": "140"
 
                }
  
@@ -109,14 +172,14 @@
             "Name": "FirstTestPack",
             "Price": 25,
             "Cards": 3,
+            "SupporterChance": 0.4,
             "Chances":[
-                0.4,
-                0.2,
-                0.1,
-                0.29,
-                0.01
+                0.50,
+                0.30,
+                0.15,
+                0.05
             ],
-            "img": "./assets/images.jfif"
+            "img": "../Cards/assets/pack.jpg"
         }
 
     ]
